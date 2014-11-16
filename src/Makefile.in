@@ -91,7 +91,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_chess_OBJECTS = main.$(OBJEXT)
+am_chess_OBJECTS = main.$(OBJEXT) SmartChessWindow.$(OBJEXT)
 chess_OBJECTS = $(am_chess_OBJECTS)
 am__DEPENDENCIES_1 =
 chess_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -286,7 +286,7 @@ top_srcdir = @top_srcdir@
 AM_CXXFLAGS = ${libgtkmm_CFLAGS}
 chess_LDADD = ${libgtkmm_LIBS}
 SUBDIRS = .
-chess_SOURCES = main.cpp
+chess_SOURCES = main.cpp SmartChessWindow.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -300,9 +300,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/Makefile
+	  $(AUTOMAKE) --gnu src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -374,6 +374,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SmartChessWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .cpp.o:

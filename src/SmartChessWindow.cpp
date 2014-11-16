@@ -1,4 +1,4 @@
-//===-- smart-chess/main.cpp ------------------------------------*- C++ -*-===//
+//===-- smart-chess/SmartChessWindow.cpp ------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,42 +23,23 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file main.cpp
-/// \brief Main entry point for smart-chess
+/// \file SmartChessWindow.cpp
+/// \brief The main window for the game.
 ///
 //===----------------------------------------------------------------------===//
+
 #include "SmartChessWindow.h"
-#include <iostream>
-#include <exception>
 
-using namespace std;
+namespace sch {
 
-int main(int argc, char * argv[])
-{
-	try {
-		Glib::RefPtr<Gtk::Application> app =
-				Gtk::Application::create(argc, argv);
+SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
+		const Glib::RefPtr<Gtk::Builder>& builder)
+: Gtk::Window(cobject){
 
-		// @todo Improve how we retrieve the resource files, we don't want
-		// harcoded stuff.
-		Glib::RefPtr<Gtk::Builder> builder =
-				Gtk::Builder::create_from_file("data/chess-gui.glade");
-
-		sch::SmartChessWindow* main_window = nullptr;
-		builder->get_widget_derived("MainWindow", main_window);
-
-		unique_ptr<Gtk::Window> uptr_window(main_window);
-
-		app->run(*uptr_window);
-	} catch (const std::exception& e) {
-		cerr << e.what() << endl;
-	}
-	catch (const Glib::Exception& e) {
-		cerr << e.what() << endl;
-	}
-	catch (...) {
-		cerr << "Unknown exception thrown!" << endl;
-	}
-
-	return EXIT_SUCCESS;
 }
+
+SmartChessWindow::~SmartChessWindow() {
+	// TODO Auto-generated destructor stub
+}
+
+} /* namespace sch */
