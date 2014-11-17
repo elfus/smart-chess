@@ -33,6 +33,11 @@
 
 #include <gtkmm/window.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/grid.h>
+#include <cairomm/refptr.h>
+#include <cairomm/context.h>
+#include <memory>
+#include "ChessBoard.h"
 
 namespace sch { // sch stands for Smart Chess :)
 
@@ -41,6 +46,9 @@ public:
 	SmartChessWindow(BaseObjectType* cobject,
 			const Glib::RefPtr<Gtk::Builder>& builder);
 	virtual ~SmartChessWindow();
+private:
+	std::unique_ptr<Gtk::Grid> mMainGrid;
+	std::unique_ptr<ChessBoard> mChessBoard;
 };
 
 } /* namespace sch */

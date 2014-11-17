@@ -29,17 +29,26 @@
 //===----------------------------------------------------------------------===//
 
 #include "SmartChessWindow.h"
+#include <iostream>
+
+using namespace std;
 
 namespace sch {
 
 SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 		const Glib::RefPtr<Gtk::Builder>& builder)
-: Gtk::Window(cobject){
+: Gtk::Window(cobject), mMainGrid(nullptr), mChessBoard(new ChessBoard){
+	Gtk::Grid* grid = nullptr;
+	builder->get_widget("MainGrid", grid);
+	if(grid)
+		mMainGrid.reset(grid);
 
+	mChessBoard->show();
+	mMainGrid->attach(*mChessBoard,1,1,1,1);
 }
 
 SmartChessWindow::~SmartChessWindow() {
-	// TODO Auto-generated destructor stub
+	cerr << "Destructor" << endl;
 }
 
 } /* namespace sch */
