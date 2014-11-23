@@ -13,6 +13,11 @@
 namespace sch {
 
 class ChessBoard: public Gtk::DrawingArea {
+private:
+	static const int SQUARE_NUM = 8;
+
+	void draw_squares(const Cairo::RefPtr<Cairo::Context>& ctx,
+			int board_width, int board_height);
 public:
 	ChessBoard();
 	virtual ~ChessBoard();

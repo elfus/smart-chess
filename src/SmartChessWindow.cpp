@@ -43,8 +43,8 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	if(grid)
 		mMainGrid.reset(grid);
 
-	mChessBoard->show();
 	mMainGrid->attach(*mChessBoard,1,1,1,1);
+	show_all_children();
 }
 
 SmartChessWindow::~SmartChessWindow() {
