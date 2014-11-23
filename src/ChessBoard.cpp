@@ -14,10 +14,11 @@ namespace sch {
 
 ChessBoard::ChessBoard() : Gtk::DrawingArea(){
 	set_vexpand();
+	set_size_request(MIN_BOARD_W, MIN_BOARD_H);
 }
 
 ChessBoard::~ChessBoard() {
-	// TODO Auto-generated destructor stub
+	cerr << "ChessBoard Destructor" << endl;
 }
 
 void ChessBoard::draw_squares(const Cairo::RefPtr<Cairo::Context>& ctx,
@@ -60,26 +61,6 @@ bool ChessBoard::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	const int height = allocation.get_height();
 
 	draw_squares(ctx, width, height);
-
-	// coordinates for the center of the window
-	static float i = 0;
-	int xc, yc;
-	xc = width / 2;
-	yc = height / 2;
-	if( i == width)
-		i = 0;
-
-	ctx->set_line_join(Cairo::LineJoin::LINE_JOIN_ROUND);
-	ctx->set_line_width(5.0);
-
-	// draw red lines out from the center of the window
-	ctx->set_source_rgb(0.8, 0.0, 0.0);
-	ctx->move_to(i++, 0);
-	ctx->line_to(xc, yc);
-	ctx->line_to(0, height);
-	ctx->move_to(xc, yc);
-	ctx->line_to(width, yc);
-	ctx->stroke();
 
 	return true;
 }

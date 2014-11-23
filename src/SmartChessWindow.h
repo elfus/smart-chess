@@ -34,6 +34,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/aspectframe.h>
 #include <cairomm/refptr.h>
 #include <cairomm/context.h>
 #include <memory>

@@ -43,12 +43,18 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	if(grid)
 		mMainGrid.reset(grid);
 
-	mMainGrid->attach(*mChessBoard,1,1,1,1);
+	Gtk::AspectFrame* af;
+	builder->get_widget("AspectFrameBoard", af);
+	af->set_vexpand();
+	af->set_hexpand();
+
+	af->add(*mChessBoard);
+
 	show_all_children();
 }
 
 SmartChessWindow::~SmartChessWindow() {
-	cerr << "Destructor" << endl;
+	cerr << "SmartChessWindow Destructor" << endl;
 }
 
 } /* namespace sch */

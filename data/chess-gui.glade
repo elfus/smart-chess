@@ -11,7 +11,6 @@
       <object class="GtkGrid" id="MainGrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="column_homogeneous">True</property>
         <child>
           <object class="GtkStatusbar" id="statusbar1">
             <property name="visible">True</property>
@@ -201,9 +200,27 @@
           </packing>
         </child>
         <child>
+          <object class="GtkAspectFrame" id="AspectFrameBoard">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTextView" id="textview1">
@@ -218,9 +235,6 @@
             <property name="width">1</property>
             <property name="height">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>
