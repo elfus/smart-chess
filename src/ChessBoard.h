@@ -36,6 +36,8 @@
 
 namespace sch {
 
+class ChessPiece;
+
 class ChessBoard: public Gtk::DrawingArea {
 public:
 	enum Row {
@@ -60,12 +62,21 @@ public:
 		H
 	};
 
+	struct Square {
+		Square(Row r, Column c) : row(r), column(c), piece(nullptr){}
+		Row row;
+		Column column;
+		std::shared_ptr<ChessPiece> piece;
+		bool hasPiece() { return piece.operator bool(); }
+		void removePiece() { piece = nullptr; }
+	};
+
 	ChessBoard();
 	virtual ~ChessBoard();
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& ctx);
 
-	sigc::signal<void, Row, Column> getSignalClickedReleased();
+	sigc::signal<void, Square> getSignalClickedReleased();
 
 private:
 	static const int SQUARE_NUM = 8;
@@ -77,7 +88,7 @@ private:
 	int mSquareWidth;
 	int mSquareHeight;
 
-	sigc::signal<void, Row, Column> mSignalClickReleased;
+	sigc::signal<void, Square> mSignalClickReleased;
 
 	void drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 			int board_width, int board_height);
@@ -87,7 +98,7 @@ private:
 	void drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
 			const Glib::ustring& path, Row row, Column col);
 
-	std::tuple<Row,Column> calculateSquare(double x, double y);
+	Square calculateSquare(double x, double y);
 };
 
 std::ostream& operator <<(std::ostream& os, ChessBoard::Row r);

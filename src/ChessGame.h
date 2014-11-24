@@ -36,8 +36,6 @@
 
 namespace sch {
 
-class ChessBoard;
-
 class ChessGame {
 public:
 	ChessGame(std::shared_ptr<ChessBoard>& board);
@@ -47,7 +45,7 @@ public:
 	void end();
 	void reset();
 
-	void chessBoardClicked(ChessBoard::Row, ChessBoard::Column);
+	void chessBoardClicked(ChessBoard::Square);
 private:
 	std::shared_ptr<ChessBoard> mBoard;
 };

@@ -48,14 +48,14 @@ ChessBoard::~ChessBoard() {
 	cerr << "ChessBoard Destructor" << endl;
 }
 
-sigc::signal<void, ChessBoard::Row, ChessBoard::Column>
+sigc::signal<void, ChessBoard::Square>
 ChessBoard::getSignalClickedReleased()
 {
 	return mSignalClickReleased;
 }
 
 
-tuple<ChessBoard::Row, ChessBoard::Column>
+ChessBoard::Square
 ChessBoard::calculateSquare(double x, double y)
 {
 	int  i = 0, j = 0;
@@ -75,7 +75,7 @@ ChessBoard::calculateSquare(double x, double y)
 	}
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
-	return make_tuple(Row(j), Column(i));
+	return Square(Row(j), Column(i));
 }
 
 bool ChessBoard::clickReleased(GdkEventButton* event)
@@ -86,8 +86,8 @@ bool ChessBoard::clickReleased(GdkEventButton* event)
 				 << event->x << ", " << event->y << endl;
 			return false;
 		}
-		auto s = calculateSquare(event->x, event->y);
-		mSignalClickReleased(get<0>(s), get<1>(s));
+		Square s = calculateSquare(event->x, event->y);
+		mSignalClickReleased(s);
 	}
 
 	return false;

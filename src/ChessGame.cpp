@@ -45,9 +45,9 @@ ChessGame::~ChessGame() {
 	cerr << "ChessGame Destructor" << endl;
 }
 
-void ChessGame::chessBoardClicked(ChessBoard::Row row, ChessBoard::Column col)
+void ChessGame::chessBoardClicked(ChessBoard::Square s)
 {
-	cout << "clicked: " << row << " " << col << endl;
+	cout << "clicked: " << s.row << " " << s.column << endl;
 }
 
 void ChessGame::start() {
