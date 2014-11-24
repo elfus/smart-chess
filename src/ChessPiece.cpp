@@ -1,4 +1,4 @@
-//===-- smart-chess/SmartChessWindow.h --------------------------*- C++ -*-===//
+//===-- smart-chess/ChessPiece.cpp ------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,37 +23,22 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file SmartChessWindow.h
-/// \brief The main window for the game.
+/// \file ChessPiece.cpp
+/// \brief The class in charge of representing chess pieces.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef SMARTCHESSWINDOW_H_
-#define SMARTCHESSWINDOW_H_
+#include "ChessPiece.h"
 
-#include <gtkmm/window.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/aspectframe.h>
-#include <cairomm/refptr.h>
-#include <cairomm/context.h>
-#include <memory>
-#include "ChessBoard.h"
-#include "ChessGame.h"
+namespace sch {
 
-namespace sch { // sch stands for Smart Chess :)
+ChessPiece::ChessPiece() {
+	// TODO Auto-generated constructor stub
 
-class SmartChessWindow : public Gtk::Window{
-public:
-	SmartChessWindow(BaseObjectType* cobject,
-			const Glib::RefPtr<Gtk::Builder>& builder);
-	virtual ~SmartChessWindow();
-private:
-	std::unique_ptr<Gtk::Grid> mMainGrid;
-	std::shared_ptr<ChessBoard> mChessBoard;
-	std::shared_ptr<ChessGame> mChessGame;
-};
+}
+
+ChessPiece::~ChessPiece() {
+	// TODO Auto-generated destructor stub
+}
 
 } /* namespace sch */
-
-#endif /* SMARTCHESSWINDOW_H_ */

@@ -1,4 +1,4 @@
-//===-- smart-chess/SmartChessWindow.h --------------------------*- C++ -*-===//
+//===-- smart-chess/ChessPiece.h --------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,37 +23,48 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file SmartChessWindow.h
-/// \brief The main window for the game.
+/// \file ChessPiece.h
+/// \brief The class in charge of representing chess pieces.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef SMARTCHESSWINDOW_H_
-#define SMARTCHESSWINDOW_H_
+#ifndef CHESSPIECE_H_
+#define CHESSPIECE_H_
 
-#include <gtkmm/window.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/aspectframe.h>
-#include <cairomm/refptr.h>
-#include <cairomm/context.h>
-#include <memory>
-#include "ChessBoard.h"
-#include "ChessGame.h"
+namespace sch {
 
-namespace sch { // sch stands for Smart Chess :)
-
-class SmartChessWindow : public Gtk::Window{
+class ChessPiece {
 public:
-	SmartChessWindow(BaseObjectType* cobject,
-			const Glib::RefPtr<Gtk::Builder>& builder);
-	virtual ~SmartChessWindow();
-private:
-	std::unique_ptr<Gtk::Grid> mMainGrid;
-	std::shared_ptr<ChessBoard> mChessBoard;
-	std::shared_ptr<ChessGame> mChessGame;
+	ChessPiece();
+	virtual ~ChessPiece();
+protected:
+
+};
+
+class King : public ChessPiece{
+
+};
+
+class Queen : public ChessPiece {
+
+};
+
+class Rook : public ChessPiece {
+
+};
+
+class Bishop : public ChessPiece {
+
+};
+
+class Knight : public ChessPiece {
+
+};
+
+class Pawn : public ChessPiece {
+
 };
 
 } /* namespace sch */
 
-#endif /* SMARTCHESSWINDOW_H_ */
+#endif /* CHESSPIECE_H_ */

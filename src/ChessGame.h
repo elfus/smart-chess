@@ -1,4 +1,4 @@
-//===-- smart-chess/SmartChessWindow.h --------------------------*- C++ -*-===//
+//===-- smart-chess/ChessGame.h ---------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,37 +23,35 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file SmartChessWindow.h
-/// \brief The main window for the game.
+/// \file ChessGame.h
+/// \brief The class representing a single game or match.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef SMARTCHESSWINDOW_H_
-#define SMARTCHESSWINDOW_H_
+#ifndef CHESSGAME_H_
+#define CHESSGAME_H_
 
-#include <gtkmm/window.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/aspectframe.h>
-#include <cairomm/refptr.h>
-#include <cairomm/context.h>
 #include <memory>
 #include "ChessBoard.h"
-#include "ChessGame.h"
 
-namespace sch { // sch stands for Smart Chess :)
+namespace sch {
 
-class SmartChessWindow : public Gtk::Window{
+class ChessBoard;
+
+class ChessGame {
 public:
-	SmartChessWindow(BaseObjectType* cobject,
-			const Glib::RefPtr<Gtk::Builder>& builder);
-	virtual ~SmartChessWindow();
+	ChessGame(std::shared_ptr<ChessBoard>& board);
+	~ChessGame();
+
+	void start();
+	void end();
+	void reset();
+
+	void chessBoardClicked(ChessBoard::Row, ChessBoard::Column);
 private:
-	std::unique_ptr<Gtk::Grid> mMainGrid;
-	std::shared_ptr<ChessBoard> mChessBoard;
-	std::shared_ptr<ChessGame> mChessGame;
+	std::shared_ptr<ChessBoard> mBoard;
 };
 
 } /* namespace sch */
 
-#endif /* SMARTCHESSWINDOW_H_ */
+#endif /* CHESSGAME_H_ */
