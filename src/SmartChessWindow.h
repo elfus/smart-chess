@@ -49,7 +49,7 @@ public:
 	virtual ~SmartChessWindow();
 private:
 	std::unique_ptr<Gtk::Grid> mMainGrid;
-	std::unique_ptr<ChessBoard> mChessBoard;
+	std::shared_ptr<ChessBoard> mChessBoard;
 };
 
 } /* namespace sch */

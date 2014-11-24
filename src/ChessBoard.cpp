@@ -8,6 +8,7 @@
 #include "ChessBoard.h"
 #include <iostream>
 #include <assert.h>
+#include <gdkmm.h>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ ChessBoard::ChessBoard() : Gtk::DrawingArea(){
 	set_size_request(MIN_BOARD_W, MIN_BOARD_H);
 	set_events(Gdk::EventMask::BUTTON_PRESS_MASK | Gdk::EventMask::BUTTON_RELEASE_MASK);
 
-	signal_button_release_event().connect(sigc::mem_fun(*this,&ChessBoard::click_released));
+	signal_button_release_event().connect(sigc::mem_fun(*this,&ChessBoard::clickReleased));
 }
 
 ChessBoard::~ChessBoard() {
@@ -49,7 +50,7 @@ ChessBoard::calculateSquare(double x, double y)
 	return make_tuple(Row(j), Column(i));
 }
 
-bool ChessBoard::click_released(GdkEventButton* event)
+bool ChessBoard::clickReleased(GdkEventButton* event)
 {
 	if(event->button == 1)  {// 1 is left mouse
 		cout << "clicked on x= "<< event->x << ", y= "<<event->y << endl;
@@ -65,7 +66,7 @@ bool ChessBoard::click_released(GdkEventButton* event)
 	return false;
 }
 
-void ChessBoard::draw_squares(const Cairo::RefPtr<Cairo::Context>& ctx,
+void ChessBoard::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 		int board_width, int board_height)
 {
 	mSquareWidth = board_width / SQUARE_NUM;
@@ -81,7 +82,7 @@ void ChessBoard::draw_squares(const Cairo::RefPtr<Cairo::Context>& ctx,
 				is_white = false;
 			}
 			else {
-				ctx->set_source_rgb(0, 0, 0);
+				ctx->set_source_rgb(.3, .3, .3);
 				is_white = true;
 			}
 			y = j * mSquareHeight;
@@ -93,10 +94,19 @@ void ChessBoard::draw_squares(const Cairo::RefPtr<Cairo::Context>& ctx,
 			is_white = false;
 		}
 		else {
-			ctx->set_source_rgb(0, 0, 0);
+			ctx->set_source_rgb(.3, .3, .3);
 			is_white = true;
 		}
 	}
+}
+
+void ChessBoard::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
+		const Glib::ustring& path, Row row, Column col)
+{
+	Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file(path);
+	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
+	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*col, 0 + mSquareHeight*row);
+	ctx->paint();
 }
 
 bool ChessBoard::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
@@ -104,7 +114,9 @@ bool ChessBoard::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	mBoardWidth = allocation.get_width();
 	mBoardHeight = allocation.get_height();
 
-	draw_squares(ctx, mBoardWidth, mBoardHeight);
+	drawSquares(ctx, mBoardWidth, mBoardHeight);
+
+	drawFigure(ctx, "data/pawnw.gif", Row::EIGHT, Column::A);
 
 	return true;
 }

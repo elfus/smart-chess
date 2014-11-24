@@ -52,10 +52,13 @@ private:
 	int mSquareWidth;
 	int mSquareHeight;
 
-	void draw_squares(const Cairo::RefPtr<Cairo::Context>& ctx,
+	void drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 			int board_width, int board_height);
 
-	bool click_released(GdkEventButton* event);
+	bool clickReleased(GdkEventButton* event);
+
+	void drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
+			const Glib::ustring& path, Row row, Column col);
 
 	std::tuple<Row,Column> calculateSquare(double x, double y);
 };
