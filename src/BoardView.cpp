@@ -28,6 +28,7 @@
 ///
 //===----------------------------------------------------------------------===//
 #include "BoardView.h"
+#include "BoardState.h"
 #include "ChessPiece.h"
 #include <iostream>
 #include <assert.h>
@@ -127,14 +128,15 @@ void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 	}
 }
 
-void BoardView::drawPiece(const ChessPiece& p)
+void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessPiece& p)
 {
+	ctx->save();
 	auto image = p.getImage();
 	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
-	auto ctx = get_window()->create_cairo_context();
 	BoardPosition pos = p.getPosition();
 	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*pos.column, 0 + mSquareHeight*pos.row);
 	ctx->paint();
+	ctx->restore();
 }
 
 void BoardView::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
@@ -153,7 +155,17 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
-	drawFigure(ctx, "data/pawnw.gif", BoardRow::EIGHT, BoardColumn::A);
+	if(mState) {
+		auto black_pieces = mState->getBlackPieces();
+		assert(!black_pieces.empty());
+		for(auto p : black_pieces)
+			drawPiece(ctx, *p);
+
+		auto white_pieces = mState->getWhitePieces();
+		assert(!white_pieces.empty());
+		for(auto p : white_pieces)
+			drawPiece(ctx, *p);
+	}
 
 	return true;
 }

@@ -1,4 +1,4 @@
-//===-- smart-chess/BoardState.h --------------------------------*- C++ -*-===//
+//===-- smart-chess/Util.h --------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,53 +23,48 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file BoardState.h
-/// \brief The class representing a single game or match.
+/// \file Util.h
+/// \brief Several helper types, structs and classes
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef CHESSGAME_H_
-#define CHESSGAME_H_
+#ifndef UTIL_H_
+#define UTIL_H_
 
-#include <vector>
-#include <memory>
-#include <assert.h>
-#include "BoardView.h"
-
-namespace sch {
-
-class BoardState {
-public:
-	BoardState(std::shared_ptr<BoardView>& board);
-	~BoardState();
-
-	auto getWhitePieces() -> std::vector<std::shared_ptr<ChessPiece>> {
-		return mWhitePieces;
-	}
-
-	auto getBlackPieces() -> std::vector<std::shared_ptr<ChessPiece>> {
-		return mBlackPieces;
-	}
-
-	void updateView();
-
-private:
-	std::shared_ptr<BoardView> mBoardView;
-	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
-	std::vector<std::shared_ptr<ChessPiece>> mBlackPieces;
-	std::vector<BoardSquare> mSquares;
-
-	void initWhitePieces();
-	void initBlackPieces();
-	void initSquares();
-	void reset();
-
-	void start();
-	void end();
-
-
+namespace sch
+{
+enum BoardRow {
+	MAX_ROW = 8,
+	ONE = 7,
+	TWO = 6,
+	THREE = 5,
+	FOUR = 4,
+	FIVE = 3,
+	SIX = 2,
+	SEVEN = 1,
+	EIGHT = 0
 };
 
-} /* namespace sch */
+enum BoardColumn {
+	A = 0,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	MAX_COL
+};
 
-#endif /* CHESSGAME_H_ */
+struct BoardPosition {
+	BoardRow row;
+	BoardColumn column;
+	BoardPosition(BoardRow r, BoardColumn c) : row(r), column(c) {}
+};
+
+}
+
+
+
+#endif /* UTIL_H_ */

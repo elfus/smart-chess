@@ -47,10 +47,7 @@ BoardState::~BoardState() {
 
 void BoardState::updateView() {
 	// @todo erase previous frame
-	for(auto p : mWhitePieces)
-		mBoardView->drawPiece(*p);
-	for(auto p : mBlackPieces)
-		mBoardView->drawPiece(*p);
+	mBoardView->setBoardState(shared_ptr<BoardState>(this));
 }
 
 void BoardState::initWhitePieces() {
@@ -67,16 +64,16 @@ void BoardState::initWhitePieces() {
 }
 
 void BoardState::initBlackPieces() {
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new King(BoardPosition(SEVEN, E), ImageType::BLACK_KING)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Queen(BoardPosition(SEVEN, D), ImageType::BLACK_QUEEN)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(SEVEN, B), ImageType::BLACK_KNIGHT)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(SEVEN, G), ImageType::BLACK_KNIGHT)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(SEVEN, A), ImageType::BLACK_ROOK)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(SEVEN, H), ImageType::BLACK_ROOK)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(SEVEN, C), ImageType::BLACK_BISHOP)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(SEVEN, F), ImageType::BLACK_BISHOP)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new King(BoardPosition(EIGHT, E), ImageType::BLACK_KING)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Queen(BoardPosition(EIGHT, D), ImageType::BLACK_QUEEN)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(EIGHT, B), ImageType::BLACK_KNIGHT)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(EIGHT, G), ImageType::BLACK_KNIGHT)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(EIGHT, A), ImageType::BLACK_ROOK)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(EIGHT, H), ImageType::BLACK_ROOK)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(EIGHT, C), ImageType::BLACK_BISHOP)));
+	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(EIGHT, F), ImageType::BLACK_BISHOP)));
 	for(int i=0; i<8; ++i)
-		mWhitePieces.push_back(shared_ptr<ChessPiece>(new Pawn(BoardPosition(SEVEN, BoardColumn(i)), ImageType::BLACK_PAWN)));
+		mBlackPieces.push_back(shared_ptr<ChessPiece>(new Pawn(BoardPosition(SEVEN, BoardColumn(i)), ImageType::BLACK_PAWN)));
 }
 
 void BoardState::initSquares() {
@@ -103,6 +100,8 @@ void BoardState::reset() {
 	initWhitePieces();
 	mBlackPieces.clear();
 	initBlackPieces();
+	assert(!mWhitePieces.empty());
+	assert(!mBlackPieces.empty());
 }
 
 } /* namespace sch */

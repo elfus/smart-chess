@@ -37,6 +37,7 @@
 namespace sch {
 
 class ChessPiece;
+class BoardState;
 
 struct BoardSquare {
 	BoardSquare(BoardRow r, BoardColumn c) : row(r), column(c), piece(nullptr){}
@@ -64,7 +65,7 @@ public:
 
 	sigc::signal<void, BoardSquare> getSignalClickedReleased();
 
-	void drawPiece(const ChessPiece& p);
+	void setBoardState(std::shared_ptr<BoardState> s) { mState = s; }
 private:
 	static const int SQUARE_NUM = 8;
 	static const int MIN_BOARD_W = 400;
@@ -74,6 +75,7 @@ private:
 	int mBoardHeight;
 	int mSquareWidth;
 	int mSquareHeight;
+	std::shared_ptr<BoardState> mState;
 
 	sigc::signal<void, BoardSquare> mSignalClickReleased;
 
@@ -82,6 +84,7 @@ private:
 
 	bool clickReleased(GdkEventButton* event);
 
+	void drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessPiece& p);
 	void drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
 			const Glib::ustring& path, BoardRow row, BoardColumn col);
 
