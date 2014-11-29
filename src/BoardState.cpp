@@ -29,6 +29,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "BoardState.h"
+#include "ChessPiece.h"
 #include <iostream>
 
 using namespace std;
@@ -37,16 +38,45 @@ namespace sch {
 
 BoardState::BoardState(std::shared_ptr<BoardView>& board)
 : mBoardView(board), mSquares() {
+	reset();
+}
+
+BoardState::~BoardState() {
+	cerr << "ChessGame Destructor" << endl;
+}
+
+void BoardState::initWhitePieces() {
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new King));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Queen));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop));
+	for(int i=0; i<8; ++i)
+		mWhitePieces.push_back(shared_ptr<ChessPiece>(new Pawn));
+}
+
+void BoardState::initBlackPieces() {
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new King));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Queen));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop));
+	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop));
+	for(int i=0; i<8; ++i)
+		mWhitePieces.push_back(shared_ptr<ChessPiece>(new Pawn));
+}
+
+void BoardState::initSquares() {
 	for(int i = 0; i < BoardColumn::MAX_COL; ++i) {
 		for(int j = 0; j < BoardRow::MAX_ROW; ++j) {
 			mSquares.push_back(BoardSquare(BoardRow(j),BoardColumn(i)));
 		}
 	}
-
-}
-
-BoardState::~BoardState() {
-	cerr << "ChessGame Destructor" << endl;
 }
 
 
@@ -59,7 +89,12 @@ void BoardState::end() {
 }
 
 void BoardState::reset() {
-
+	mSquares.clear();
+	initSquares();
+	mWhitePieces.clear();
+	initWhitePieces();
+	mBlackPieces.clear();
+	initBlackPieces();
 }
 
 } /* namespace sch */

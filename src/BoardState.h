@@ -42,13 +42,29 @@ public:
 	BoardState(std::shared_ptr<BoardView>& board);
 	~BoardState();
 
-	void start();
-	void end();
-	void reset();
+	auto getWhitePieces() -> std::vector<std::shared_ptr<ChessPiece>> {
+		return mWhitePieces;
+	}
+
+	auto getBlackPieces() -> std::vector<std::shared_ptr<ChessPiece>> {
+		return mBlackPieces;
+	}
 
 private:
 	std::shared_ptr<BoardView> mBoardView;
+	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
+	std::vector<std::shared_ptr<ChessPiece>> mBlackPieces;
 	std::vector<BoardSquare> mSquares;
+
+	void initWhitePieces();
+	void initBlackPieces();
+	void initSquares();
+	void reset();
+
+	void start();
+	void end();
+
+
 };
 
 } /* namespace sch */
