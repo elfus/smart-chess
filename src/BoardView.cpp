@@ -48,15 +48,14 @@ BoardView::~BoardView() {
 	cerr << "ChessBoard Destructor" << endl;
 }
 
-sigc::signal<void, BoardView::Square>
+sigc::signal<void, BoardSquare>
 BoardView::getSignalClickedReleased()
 {
 	return mSignalClickReleased;
 }
 
 
-BoardView::Square
-BoardView::calculateSquare(double x, double y)
+BoardSquare BoardView::calculateSquare(double x, double y)
 {
 	int  i = 0, j = 0;
 	bool found = false;
@@ -75,7 +74,7 @@ BoardView::calculateSquare(double x, double y)
 	}
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
-	return Square(Row(j), Column(i));
+	return BoardSquare(BoardRow(j), BoardColumn(i));
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)
@@ -86,7 +85,7 @@ bool BoardView::clickReleased(GdkEventButton* event)
 				 << event->x << ", " << event->y << endl;
 			return false;
 		}
-		Square s = calculateSquare(event->x, event->y);
+		BoardSquare s = calculateSquare(event->x, event->y);
 		mSignalClickReleased(s);
 	}
 
@@ -128,7 +127,7 @@ void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 }
 
 void BoardView::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
-		const Glib::ustring& path, Row row, Column col)
+		const Glib::ustring& path, BoardRow row, BoardColumn col)
 {
 	Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file(path);
 	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
@@ -143,36 +142,36 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
-	drawFigure(ctx, "data/pawnw.gif", Row::EIGHT, Column::A);
+	drawFigure(ctx, "data/pawnw.gif", BoardRow::EIGHT, BoardColumn::A);
 
 	return true;
 }
 
-std::ostream& operator <<(std::ostream& os, BoardView::Row r)
+std::ostream& operator <<(std::ostream& os, BoardRow r)
 {
 	switch (r) {
-	case BoardView::Row::ONE: os << 1; break;
-	case BoardView::Row::TWO: os << 2; break;
-	case BoardView::Row::THREE: os << 3; break;
-	case BoardView::Row::FOUR: os << 4; break;
-	case BoardView::Row::FIVE: os << 5; break;
-	case BoardView::Row::SIX: os << 6; break;
-	case BoardView::Row::SEVEN: os << 7; break;
-	case BoardView::Row::EIGHT: os << 8; break;
+	case BoardRow::ONE: os << 1; break;
+	case BoardRow::TWO: os << 2; break;
+	case BoardRow::THREE: os << 3; break;
+	case BoardRow::FOUR: os << 4; break;
+	case BoardRow::FIVE: os << 5; break;
+	case BoardRow::SIX: os << 6; break;
+	case BoardRow::SEVEN: os << 7; break;
+	case BoardRow::EIGHT: os << 8; break;
 	}
 	return os;
 }
-std::ostream& operator <<(std::ostream& os, BoardView::Column c)
+std::ostream& operator <<(std::ostream& os, BoardColumn c)
 {
 	switch(c) {
-	case BoardView::Column::A: os << "A"; break;
-	case BoardView::Column::B: os << "B"; break;
-	case BoardView::Column::C: os << "C"; break;
-	case BoardView::Column::D: os << "D"; break;
-	case BoardView::Column::E: os << "E"; break;
-	case BoardView::Column::F: os << "F"; break;
-	case BoardView::Column::G: os << "G"; break;
-	case BoardView::Column::H: os << "H"; break;
+	case BoardColumn::A: os << "A"; break;
+	case BoardColumn::B: os << "B"; break;
+	case BoardColumn::C: os << "C"; break;
+	case BoardColumn::D: os << "D"; break;
+	case BoardColumn::E: os << "E"; break;
+	case BoardColumn::F: os << "F"; break;
+	case BoardColumn::G: os << "G"; break;
+	case BoardColumn::H: os << "H"; break;
 	}
 	return os;
 }

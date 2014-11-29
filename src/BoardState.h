@@ -46,10 +46,10 @@ public:
 	void end();
 	void reset();
 
-	void chessBoardClicked(BoardView::Square);
+	void chessBoardClicked(BoardSquare);
 private:
 	std::shared_ptr<BoardView> mBoard;
-	std::vector<BoardView::Square> mSquares;
+	std::vector<BoardSquare> mSquares;
 };
 
 } /* namespace sch */

@@ -38,47 +38,49 @@ namespace sch {
 
 class ChessPiece;
 
+enum BoardRow {
+	MAX_ROW = 8,
+	ONE = 7,
+	TWO = 6,
+	THREE = 5,
+	FOUR = 4,
+	FIVE = 3,
+	SIX = 2,
+	SEVEN = 1,
+	EIGHT = 0
+};
+
+enum BoardColumn {
+	A = 0,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	MAX_COL
+};
+
+struct BoardSquare {
+	BoardSquare(BoardRow r, BoardColumn c) : row(r), column(c), piece(nullptr){}
+	BoardRow row;
+	BoardColumn column;
+	std::shared_ptr<ChessPiece> piece;
+	bool hasPiece() { return piece.operator bool(); }
+	void removePiece() { piece = nullptr; }
+};
+
 class BoardView: public Gtk::DrawingArea {
 public:
-	enum Row {
-		MAX_ROW = 8,
-		ONE = 7,
-		TWO = 6,
-		THREE = 5,
-		FOUR = 4,
-		FIVE = 3,
-		SIX = 2,
-		SEVEN = 1,
-		EIGHT = 0
-	};
 
-	enum Column {
-		A = 0,
-		B,
-		C,
-		D,
-		E,
-		F,
-		G,
-		H,
-		MAX_COL
-	};
-
-	struct Square {
-		Square(Row r, Column c) : row(r), column(c), piece(nullptr){}
-		Row row;
-		Column column;
-		std::shared_ptr<ChessPiece> piece;
-		bool hasPiece() { return piece.operator bool(); }
-		void removePiece() { piece = nullptr; }
-	};
 
 	BoardView();
 	virtual ~BoardView();
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& ctx);
 
-	sigc::signal<void, Square> getSignalClickedReleased();
+	sigc::signal<void, BoardSquare> getSignalClickedReleased();
 
 private:
 	static const int SQUARE_NUM = 8;
@@ -90,7 +92,7 @@ private:
 	int mSquareWidth;
 	int mSquareHeight;
 
-	sigc::signal<void, Square> mSignalClickReleased;
+	sigc::signal<void, BoardSquare> mSignalClickReleased;
 
 	void drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 			int board_width, int board_height);
@@ -98,13 +100,13 @@ private:
 	bool clickReleased(GdkEventButton* event);
 
 	void drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
-			const Glib::ustring& path, Row row, Column col);
+			const Glib::ustring& path, BoardRow row, BoardColumn col);
 
-	Square calculateSquare(double x, double y);
+	BoardSquare calculateSquare(double x, double y);
 };
 
-std::ostream& operator <<(std::ostream& os, BoardView::Row r);
-std::ostream& operator <<(std::ostream& os, BoardView::Column c);
+std::ostream& operator <<(std::ostream& os, BoardRow r);
+std::ostream& operator <<(std::ostream& os, BoardColumn c);
 
 
 } /* namespace sch */

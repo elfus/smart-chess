@@ -39,10 +39,9 @@ BoardState::BoardState(std::shared_ptr<BoardView>& board)
 : mBoard(board), mSquares() {
 	mBoard->getSignalClickedReleased().
 			connect(sigc::mem_fun(*this, &BoardState::chessBoardClicked));
-	for(int i = 0; i < BoardView::Column::MAX_COL; ++i) {
-		for(int j = 0; j < BoardView::Row::MAX_ROW; ++j) {
-			mSquares.push_back(BoardView::Square(
-					BoardView::Row(j),BoardView::Column(i)));
+	for(int i = 0; i < BoardColumn::MAX_COL; ++i) {
+		for(int j = 0; j < BoardRow::MAX_ROW; ++j) {
+			mSquares.push_back(BoardSquare(BoardRow(j),BoardColumn(i)));
 		}
 	}
 }
@@ -51,7 +50,7 @@ BoardState::~BoardState() {
 	cerr << "ChessGame Destructor" << endl;
 }
 
-void BoardState::chessBoardClicked(BoardView::Square s)
+void BoardState::chessBoardClicked(BoardSquare s)
 {
 	cout << "clicked: " << s.row << " " << s.column << endl;
 }
