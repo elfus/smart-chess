@@ -46,9 +46,8 @@ public:
 	void end();
 	void reset();
 
-	void chessBoardClicked(BoardSquare);
 private:
-	std::shared_ptr<BoardView> mBoard;
+	std::shared_ptr<BoardView> mBoardView;
 	std::vector<BoardSquare> mSquares;
 };
 

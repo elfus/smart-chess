@@ -8,12 +8,19 @@
 #ifndef BOARDCONTROLLER_H_
 #define BOARDCONTROLLER_H_
 
+#include "BoardState.h"
+
 namespace sch {
 
 class BoardController {
 public:
-	BoardController();
+
+	BoardController(std::shared_ptr<BoardState> state);
 	virtual ~BoardController();
+
+	void chessBoardClicked(BoardSquare);
+private:
+	std::shared_ptr<BoardState> mState;
 };
 
 } /* namespace sch */
