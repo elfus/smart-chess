@@ -1,4 +1,4 @@
-//===-- smart-chess/ChessGame.h ---------------------------------*- C++ -*-===//
+//===-- smart-chess/BoardState.cpp -------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,33 +23,49 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file ChessGame.h
+/// \file BoardState.cpp
 /// \brief The class representing a single game or match.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef CHESSGAME_H_
-#define CHESSGAME_H_
+#include "BoardState.h"
+#include <iostream>
 
-#include <memory>
-#include "ChessBoard.h"
+using namespace std;
 
 namespace sch {
 
-class ChessGame {
-public:
-	ChessGame(std::shared_ptr<ChessBoard>& board);
-	~ChessGame();
+BoardState::BoardState(std::shared_ptr<BoardView>& board)
+: mBoard(board), mSquares() {
+	mBoard->getSignalClickedReleased().
+			connect(sigc::mem_fun(*this, &BoardState::chessBoardClicked));
+	for(int i = 0; i < BoardView::Column::MAX_COL; ++i) {
+		for(int j = 0; j < BoardView::Row::MAX_ROW; ++j) {
+			mSquares.push_back(BoardView::Square(
+					BoardView::Row(j),BoardView::Column(i)));
+		}
+	}
+}
 
-	void start();
-	void end();
-	void reset();
+BoardState::~BoardState() {
+	cerr << "ChessGame Destructor" << endl;
+}
 
-	void chessBoardClicked(ChessBoard::Square);
-private:
-	std::shared_ptr<ChessBoard> mBoard;
-};
+void BoardState::chessBoardClicked(BoardView::Square s)
+{
+	cout << "clicked: " << s.row << " " << s.column << endl;
+}
+
+void BoardState::start() {
+
+}
+
+void BoardState::end() {
+
+}
+
+void BoardState::reset() {
+
+}
 
 } /* namespace sch */
-
-#endif /* CHESSGAME_H_ */

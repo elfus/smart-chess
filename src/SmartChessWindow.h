@@ -38,8 +38,9 @@
 #include <cairomm/refptr.h>
 #include <cairomm/context.h>
 #include <memory>
-#include "ChessBoard.h"
-#include "ChessGame.h"
+#include "BoardController.h"
+#include "BoardView.h"
+#include "BoardState.h"
 
 namespace sch { // sch stands for Smart Chess :)
 
@@ -50,8 +51,9 @@ public:
 	virtual ~SmartChessWindow();
 private:
 	std::unique_ptr<Gtk::Grid> mMainGrid;
-	std::shared_ptr<ChessBoard> mChessBoard;
-	std::shared_ptr<ChessGame> mChessGame;
+	std::shared_ptr<BoardView> mBoardView;
+	std::shared_ptr<BoardState> mBoardState;
+	std::shared_ptr<BoardController> mBoardController;
 };
 
 } /* namespace sch */

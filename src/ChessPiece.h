@@ -31,14 +31,19 @@
 #ifndef CHESSPIECE_H_
 #define CHESSPIECE_H_
 
+#include "BoardView.h"
+
 namespace sch {
 
 class ChessPiece {
 public:
 	ChessPiece();
 	virtual ~ChessPiece();
-protected:
 
+	bool isWhitePiece() { return mWhitePiece; }
+	bool isBlackPiece() { return !mWhitePiece; }
+protected:
+	bool mWhitePiece;
 };
 
 class King : public ChessPiece{

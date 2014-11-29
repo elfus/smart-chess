@@ -92,7 +92,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_chess_OBJECTS = main.$(OBJEXT) SmartChessWindow.$(OBJEXT) \
-	ChessBoard.$(OBJEXT) ChessGame.$(OBJEXT) ChessPiece.$(OBJEXT)
+	BoardView.$(OBJEXT) BoardState.$(OBJEXT) \
+	BoardController.$(OBJEXT) ChessPiece.$(OBJEXT)
 chess_OBJECTS = $(am_chess_OBJECTS)
 am__DEPENDENCIES_1 =
 chess_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -287,8 +288,8 @@ top_srcdir = @top_srcdir@
 AM_CXXFLAGS = ${libgtkmm_CFLAGS}
 chess_LDADD = ${libgtkmm_LIBS}
 SUBDIRS = .
-chess_SOURCES = main.cpp SmartChessWindow.cpp ChessBoard.cpp ChessGame.cpp \
-ChessPiece.cpp
+chess_SOURCES = main.cpp SmartChessWindow.cpp BoardView.cpp BoardState.cpp \
+BoardController.cpp ChessPiece.cpp
 
 all: all-recursive
 
@@ -377,8 +378,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ChessBoard.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ChessGame.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BoardController.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BoardState.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BoardView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ChessPiece.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SmartChessWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@

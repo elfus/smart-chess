@@ -1,4 +1,4 @@
-//===-- smart-chess/ChessBoard.h --------------------------------*- C++ -*-===//
+//===-- smart-chess/BoardView.h --------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,7 +23,7 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file ChessBoard.h
+/// \file BoardView.h
 /// \brief The class in charge of drawing the chess board on the gui.
 ///
 //===----------------------------------------------------------------------===//
@@ -38,9 +38,10 @@ namespace sch {
 
 class ChessPiece;
 
-class ChessBoard: public Gtk::DrawingArea {
+class BoardView: public Gtk::DrawingArea {
 public:
 	enum Row {
+		MAX_ROW = 8,
 		ONE = 7,
 		TWO = 6,
 		THREE = 5,
@@ -59,7 +60,8 @@ public:
 		E,
 		F,
 		G,
-		H
+		H,
+		MAX_COL
 	};
 
 	struct Square {
@@ -71,8 +73,8 @@ public:
 		void removePiece() { piece = nullptr; }
 	};
 
-	ChessBoard();
-	virtual ~ChessBoard();
+	BoardView();
+	virtual ~BoardView();
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& ctx);
 
@@ -101,8 +103,8 @@ private:
 	Square calculateSquare(double x, double y);
 };
 
-std::ostream& operator <<(std::ostream& os, ChessBoard::Row r);
-std::ostream& operator <<(std::ostream& os, ChessBoard::Column c);
+std::ostream& operator <<(std::ostream& os, BoardView::Row r);
+std::ostream& operator <<(std::ostream& os, BoardView::Column c);
 
 
 } /* namespace sch */

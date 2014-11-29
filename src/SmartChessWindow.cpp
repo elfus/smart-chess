@@ -37,8 +37,8 @@ namespace sch {
 
 SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 		const Glib::RefPtr<Gtk::Builder>& builder)
-: Gtk::Window(cobject), mMainGrid(nullptr), mChessBoard(new ChessBoard),
-  mChessGame(new ChessGame(mChessBoard)){
+: Gtk::Window(cobject), mMainGrid(nullptr), mBoardView(new BoardView),
+  mBoardState(new BoardState(mBoardView)){
 	Gtk::Grid* grid = nullptr;
 	builder->get_widget("MainGrid", grid);
 	if(grid)
@@ -49,7 +49,7 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	af->set_vexpand();
 	af->set_hexpand();
 
-	af->add(*mChessBoard);
+	af->add(*mBoardView);
 
 	show_all_children();
 }

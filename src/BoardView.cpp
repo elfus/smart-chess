@@ -1,4 +1,4 @@
-//===-- smart-chess/ChessBoard.cpp ------------------------------*- C++ -*-===//
+//===-- smart-chess/BoardView.cpp ------------------------------*- C++ -*-===//
 //
 // This file is part of smart-chess, a chess game meant to provide an easy
 // interface to experiment, learn and implement Artificial Intelligence
@@ -23,11 +23,11 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file ChessBoard.cpp
+/// \file BoardView.cpp
 /// \brief The class in charge of drawing the chess board on the gui.
 ///
 //===----------------------------------------------------------------------===//
-#include "ChessBoard.h"
+#include "BoardView.h"
 #include <iostream>
 #include <assert.h>
 #include <gdkmm.h>
@@ -36,27 +36,27 @@ using namespace std;
 
 namespace sch {
 
-ChessBoard::ChessBoard() : Gtk::DrawingArea(){
+BoardView::BoardView() : Gtk::DrawingArea(){
 	set_vexpand();
 	set_size_request(MIN_BOARD_W, MIN_BOARD_H);
 	set_events(Gdk::EventMask::BUTTON_PRESS_MASK | Gdk::EventMask::BUTTON_RELEASE_MASK);
 
-	signal_button_release_event().connect(sigc::mem_fun(*this,&ChessBoard::clickReleased));
+	signal_button_release_event().connect(sigc::mem_fun(*this,&BoardView::clickReleased));
 }
 
-ChessBoard::~ChessBoard() {
+BoardView::~BoardView() {
 	cerr << "ChessBoard Destructor" << endl;
 }
 
-sigc::signal<void, ChessBoard::Square>
-ChessBoard::getSignalClickedReleased()
+sigc::signal<void, BoardView::Square>
+BoardView::getSignalClickedReleased()
 {
 	return mSignalClickReleased;
 }
 
 
-ChessBoard::Square
-ChessBoard::calculateSquare(double x, double y)
+BoardView::Square
+BoardView::calculateSquare(double x, double y)
 {
 	int  i = 0, j = 0;
 	bool found = false;
@@ -78,7 +78,7 @@ ChessBoard::calculateSquare(double x, double y)
 	return Square(Row(j), Column(i));
 }
 
-bool ChessBoard::clickReleased(GdkEventButton* event)
+bool BoardView::clickReleased(GdkEventButton* event)
 {
 	if(event->button == 1)  {// 1 is left mouse
 		if(event->x > mBoardWidth || event->y > mBoardHeight) {
@@ -93,7 +93,7 @@ bool ChessBoard::clickReleased(GdkEventButton* event)
 	return false;
 }
 
-void ChessBoard::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
+void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 		int board_width, int board_height)
 {
 	mSquareWidth = board_width / SQUARE_NUM;
@@ -127,7 +127,7 @@ void ChessBoard::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 	}
 }
 
-void ChessBoard::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
+void BoardView::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
 		const Glib::ustring& path, Row row, Column col)
 {
 	Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file(path);
@@ -136,7 +136,7 @@ void ChessBoard::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
 	ctx->paint();
 }
 
-bool ChessBoard::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
+bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	Gtk::Allocation allocation = get_allocation();
 	mBoardWidth = allocation.get_width();
 	mBoardHeight = allocation.get_height();
@@ -148,31 +148,31 @@ bool ChessBoard::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	return true;
 }
 
-std::ostream& operator <<(std::ostream& os, ChessBoard::Row r)
+std::ostream& operator <<(std::ostream& os, BoardView::Row r)
 {
 	switch (r) {
-	case ChessBoard::Row::ONE: os << 1; break;
-	case ChessBoard::Row::TWO: os << 2; break;
-	case ChessBoard::Row::THREE: os << 3; break;
-	case ChessBoard::Row::FOUR: os << 4; break;
-	case ChessBoard::Row::FIVE: os << 5; break;
-	case ChessBoard::Row::SIX: os << 6; break;
-	case ChessBoard::Row::SEVEN: os << 7; break;
-	case ChessBoard::Row::EIGHT: os << 8; break;
+	case BoardView::Row::ONE: os << 1; break;
+	case BoardView::Row::TWO: os << 2; break;
+	case BoardView::Row::THREE: os << 3; break;
+	case BoardView::Row::FOUR: os << 4; break;
+	case BoardView::Row::FIVE: os << 5; break;
+	case BoardView::Row::SIX: os << 6; break;
+	case BoardView::Row::SEVEN: os << 7; break;
+	case BoardView::Row::EIGHT: os << 8; break;
 	}
 	return os;
 }
-std::ostream& operator <<(std::ostream& os, ChessBoard::Column c)
+std::ostream& operator <<(std::ostream& os, BoardView::Column c)
 {
 	switch(c) {
-	case ChessBoard::Column::A: os << "A"; break;
-	case ChessBoard::Column::B: os << "B"; break;
-	case ChessBoard::Column::C: os << "C"; break;
-	case ChessBoard::Column::D: os << "D"; break;
-	case ChessBoard::Column::E: os << "E"; break;
-	case ChessBoard::Column::F: os << "F"; break;
-	case ChessBoard::Column::G: os << "G"; break;
-	case ChessBoard::Column::H: os << "H"; break;
+	case BoardView::Column::A: os << "A"; break;
+	case BoardView::Column::B: os << "B"; break;
+	case BoardView::Column::C: os << "C"; break;
+	case BoardView::Column::D: os << "D"; break;
+	case BoardView::Column::E: os << "E"; break;
+	case BoardView::Column::F: os << "F"; break;
+	case BoardView::Column::G: os << "G"; break;
+	case BoardView::Column::H: os << "H"; break;
 	}
 	return os;
 }
