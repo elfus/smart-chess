@@ -139,15 +139,6 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	ctx->restore();
 }
 
-void BoardView::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
-		const Glib::ustring& path, BoardRow row, BoardColumn col)
-{
-	Glib::RefPtr<Gdk::Pixbuf> image = Gdk::Pixbuf::create_from_file(path);
-	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
-	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*col, 0 + mSquareHeight*row);
-	ctx->paint();
-}
-
 bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	Gtk::Allocation allocation = get_allocation();
 	mBoardWidth = allocation.get_width();

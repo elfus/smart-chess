@@ -85,8 +85,6 @@ private:
 	bool clickReleased(GdkEventButton* event);
 
 	void drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessPiece& p);
-	void drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
-			const Glib::ustring& path, BoardRow row, BoardColumn col);
 
 
 	BoardSquare calculateSquare(double x, double y);
