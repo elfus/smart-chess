@@ -50,6 +50,8 @@ public:
 		return mBlackPieces;
 	}
 
+	void updateView();
+
 private:
 	std::shared_ptr<BoardView> mBoardView;
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;

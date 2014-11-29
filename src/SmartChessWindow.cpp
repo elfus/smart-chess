@@ -57,6 +57,7 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 		sigc::mem_fun(*mBoardController,&BoardController::chessBoardClicked));
 
 	show_all_children();
+	mBoardState->updateView();
 }
 
 SmartChessWindow::~SmartChessWindow() {

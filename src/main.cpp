@@ -27,6 +27,7 @@
 /// \brief Main entry point for smart-chess
 ///
 //===----------------------------------------------------------------------===//
+#include "ChessPiece.h"
 #include "SmartChessWindow.h"
 #include <iostream>
 #include <exception>
@@ -38,6 +39,8 @@ int main(int argc, char * argv[])
 	try {
 		Glib::RefPtr<Gtk::Application> app =
 				Gtk::Application::create(argc, argv);
+
+		sch::ChessPiece::loadImages();
 
 		// @todo Improve how we retrieve the resource files, we don't want
 		// harcoded stuff.

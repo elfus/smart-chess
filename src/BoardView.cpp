@@ -28,6 +28,7 @@
 ///
 //===----------------------------------------------------------------------===//
 #include "BoardView.h"
+#include "ChessPiece.h"
 #include <iostream>
 #include <assert.h>
 #include <gdkmm.h>
@@ -124,6 +125,16 @@ void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 			is_white = true;
 		}
 	}
+}
+
+void BoardView::drawPiece(const ChessPiece& p)
+{
+	auto image = p.getImage();
+	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
+	auto ctx = get_window()->create_cairo_context();
+	BoardPosition pos = p.getPosition();
+	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*pos.column, 0 + mSquareHeight*pos.row);
+	ctx->paint();
 }
 
 void BoardView::drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,

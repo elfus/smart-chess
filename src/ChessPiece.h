@@ -32,42 +32,89 @@
 #define CHESSPIECE_H_
 
 #include "BoardView.h"
+#include "Util.h"
+#include <gdkmm.h>
+#include <map>
 
 namespace sch {
 
+enum class ImageType {
+	WHITE_KING,
+	BLACK_KING,
+	WHITE_QUEEN,
+	BLACK_QUEEN,
+	WHITE_ROOK,
+	BLACK_ROOK,
+	WHITE_BISHOP,
+	BLACK_BISHOP,
+	WHITE_KNIGHT,
+	BLACK_KNIGHT,
+	WHITE_PAWN,
+	BLACK_PAWN,
+	UNDEFINED
+};
+
 class ChessPiece {
 public:
-	ChessPiece();
+	ChessPiece(BoardPosition p, ImageType color)
+	: mImageType(color),  mImage(images[mImageType]), mPosition(p) {}
 	virtual ~ChessPiece();
 
-	bool isWhitePiece() { return mWhitePiece; }
-	bool isBlackPiece() { return !mWhitePiece; }
+	bool isWhite() {
+		switch(mImageType) {
+		case ImageType::WHITE_KING:
+		case ImageType::WHITE_QUEEN:
+		case ImageType::WHITE_BISHOP:
+		case ImageType::WHITE_KNIGHT:
+		case ImageType::WHITE_ROOK:
+		case ImageType::WHITE_PAWN:
+			return true;
+		default:
+			return false;
+		}
+	}
+	bool isBlack() { return !isWhite(); }
+	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
+	void setPosition(BoardPosition pos) { mPosition = pos; }
+	BoardPosition getPosition() const { return mPosition; }
+
+	static void loadImages();
 protected:
-	bool mWhitePiece;
+	static std::map<ImageType, Glib::RefPtr<Gdk::Pixbuf>> images;
+
+	ImageType mImageType;
+	Glib::RefPtr<Gdk::Pixbuf> mImage;
+	BoardPosition mPosition;
 };
 
 class King : public ChessPiece{
-
+public:
+	King(BoardPosition p, ImageType t) : ChessPiece(p, t){ }
 };
 
 class Queen : public ChessPiece {
-
+public:
+	Queen(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
 };
 
 class Rook : public ChessPiece {
-
+public:
+	Rook(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
 };
 
 class Bishop : public ChessPiece {
-
+public:
+	Bishop(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
 };
 
 class Knight : public ChessPiece {
-
+public:
+	Knight(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
 };
 
 class Pawn : public ChessPiece {
-
+public:
+	Pawn(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
 };
 
 } /* namespace sch */

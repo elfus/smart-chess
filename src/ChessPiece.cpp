@@ -32,13 +32,28 @@
 
 namespace sch {
 
-ChessPiece::ChessPiece() {
-	// TODO Auto-generated constructor stub
-
-}
+std::map<ImageType, Glib::RefPtr<Gdk::Pixbuf>> ChessPiece::images;
 
 ChessPiece::~ChessPiece() {
 	// TODO Auto-generated destructor stub
+}
+
+/// @note This method MUST be called at the beginning of the program.
+void ChessPiece::loadImages()
+{
+	images[ImageType::WHITE_KING] = Gdk::Pixbuf::create_from_file("data/kingw.gif");
+	images[ImageType::WHITE_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenw.gif");
+	images[ImageType::WHITE_ROOK] = Gdk::Pixbuf::create_from_file("data/rookw.gif");
+	images[ImageType::WHITE_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopw.gif");
+	images[ImageType::WHITE_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightw.gif");
+	images[ImageType::WHITE_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnw.gif");
+
+	images[ImageType::BLACK_KING] = Gdk::Pixbuf::create_from_file("data/kingb.gif");
+	images[ImageType::BLACK_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenb.gif");
+	images[ImageType::BLACK_ROOK] = Gdk::Pixbuf::create_from_file("data/rookb.gif");
+	images[ImageType::BLACK_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopb.gif");
+	images[ImageType::BLACK_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightb.gif");
+	images[ImageType::BLACK_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnb.gif");
 }
 
 } /* namespace sch */

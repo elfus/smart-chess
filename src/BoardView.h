@@ -32,35 +32,11 @@
 #define CHESSBOARD_H_
 
 #include <gtkmm/drawingarea.h>
-#include <tuple>
+#include "Util.h"
 
 namespace sch {
 
 class ChessPiece;
-
-enum BoardRow {
-	MAX_ROW = 8,
-	ONE = 7,
-	TWO = 6,
-	THREE = 5,
-	FOUR = 4,
-	FIVE = 3,
-	SIX = 2,
-	SEVEN = 1,
-	EIGHT = 0
-};
-
-enum BoardColumn {
-	A = 0,
-	B,
-	C,
-	D,
-	E,
-	F,
-	G,
-	H,
-	MAX_COL
-};
 
 struct BoardSquare {
 	BoardSquare(BoardRow r, BoardColumn c) : row(r), column(c), piece(nullptr){}
@@ -88,6 +64,7 @@ public:
 
 	sigc::signal<void, BoardSquare> getSignalClickedReleased();
 
+	void drawPiece(const ChessPiece& p);
 private:
 	static const int SQUARE_NUM = 8;
 	static const int MIN_BOARD_W = 400;
@@ -107,6 +84,7 @@ private:
 
 	void drawFigure(const Cairo::RefPtr<Cairo::Context>& ctx,
 			const Glib::ustring& path, BoardRow row, BoardColumn col);
+
 
 	BoardSquare calculateSquare(double x, double y);
 };
