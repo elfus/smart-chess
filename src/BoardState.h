@@ -52,7 +52,7 @@ public:
 	}
 
 	void updateView();
-	BoardSquare getSquareAt(BoardPosition pos);
+	BoardSquare& getSquareAt(BoardPosition pos);
 
 private:
 	std::shared_ptr<BoardView> mBoardView;
@@ -63,6 +63,7 @@ private:
 	void initWhitePieces();
 	void initBlackPieces();
 	void initSquares();
+	void bindPiecesToSquares();
 	void reset();
 
 	void start();

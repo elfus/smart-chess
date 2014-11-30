@@ -44,12 +44,12 @@ std::ostream& operator << (std::ostream& os, PieceType t)
 	case PieceType::WHITE_KNIGHT : os << "WHITE_KNIGHT"; break;
 	case PieceType::WHITE_PAWN : os << "WHITE_PAWN"; break;
 
-	case PieceType::BLACK_KING : os << "WHITE_KING"; break;
-	case PieceType::BLACK_QUEEN : os << "WHITE_QUEEN"; break;
-	case PieceType::BLACK_BISHOP : os << "WHITE_BISHOP"; break;
-	case PieceType::BLACK_ROOK : os << "WHITE_ROOK"; break;
-	case PieceType::BLACK_KNIGHT : os << "WHITE_KNIGHT"; break;
-	case PieceType::BLACK_PAWN : os << "WHITE_PAWN"; break;
+	case PieceType::BLACK_KING : os << "BLACK_KING"; break;
+	case PieceType::BLACK_QUEEN : os << "BLACK_QUEEN"; break;
+	case PieceType::BLACK_BISHOP : os << "BLACK_BISHOP"; break;
+	case PieceType::BLACK_ROOK : os << "BLACK_ROOK"; break;
+	case PieceType::BLACK_KNIGHT : os << "BLACK_KNIGHT"; break;
+	case PieceType::BLACK_PAWN : os << "BLACK_PAWN"; break;
 	case PieceType::UNDEFINED: os << "UNDEFINED"; break;
 	}
 	return os;

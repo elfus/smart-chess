@@ -31,6 +31,7 @@
 #include "BoardState.h"
 #include "ChessPiece.h"
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -85,6 +86,20 @@ void BoardState::initSquares() {
 }
 
 
+void BoardState::bindPiecesToSquares()
+{
+	for(auto p : mWhitePieces) {
+		BoardSquare& s = getSquareAt(p->getPosition());
+		s.setPiece(p);
+	}
+
+	for(auto p : mBlackPieces) {
+		BoardSquare& s = getSquareAt(p->getPosition());
+		s.setPiece(p);
+	}
+}
+
+
 void BoardState::start() {
 
 }
@@ -100,13 +115,14 @@ void BoardState::reset() {
 	initWhitePieces();
 	mBlackPieces.clear();
 	initBlackPieces();
+	bindPiecesToSquares();
 	assert(!mWhitePieces.empty());
 	assert(!mBlackPieces.empty());
 }
 
-BoardSquare BoardState::getSquareAt(BoardPosition pos)
+BoardSquare& BoardState::getSquareAt(BoardPosition pos)
 {
-	for(auto s : mSquares) {
+	for(auto& s : mSquares) {
 		if(s.mPosition == pos)
 			return s;
 	}
