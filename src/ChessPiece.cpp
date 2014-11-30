@@ -32,7 +32,28 @@
 
 namespace sch {
 
-std::map<ImageType, Glib::RefPtr<Gdk::Pixbuf>> ChessPiece::images;
+std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> ChessPiece::images;
+
+std::ostream& operator << (std::ostream& os, PieceType t)
+{
+	switch(t) {
+	case PieceType::WHITE_KING : os << "WHITE_KING"; break;
+	case PieceType::WHITE_QUEEN : os << "WHITE_QUEEN"; break;
+	case PieceType::WHITE_BISHOP : os << "WHITE_BISHOP"; break;
+	case PieceType::WHITE_ROOK : os << "WHITE_ROOK"; break;
+	case PieceType::WHITE_KNIGHT : os << "WHITE_KNIGHT"; break;
+	case PieceType::WHITE_PAWN : os << "WHITE_PAWN"; break;
+
+	case PieceType::BLACK_KING : os << "WHITE_KING"; break;
+	case PieceType::BLACK_QUEEN : os << "WHITE_QUEEN"; break;
+	case PieceType::BLACK_BISHOP : os << "WHITE_BISHOP"; break;
+	case PieceType::BLACK_ROOK : os << "WHITE_ROOK"; break;
+	case PieceType::BLACK_KNIGHT : os << "WHITE_KNIGHT"; break;
+	case PieceType::BLACK_PAWN : os << "WHITE_PAWN"; break;
+	case PieceType::UNDEFINED: os << "UNDEFINED"; break;
+	}
+	return os;
+}
 
 ChessPiece::~ChessPiece() {
 	// TODO Auto-generated destructor stub
@@ -41,19 +62,37 @@ ChessPiece::~ChessPiece() {
 /// @note This method MUST be called at the beginning of the program.
 void ChessPiece::loadImages()
 {
-	images[ImageType::WHITE_KING] = Gdk::Pixbuf::create_from_file("data/kingw.gif");
-	images[ImageType::WHITE_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenw.gif");
-	images[ImageType::WHITE_ROOK] = Gdk::Pixbuf::create_from_file("data/rookw.gif");
-	images[ImageType::WHITE_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopw.gif");
-	images[ImageType::WHITE_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightw.gif");
-	images[ImageType::WHITE_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnw.gif");
+	images[PieceType::WHITE_KING] = Gdk::Pixbuf::create_from_file("data/kingw.gif");
+	images[PieceType::WHITE_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenw.gif");
+	images[PieceType::WHITE_ROOK] = Gdk::Pixbuf::create_from_file("data/rookw.gif");
+	images[PieceType::WHITE_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopw.gif");
+	images[PieceType::WHITE_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightw.gif");
+	images[PieceType::WHITE_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnw.gif");
 
-	images[ImageType::BLACK_KING] = Gdk::Pixbuf::create_from_file("data/kingb.gif");
-	images[ImageType::BLACK_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenb.gif");
-	images[ImageType::BLACK_ROOK] = Gdk::Pixbuf::create_from_file("data/rookb.gif");
-	images[ImageType::BLACK_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopb.gif");
-	images[ImageType::BLACK_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightb.gif");
-	images[ImageType::BLACK_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnb.gif");
+	images[PieceType::BLACK_KING] = Gdk::Pixbuf::create_from_file("data/kingb.gif");
+	images[PieceType::BLACK_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenb.gif");
+	images[PieceType::BLACK_ROOK] = Gdk::Pixbuf::create_from_file("data/rookb.gif");
+	images[PieceType::BLACK_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopb.gif");
+	images[PieceType::BLACK_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightb.gif");
+	images[PieceType::BLACK_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnb.gif");
+}
+
+bool ChessPiece::isWhite() {
+	switch(mPieceType) {
+	case PieceType::WHITE_KING:
+	case PieceType::WHITE_QUEEN:
+	case PieceType::WHITE_BISHOP:
+	case PieceType::WHITE_KNIGHT:
+	case PieceType::WHITE_ROOK:
+	case PieceType::WHITE_PAWN:
+		return true;
+	default:
+		return false;
+	}
+}
+
+bool ChessPiece::isBlack() {
+	return !isWhite();
 }
 
 } /* namespace sch */

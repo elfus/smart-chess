@@ -76,7 +76,11 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	}
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
-	return BoardSquare(BoardRow(j), BoardColumn(i));
+
+	if(mState)
+	 return mState->getSquareAt(BoardPosition(BoardRow(j), BoardColumn(i)));
+	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable" << endl;
+	return BoardSquare(BoardPosition(BoardRow(j), BoardColumn(i)));
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)

@@ -38,7 +38,7 @@
 
 namespace sch {
 
-enum class ImageType {
+enum class PieceType {
 	WHITE_KING,
 	BLACK_KING,
 	WHITE_QUEEN,
@@ -54,67 +54,59 @@ enum class ImageType {
 	UNDEFINED
 };
 
+std::ostream& operator << (std::ostream& os, PieceType t);
+
+
 class ChessPiece {
 public:
-	ChessPiece(BoardPosition p, ImageType color)
-	: mImageType(color),  mImage(images[mImageType]), mPosition(p) {}
+	ChessPiece(BoardPosition p, PieceType color)
+	: mPieceType(color),  mImage(images[mPieceType]), mPosition(p) {}
 	virtual ~ChessPiece();
 
-	bool isWhite() {
-		switch(mImageType) {
-		case ImageType::WHITE_KING:
-		case ImageType::WHITE_QUEEN:
-		case ImageType::WHITE_BISHOP:
-		case ImageType::WHITE_KNIGHT:
-		case ImageType::WHITE_ROOK:
-		case ImageType::WHITE_PAWN:
-			return true;
-		default:
-			return false;
-		}
-	}
-	bool isBlack() { return !isWhite(); }
+	bool isWhite();
+	bool isBlack();
 	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
 	void setPosition(BoardPosition pos) { mPosition = pos; }
 	BoardPosition getPosition() const { return mPosition; }
+	PieceType getPieceType() const { return mPieceType; }
 
 	static void loadImages();
 protected:
-	static std::map<ImageType, Glib::RefPtr<Gdk::Pixbuf>> images;
+	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
 
-	ImageType mImageType;
+	PieceType mPieceType;
 	Glib::RefPtr<Gdk::Pixbuf> mImage;
 	BoardPosition mPosition;
 };
 
 class King : public ChessPiece{
 public:
-	King(BoardPosition p, ImageType t) : ChessPiece(p, t){ }
+	King(BoardPosition p, PieceType t) : ChessPiece(p, t){ }
 };
 
 class Queen : public ChessPiece {
 public:
-	Queen(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
+	Queen(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 };
 
 class Rook : public ChessPiece {
 public:
-	Rook(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
+	Rook(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 };
 
 class Bishop : public ChessPiece {
 public:
-	Bishop(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
+	Bishop(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 };
 
 class Knight : public ChessPiece {
 public:
-	Knight(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
+	Knight(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 };
 
 class Pawn : public ChessPiece {
 public:
-	Pawn(BoardPosition p, ImageType t) : ChessPiece(p, t) {}
+	Pawn(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 };
 
 } /* namespace sch */

@@ -61,6 +61,32 @@ struct BoardPosition {
 	BoardRow row;
 	BoardColumn column;
 	BoardPosition(BoardRow r, BoardColumn c) : row(r), column(c) {}
+
+	bool operator ==(const BoardPosition& that) {
+		return row == that.row && column == that.column;
+	}
+};
+
+class ChessPiece;
+
+struct BoardSquare {
+	BoardSquare(BoardPosition pos) : mPosition(pos), piece(nullptr){}
+	BoardPosition mPosition;
+
+	void setPiece(std::shared_ptr<ChessPiece>& p) { piece = p; }
+	bool hasPiece() { return piece.operator bool(); }
+	std::shared_ptr<ChessPiece> getPiece() {
+		return piece;
+	}
+
+	std::shared_ptr<ChessPiece> removePiece() {
+		std::shared_ptr<ChessPiece> tmp = piece;
+		piece = nullptr;
+		return tmp;
+	}
+
+private:
+	std::shared_ptr<ChessPiece> piece;
 };
 
 }

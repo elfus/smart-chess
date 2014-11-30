@@ -39,21 +39,6 @@ namespace sch {
 class ChessPiece;
 class BoardState;
 
-struct BoardSquare {
-	BoardSquare(BoardRow r, BoardColumn c) : row(r), column(c), piece(nullptr){}
-	BoardRow row;
-	BoardColumn column;
-	void setPiece(std::shared_ptr<ChessPiece>& p) { piece = p; }
-	bool hasPiece() { return piece.operator bool(); }
-	std::shared_ptr<ChessPiece> removePiece() {
-		std::shared_ptr<ChessPiece> tmp = piece;
-		piece = nullptr;
-		return tmp;
-	}
-private:
-	std::shared_ptr<ChessPiece> piece;
-};
-
 class BoardView: public Gtk::DrawingArea {
 public:
 

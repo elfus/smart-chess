@@ -6,6 +6,7 @@
  */
 
 #include "BoardController.h"
+#include "ChessPiece.h"
 #include <iostream>
 
 using namespace std;
@@ -24,7 +25,13 @@ BoardController::~BoardController() {
 
 void BoardController::chessBoardClicked(BoardSquare s)
 {
-	cout << "clicked: " << s.row << " " << s.column << endl;
+	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << ", ";
+	cout << "PIECE: ";
+	if(s.hasPiece())
+		cout << s.getPiece()->getPieceType() << endl;
+	else
+		cout << "NO PIECE" << endl;
+
 }
 
 } /* namespace sch */
