@@ -79,7 +79,7 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 
 	if(mState)
 	 return mState->getSquareAt(BoardPosition(BoardRow(j), BoardColumn(i)));
-	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable" << endl;
+	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable, creating new BoardSquare" << endl;
 	return BoardSquare(BoardPosition(BoardRow(j), BoardColumn(i)));
 }
 
