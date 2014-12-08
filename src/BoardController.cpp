@@ -13,8 +13,8 @@ using namespace std;
 
 namespace sch {
 
-BoardController::BoardController(std::shared_ptr<BoardState> state)
-: mState(state){
+BoardController::BoardController()
+: mState(nullptr){
 
 
 }

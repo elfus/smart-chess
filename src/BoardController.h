@@ -15,7 +15,7 @@ namespace sch {
 class BoardController {
 public:
 
-	BoardController(std::shared_ptr<BoardState> state);
+	BoardController();
 	virtual ~BoardController();
 
 	void chessBoardClicked(BoardSquare);
