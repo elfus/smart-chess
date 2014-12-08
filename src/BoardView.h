@@ -37,7 +37,7 @@
 namespace sch {
 
 class ChessPiece;
-class BoardState;
+class BoardController;
 
 class BoardView: public Gtk::DrawingArea {
 public:
@@ -50,7 +50,9 @@ public:
 
 	sigc::signal<void, BoardSquare> getSignalClickedReleased();
 
-	void setBoardState(std::shared_ptr<BoardState> s) { mState = s; }
+	void setBoardController(std::shared_ptr<BoardController> c) { mController = c; }
+
+	void force_redraw();
 private:
 	static const int SQUARE_NUM = 8;
 	static const int MIN_BOARD_W = 400;
@@ -60,7 +62,7 @@ private:
 	int mBoardHeight;
 	int mSquareWidth;
 	int mSquareHeight;
-	std::shared_ptr<BoardState> mState;
+	std::shared_ptr<BoardController> mController;
 
 	sigc::signal<void, BoardSquare> mSignalClickReleased;
 

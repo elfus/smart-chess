@@ -36,14 +36,23 @@ void BoardController::chessBoardClicked(BoardSquare s)
 
 void BoardController::startGame() {
 	cout << "BoardController::startGame" << endl;
+	mState = make_shared<BoardState>();
+
+	mView->force_redraw();
 }
 
 void BoardController::endGame() {
 	cout << "BoardController::endGame" << endl;
+	// process current game state, then delete;
+	mState.reset();
+
+	mView->force_redraw();
 }
 
 void BoardController::resetGame() {
 	cout << "BoardController::resetGame" << endl;
+	endGame();
+	startGame();
 }
 
 } /* namespace sch */

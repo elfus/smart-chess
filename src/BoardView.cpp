@@ -28,7 +28,7 @@
 ///
 //===----------------------------------------------------------------------===//
 #include "BoardView.h"
-#include "BoardState.h"
+#include "BoardController.h"
 #include "ChessPiece.h"
 #include <iostream>
 #include <assert.h>
@@ -77,8 +77,8 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
 
-	if(mState)
-	 return mState->getSquareAt(BoardPosition(BoardRow(j), BoardColumn(i)));
+	if(mController->gameInProgress())
+	 return mController->getState()->getSquareAt(BoardPosition(BoardRow(j), BoardColumn(i)));
 	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable, creating new BoardSquare" << endl;
 	return BoardSquare(BoardPosition(BoardRow(j), BoardColumn(i)));
 }
@@ -143,6 +143,15 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	ctx->restore();
 }
 
+void BoardView::force_redraw() {
+	Glib::RefPtr<Gdk::Window> win = get_window();
+	if (win)
+	{
+		Gdk::Rectangle r(0, 0, get_allocation().get_width(), get_allocation().get_height());
+		win->invalidate_rect(r, false);
+	}
+}
+
 bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	Gtk::Allocation allocation = get_allocation();
 	mBoardWidth = allocation.get_width();
@@ -151,7 +160,8 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
 	// @todo Remove mState variable from this class
-	if(mState) {
+	if(mController->gameInProgress()) {
+		auto mState = mController->getState();
 		auto black_pieces = mState->getBlackPieces();
 		assert(!black_pieces.empty());
 		for(auto p : black_pieces)

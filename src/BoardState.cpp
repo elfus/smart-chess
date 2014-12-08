@@ -40,10 +40,11 @@ namespace sch {
 BoardState::BoardState()
 : mWhitePieces(), mBlackPieces(), mSquares() {
 	reset();
+	cout << "BoardState Constructor" << endl;
 }
 
 BoardState::~BoardState() {
-	cerr << "ChessGame Destructor" << endl;
+	cout << "BoardState Destructor" << endl;
 }
 
 void BoardState::initWhitePieces() {
@@ -96,15 +97,6 @@ void BoardState::bindPiecesToSquares()
 				s.setPiece(p);
 		}
 	}
-}
-
-
-void BoardState::start() {
-
-}
-
-void BoardState::end() {
-
 }
 
 void BoardState::reset() {

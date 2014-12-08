@@ -20,11 +20,17 @@ public:
 
 	void chessBoardClicked(BoardSquare);
 
+	bool gameInProgress() { return mState.operator bool();}
+	std::shared_ptr<BoardState> getState() const {return mState; }
+
+	void setBoardView(std::shared_ptr<BoardView> v) { mView = v; }
+
 	void startGame();
 	void endGame();
 	void resetGame();
 private:
 	std::shared_ptr<BoardState> mState;
+	std::shared_ptr<BoardView> mView;
 };
 
 } /* namespace sch */

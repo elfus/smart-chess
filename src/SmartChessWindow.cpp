@@ -57,7 +57,8 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	mBoardView->getSignalClickedReleased().connect(
 		sigc::mem_fun(*mBoardController,&BoardController::chessBoardClicked));
 
-	mBoardView->setBoardState(mBoardState);
+	mBoardView->setBoardController(mBoardController);
+	mBoardController->setBoardView(mBoardView);
 
 	// setup the buttons that control the game
 	Gtk::Button *b = nullptr;
@@ -76,6 +77,9 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::resetGame));
 	b = nullptr;
 	show_all_children();
+
+	// start a game
+	mBoardController->startGame();
 }
 
 SmartChessWindow::~SmartChessWindow() {

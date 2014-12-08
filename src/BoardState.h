@@ -34,7 +34,7 @@
 #include <vector>
 #include <memory>
 #include <assert.h>
-#include "BoardView.h"
+#include "ChessPiece.h"
 
 namespace sch {
 
@@ -63,11 +63,6 @@ private:
 	void initSquares();
 	void bindPiecesToSquares();
 	void reset();
-
-	void start();
-	void end();
-
-
 };
 
 } /* namespace sch */
