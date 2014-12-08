@@ -34,4 +34,16 @@ void BoardController::chessBoardClicked(BoardSquare s)
 
 }
 
+void BoardController::startGame() {
+	cout << "BoardController::startGame" << endl;
+}
+
+void BoardController::endGame() {
+	cout << "BoardController::endGame" << endl;
+}
+
+void BoardController::resetGame() {
+	cout << "BoardController::resetGame" << endl;
+}
+
 } /* namespace sch */

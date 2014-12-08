@@ -30,6 +30,7 @@
 
 #include "SmartChessWindow.h"
 #include <iostream>
+#include <gtkmm/button.h>
 
 using namespace std;
 
@@ -57,6 +58,23 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 		sigc::mem_fun(*mBoardController,&BoardController::chessBoardClicked));
 
 	mBoardView->setBoardState(mBoardState);
+
+	// setup the buttons that control the game
+	Gtk::Button *b = nullptr;
+	builder->get_widget("StartButton", b);
+	assert(b);
+	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::startGame));
+	b = nullptr;
+
+	builder->get_widget("EndButton", b);
+	assert(b);
+	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::endGame));
+	b = nullptr;
+
+	builder->get_widget("ResetButton", b);
+	assert(b);
+	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::resetGame));
+	b = nullptr;
 	show_all_children();
 }
 

@@ -19,6 +19,10 @@ public:
 	virtual ~BoardController();
 
 	void chessBoardClicked(BoardSquare);
+
+	void startGame();
+	void endGame();
+	void resetGame();
 private:
 	std::shared_ptr<BoardState> mState;
 };
