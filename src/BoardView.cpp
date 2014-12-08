@@ -140,6 +140,22 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	BoardPosition pos = p.getPosition();
 	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*pos.column, 0 + mSquareHeight*pos.row);
 	ctx->paint();
+
+	if(p.isSelected()) {
+		const double LINE_W = 8.0;
+		const double orig_x = 0 + mSquareWidth*pos.column + (LINE_W/2);
+		const double orig_y = 0 + mSquareHeight*pos.row + (LINE_W/2);
+		ctx->set_source_rgba(0, 0.0, 0.9, 1.0);
+		ctx->set_line_width(LINE_W);
+		ctx->set_line_join(Cairo::LINE_JOIN_MITER);
+		ctx->move_to(orig_x, orig_y);
+		ctx->line_to(orig_x+mSquareWidth-LINE_W, orig_y);
+		ctx->line_to(orig_x+mSquareWidth-LINE_W, orig_y+mSquareHeight-LINE_W);
+		ctx->line_to(orig_x, orig_y+mSquareHeight-LINE_W);
+		ctx->close_path();
+		ctx->stroke();
+	}
+
 	ctx->restore();
 }
 

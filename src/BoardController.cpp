@@ -14,7 +14,9 @@ using namespace std;
 namespace sch {
 
 BoardController::BoardController()
-: mState(nullptr){
+: mState(nullptr),
+  mView(nullptr),
+  mSelectedPiece(nullptr){
 
 
 }
@@ -27,11 +29,22 @@ void BoardController::chessBoardClicked(BoardSquare s)
 {
 	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << ", ";
 	cout << "PIECE: ";
-	if(s.hasPiece())
+	if(s.hasPiece()) {
+		if(mSelectedPiece)
+			mSelectedPiece->setSelected(false);
+		mSelectedPiece = s.getPiece();
+		mSelectedPiece->setSelected();
 		cout << s.getPiece()->getPieceType() << endl;
-	else
+	}
+	else {
 		cout << "NO PIECE" << endl;
+		if(mSelectedPiece) {
+			mSelectedPiece->setSelected(false);
+			mSelectedPiece.reset();
+		}
+	}
 
+	mView->force_redraw();
 }
 
 void BoardController::startGame() {

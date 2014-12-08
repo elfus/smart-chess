@@ -31,6 +31,7 @@ public:
 private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<BoardView> mView;
+	std::shared_ptr<ChessPiece> mSelectedPiece;
 };
 
 } /* namespace sch */

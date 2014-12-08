@@ -60,7 +60,8 @@ std::ostream& operator << (std::ostream& os, PieceType t);
 class ChessPiece {
 public:
 	ChessPiece(BoardPosition p, PieceType color)
-	: mPieceType(color),  mImage(images[mPieceType]), mPosition(p) {}
+	: mPieceType(color),  mImage(images[mPieceType]), mPosition(p),
+	  mSelected(false){}
 	virtual ~ChessPiece();
 
 	bool isWhite();
@@ -70,6 +71,9 @@ public:
 	BoardPosition getPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
 
+	void setSelected(bool s = true) { mSelected = s;}
+	bool isSelected() const { return mSelected; }
+
 	static void loadImages();
 protected:
 	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
@@ -77,6 +81,7 @@ protected:
 	PieceType mPieceType;
 	Glib::RefPtr<Gdk::Pixbuf> mImage;
 	BoardPosition mPosition;
+	bool mSelected; // Selected by the user
 };
 
 class King : public ChessPiece{
