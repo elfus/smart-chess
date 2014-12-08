@@ -62,7 +62,7 @@ struct BoardPosition {
 	BoardColumn column;
 	BoardPosition(BoardRow r, BoardColumn c) : row(r), column(c) {}
 
-	bool operator ==(const BoardPosition& that) {
+	bool operator ==(const BoardPosition& that) const {
 		return row == that.row && column == that.column;
 	}
 };
