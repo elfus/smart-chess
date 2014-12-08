@@ -37,7 +37,7 @@ using namespace std;
 
 namespace sch {
 
-BoardState::BoardState(std::shared_ptr<BoardView>& board)
+BoardState::BoardState()
 : mWhitePieces(), mBlackPieces(), mSquares() {
 	reset();
 }

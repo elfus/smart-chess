@@ -40,7 +40,7 @@ namespace sch {
 
 class BoardState {
 public:
-	BoardState(std::shared_ptr<BoardView>& board);
+	BoardState();
 	~BoardState();
 
 	auto getWhitePieces() -> std::vector<std::shared_ptr<ChessPiece>> {

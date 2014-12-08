@@ -40,7 +40,7 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 		const Glib::RefPtr<Gtk::Builder>& builder)
 : Gtk::Window(cobject), mMainGrid(nullptr),
   mBoardView(new BoardView),
-  mBoardState(new BoardState(mBoardView)),
+  mBoardState(),
   mBoardController(new BoardController(mBoardState)){
 	Gtk::Grid* grid = nullptr;
 	builder->get_widget("MainGrid", grid);
