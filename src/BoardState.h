@@ -51,11 +51,9 @@ public:
 		return mBlackPieces;
 	}
 
-	void updateView();
 	BoardSquare getSquareAt(BoardPosition pos);
 
 private:
-	std::shared_ptr<BoardView> mBoardView;
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
 	std::vector<std::shared_ptr<ChessPiece>> mBlackPieces;
 	std::vector<BoardSquare> mSquares;

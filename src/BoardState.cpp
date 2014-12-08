@@ -38,17 +38,12 @@ using namespace std;
 namespace sch {
 
 BoardState::BoardState(std::shared_ptr<BoardView>& board)
-: mBoardView(board), mSquares() {
+: mWhitePieces(), mBlackPieces(), mSquares() {
 	reset();
 }
 
 BoardState::~BoardState() {
 	cerr << "ChessGame Destructor" << endl;
-}
-
-void BoardState::updateView() {
-	// @todo erase previous frame
-	mBoardView->setBoardState(shared_ptr<BoardState>(this));
 }
 
 void BoardState::initWhitePieces() {
