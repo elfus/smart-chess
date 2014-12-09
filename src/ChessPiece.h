@@ -56,6 +56,7 @@ enum class PieceType {
 
 std::ostream& operator << (std::ostream& os, PieceType t);
 
+class BoardState;
 
 class ChessPiece {
 public:
@@ -74,7 +75,7 @@ public:
 	void setSelected(bool s = true) { mSelected = s;}
 	bool isSelected() const { return mSelected; }
 
-	std::vector<BoardPosition> getPossibleMoves() const;
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const = 0;
 
 	static void loadImages();
 protected:
@@ -89,31 +90,43 @@ protected:
 class King : public ChessPiece{
 public:
 	King(BoardPosition p, PieceType t) : ChessPiece(p, t){ }
+
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
 };
 
 class Queen : public ChessPiece {
 public:
 	Queen(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
 };
 
 class Rook : public ChessPiece {
 public:
 	Rook(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
 };
 
 class Bishop : public ChessPiece {
 public:
 	Bishop(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
 };
 
 class Knight : public ChessPiece {
 public:
 	Knight(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
 };
 
 class Pawn : public ChessPiece {
 public:
 	Pawn(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+
+	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
 };
 
 } /* namespace sch */

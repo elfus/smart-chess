@@ -159,7 +159,7 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 		ctx->stroke();
 		ctx->restore();
 		// draw the possible squares that this piece can move to
-		vector<BoardPosition> options = p.getPossibleMoves();
+		vector<BoardPosition> options = p.getPossibleMoves(*mController->getState());
 
 		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
 		for(BoardPosition p : options) {

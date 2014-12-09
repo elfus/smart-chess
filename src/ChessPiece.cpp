@@ -29,7 +29,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "ChessPiece.h"
-
+#include "BoardState.h"
 #include <vector>
 
 using namespace std;
@@ -99,7 +99,37 @@ bool ChessPiece::isBlack() {
 	return !isWhite();
 }
 
-vector<BoardPosition> ChessPiece::getPossibleMoves() const {
+vector<BoardPosition> King::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
+}
+
+vector<BoardPosition> Queen::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
+}
+
+vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
+}
+
+vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
+}
+
+vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
+}
+
+vector<BoardPosition> Pawn::getPossibleMoves(BoardState s) const {
 	vector<BoardPosition> moves;
 	moves.push_back(BoardPosition(SIX, G));
 	return moves;
