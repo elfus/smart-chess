@@ -48,29 +48,30 @@ BoardState::~BoardState() {
 }
 
 void BoardState::initWhitePieces() {
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new King(BoardPosition(ONE, E), PieceType::WHITE_KING)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Queen(BoardPosition(ONE, D), PieceType::WHITE_QUEEN)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(ONE, B), PieceType::WHITE_KNIGHT)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(ONE, G), PieceType::WHITE_KNIGHT)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(ONE, A), PieceType::WHITE_ROOK)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(ONE, H),PieceType::WHITE_ROOK)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(ONE, C), PieceType::WHITE_BISHOP)));
-	mWhitePieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(ONE, F), PieceType::WHITE_BISHOP)));
+	mWhitePieces.push_back(make_shared<King>(BoardPosition(ONE, E), PieceType::WHITE_KING));
+	mWhitePieces.push_back(make_shared<Queen>(BoardPosition(ONE, D), PieceType::WHITE_QUEEN));
+	mWhitePieces.push_back(make_shared<Knight>(BoardPosition(ONE, B), PieceType::WHITE_KNIGHT));
+	mWhitePieces.push_back(make_shared<Knight>(BoardPosition(ONE, G), PieceType::WHITE_KNIGHT));
+	mWhitePieces.push_back(make_shared<Rook>(BoardPosition(ONE, A), PieceType::WHITE_ROOK));
+	mWhitePieces.push_back(make_shared<Rook>(BoardPosition(ONE, H),PieceType::WHITE_ROOK));
+	mWhitePieces.push_back(make_shared<Bishop>(BoardPosition(ONE, C), PieceType::WHITE_BISHOP));
+	mWhitePieces.push_back(make_shared<Bishop>(BoardPosition(ONE, F), PieceType::WHITE_BISHOP));
+
 	for(int i=0; i<MAX_COL; ++i)
-		mWhitePieces.push_back(shared_ptr<ChessPiece>(new Pawn(BoardPosition(TWO, BoardColumn(i)), PieceType::WHITE_PAWN)));
+		mWhitePieces.push_back(make_shared<Pawn>(BoardPosition(TWO, BoardColumn(i)), PieceType::WHITE_PAWN));
 }
 
 void BoardState::initBlackPieces() {
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new King(BoardPosition(EIGHT, E), PieceType::BLACK_KING)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Queen(BoardPosition(EIGHT, D), PieceType::BLACK_QUEEN)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(EIGHT, B), PieceType::BLACK_KNIGHT)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Knight(BoardPosition(EIGHT, G), PieceType::BLACK_KNIGHT)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(EIGHT, A), PieceType::BLACK_ROOK)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Rook(BoardPosition(EIGHT, H), PieceType::BLACK_ROOK)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(EIGHT, C), PieceType::BLACK_BISHOP)));
-	mBlackPieces.push_back(shared_ptr<ChessPiece>(new Bishop(BoardPosition(EIGHT, F), PieceType::BLACK_BISHOP)));
+	mBlackPieces.push_back(make_shared<King>(BoardPosition(EIGHT, E), PieceType::BLACK_KING));
+	mBlackPieces.push_back(make_shared<Queen>(BoardPosition(EIGHT, D), PieceType::BLACK_QUEEN));
+	mBlackPieces.push_back(make_shared<Knight>(BoardPosition(EIGHT, B), PieceType::BLACK_KNIGHT));
+	mBlackPieces.push_back(make_shared<Knight>(BoardPosition(EIGHT, G), PieceType::BLACK_KNIGHT));
+	mBlackPieces.push_back(make_shared<Rook>(BoardPosition(EIGHT, A), PieceType::BLACK_ROOK));
+	mBlackPieces.push_back(make_shared<Rook>(BoardPosition(EIGHT, H), PieceType::BLACK_ROOK));
+	mBlackPieces.push_back(make_shared<Bishop>(BoardPosition(EIGHT, C), PieceType::BLACK_BISHOP));
+	mBlackPieces.push_back(make_shared<Bishop>(BoardPosition(EIGHT, F), PieceType::BLACK_BISHOP));
 	for(int i=0; i<8; ++i)
-		mBlackPieces.push_back(shared_ptr<ChessPiece>(new Pawn(BoardPosition(SEVEN, BoardColumn(i)), PieceType::BLACK_PAWN)));
+		mBlackPieces.push_back(make_shared<Pawn>(BoardPosition(SEVEN, BoardColumn(i)), PieceType::BLACK_PAWN));
 }
 
 void BoardState::initSquares() {
