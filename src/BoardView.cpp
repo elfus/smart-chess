@@ -139,12 +139,15 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
 	BoardPosition pos = p.getPosition();
 	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*pos.column, 0 + mSquareHeight*pos.row);
+	ctx->save();
 	ctx->paint();
+	ctx->restore();
 
 	if(p.isSelected()) {
 		const double LINE_W = 8.0;
 		const double orig_x = 0 + mSquareWidth*pos.column + (LINE_W/2);
 		const double orig_y = 0 + mSquareHeight*pos.row + (LINE_W/2);
+		ctx->save();
 		ctx->set_source_rgba(0, 0.0, 0.9, 1.0);
 		ctx->set_line_width(LINE_W);
 		ctx->set_line_join(Cairo::LINE_JOIN_MITER);
@@ -154,6 +157,20 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 		ctx->line_to(orig_x, orig_y+mSquareHeight-LINE_W);
 		ctx->close_path();
 		ctx->stroke();
+		ctx->restore();
+		// draw the possible squares that this piece can move to
+		vector<BoardPosition> options = p.getPossibleMoves();
+
+		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
+		for(BoardPosition p : options) {
+			ctx->save();
+			const double x = 0 + mSquareWidth*p.column;
+			const double y = 0 + mSquareHeight*p.row;
+			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
+			ctx->fill();
+			ctx->stroke();
+			ctx->restore();
+		}
 	}
 
 	ctx->restore();

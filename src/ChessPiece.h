@@ -74,6 +74,8 @@ public:
 	void setSelected(bool s = true) { mSelected = s;}
 	bool isSelected() const { return mSelected; }
 
+	std::vector<BoardPosition> getPossibleMoves() const;
+
 	static void loadImages();
 protected:
 	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;

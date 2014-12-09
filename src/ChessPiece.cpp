@@ -30,6 +30,10 @@
 
 #include "ChessPiece.h"
 
+#include <vector>
+
+using namespace std;
+
 namespace sch {
 
 std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> ChessPiece::images;
@@ -93,6 +97,12 @@ bool ChessPiece::isWhite() {
 
 bool ChessPiece::isBlack() {
 	return !isWhite();
+}
+
+vector<BoardPosition> ChessPiece::getPossibleMoves() const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
 }
 
 } /* namespace sch */
