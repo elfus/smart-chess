@@ -77,9 +77,6 @@ private:
 	BoardSquare calculateSquare(double x, double y);
 };
 
-std::ostream& operator <<(std::ostream& os, BoardRow r);
-std::ostream& operator <<(std::ostream& os, BoardColumn c);
-
 
 } /* namespace sch */
 

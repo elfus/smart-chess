@@ -220,6 +220,9 @@ std::ostream& operator <<(std::ostream& os, BoardRow r)
 	case BoardRow::SIX: os << 6; break;
 	case BoardRow::SEVEN: os << 7; break;
 	case BoardRow::EIGHT: os << 8; break;
+	default:
+		os << "<Invalid BoardRow(" << int(r) << ")>";
+		break;
 	}
 	return os;
 }
@@ -234,6 +237,9 @@ std::ostream& operator <<(std::ostream& os, BoardColumn c)
 	case BoardColumn::F: os << "F"; break;
 	case BoardColumn::G: os << "G"; break;
 	case BoardColumn::H: os << "H"; break;
+	default:
+		os << "<Invalid BoardColumn(" << int(c) << ")>";
+		break;
 	}
 	return os;
 }
