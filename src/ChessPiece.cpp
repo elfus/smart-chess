@@ -170,11 +170,11 @@ vector<BoardPosition> Pawn::getPossibleMoves(BoardState s) const {
 	}
 
 	BoardPosition pos_3(BoardRow(pos.row + direction), BoardColumn(pos.column-1));
-	if(s.hasPieceAt(pos_3))
+	if(s.hasPieceAt(pos_3) && isWhite() != s.getPieceAt(pos_3)->isWhite())
 		moves.push_back(pos_3);
 
 	BoardPosition pos_4(BoardRow(pos.row + direction), BoardColumn(pos.column+1));
-	if(s.hasPieceAt(pos_4))
+	if(s.hasPieceAt(pos_4) && isWhite() != s.getPieceAt(pos_4)->isWhite())
 		moves.push_back(pos_4);
 
 	return moves;
