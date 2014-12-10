@@ -125,7 +125,26 @@ vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
 
 vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
 	vector<BoardPosition> moves;
-	moves.push_back(BoardPosition(SIX, G));
+	BoardPosition p0 = getPosition();
+
+	BoardPosition p1(BoardRow(p0.row - 2), BoardColumn(p0.column - 1));
+	BoardPosition p2(BoardRow(p0.row - 2), BoardColumn(p0.column + 1));
+	BoardPosition p3(BoardRow(p0.row - 1), BoardColumn(p0.column - 2));
+	BoardPosition p4(BoardRow(p0.row - 1), BoardColumn(p0.column + 2));
+	BoardPosition p5(BoardRow(p0.row + 1), BoardColumn(p0.column - 2));
+	BoardPosition p6(BoardRow(p0.row + 1), BoardColumn(p0.column + 2));
+	BoardPosition p7(BoardRow(p0.row + 2), BoardColumn(p0.column - 1));
+	BoardPosition p8(BoardRow(p0.row + 2), BoardColumn(p0.column + 1));
+
+	if(s.isValidPosition(p1)) moves.push_back(p1);
+	if(s.isValidPosition(p2)) moves.push_back(p2);
+	if(s.isValidPosition(p3)) moves.push_back(p3);
+	if(s.isValidPosition(p4)) moves.push_back(p4);
+	if(s.isValidPosition(p5)) moves.push_back(p5);
+	if(s.isValidPosition(p6)) moves.push_back(p6);
+	if(s.isValidPosition(p7)) moves.push_back(p7);
+	if(s.isValidPosition(p8)) moves.push_back(p8);
+
 	return moves;
 }
 
