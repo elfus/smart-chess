@@ -81,7 +81,7 @@ void ChessPiece::loadImages()
 	images[PieceType::BLACK_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnb.gif");
 }
 
-bool ChessPiece::isWhite() {
+bool ChessPiece::isWhite() const{
 	switch(mPieceType) {
 	case PieceType::WHITE_KING:
 	case PieceType::WHITE_QUEEN:
@@ -95,7 +95,7 @@ bool ChessPiece::isWhite() {
 	}
 }
 
-bool ChessPiece::isBlack() {
+bool ChessPiece::isBlack() const{
 	return !isWhite();
 }
 
@@ -131,7 +131,33 @@ vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
 
 vector<BoardPosition> Pawn::getPossibleMoves(BoardState s) const {
 	vector<BoardPosition> moves;
-	moves.push_back(BoardPosition(SIX, G));
+	int direction = 0;
+	// @note For the moment we assume white player is always at the bottom.
+	if(isWhite())
+		direction = -1;
+	else
+		direction = 1;
+	BoardPosition pos = getPosition();
+
+	BoardPosition pos_1(BoardRow(pos.row + direction), pos.column);
+	if(s.hasPieceAt(pos_1) == false) {
+		moves.push_back(pos_1);
+
+		if(!mMovedOnce) {
+			BoardPosition pos_2(BoardRow(pos.row + (direction*2)), pos.column);
+			if(s.hasPieceAt(pos_2) == false)
+				moves.push_back(pos_2);
+		}
+	}
+
+	BoardPosition pos_3(BoardRow(pos.row + direction), BoardColumn(pos.column-1));
+	if(s.hasPieceAt(pos_3))
+		moves.push_back(pos_3);
+
+	BoardPosition pos_4(BoardRow(pos.row + direction), BoardColumn(pos.column+1));
+	if(s.hasPieceAt(pos_4))
+		moves.push_back(pos_4);
+
 	return moves;
 }
 

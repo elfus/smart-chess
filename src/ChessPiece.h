@@ -62,13 +62,13 @@ class ChessPiece {
 public:
 	ChessPiece(BoardPosition p, PieceType color)
 	: mPieceType(color),  mImage(images[mPieceType]), mPosition(p),
-	  mSelected(false){}
+	  mSelected(false), mMovedOnce(false) {}
 	virtual ~ChessPiece();
 
-	bool isWhite();
-	bool isBlack();
+	bool isWhite() const;
+	bool isBlack() const;
 	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
-	void setPosition(BoardPosition pos) { mPosition = pos; }
+	void setPosition(BoardPosition pos) { mPosition = pos; mMovedOnce = true;}
 	BoardPosition getPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
 
@@ -85,6 +85,9 @@ protected:
 	Glib::RefPtr<Gdk::Pixbuf> mImage;
 	BoardPosition mPosition;
 	bool mSelected; // Selected by the user
+	// Used internally to detect special conditions for each piece which
+	// movement depends on whether the piece has been moved or not
+	bool mMovedOnce;
 };
 
 class King : public ChessPiece{
