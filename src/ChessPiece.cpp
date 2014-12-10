@@ -136,14 +136,45 @@ vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
 	BoardPosition p7(BoardRow(p0.row + 2), BoardColumn(p0.column - 1));
 	BoardPosition p8(BoardRow(p0.row + 2), BoardColumn(p0.column + 1));
 
-	if(s.isValidPosition(p1)) moves.push_back(p1);
-	if(s.isValidPosition(p2)) moves.push_back(p2);
-	if(s.isValidPosition(p3)) moves.push_back(p3);
-	if(s.isValidPosition(p4)) moves.push_back(p4);
-	if(s.isValidPosition(p5)) moves.push_back(p5);
-	if(s.isValidPosition(p6)) moves.push_back(p6);
-	if(s.isValidPosition(p7)) moves.push_back(p7);
-	if(s.isValidPosition(p8)) moves.push_back(p8);
+	if(s.isValidPosition(p1)) {
+		if(!s.hasPieceAt(p1) || (s.hasPieceAt(p1) && isWhite() != s.getPieceAt(p1)->isWhite()))
+			moves.push_back(p1);
+	}
+
+	if(s.isValidPosition(p2)) {
+		if(!s.hasPieceAt(p2) || (s.hasPieceAt(p2) && isWhite() != s.getPieceAt(p2)->isWhite()))
+			moves.push_back(p2);
+	}
+
+	if(s.isValidPosition(p3)) {
+		if(!s.hasPieceAt(p3) || (s.hasPieceAt(p3) && isWhite() != s.getPieceAt(p3)->isWhite()))
+			moves.push_back(p3);
+	}
+
+	if(s.isValidPosition(p4)) {
+		if(!s.hasPieceAt(p4) || (s.hasPieceAt(p4) && isWhite() != s.getPieceAt(p4)->isWhite()))
+			moves.push_back(p4);
+	}
+
+	if(s.isValidPosition(p5)) {
+		if(!s.hasPieceAt(p5) || (s.hasPieceAt(p5) && isWhite() != s.getPieceAt(p5)->isWhite()))
+			moves.push_back(p5);
+	}
+
+	if(s.isValidPosition(p6)) {
+		if(!s.hasPieceAt(p6) || (s.hasPieceAt(p6) && isWhite() != s.getPieceAt(p6)->isWhite()))
+			moves.push_back(p6);
+	}
+
+	if(s.isValidPosition(p7)) {
+		if(!s.hasPieceAt(p7) || (s.hasPieceAt(p7) && isWhite() != s.getPieceAt(p7)->isWhite()))
+			moves.push_back(p7);
+	}
+
+	if(s.isValidPosition(p8)) {
+		if(!s.hasPieceAt(p8) || (s.hasPieceAt(p8) && isWhite() != s.getPieceAt(p8)->isWhite()))
+			moves.push_back(p8);
+	}
 
 	return moves;
 }
