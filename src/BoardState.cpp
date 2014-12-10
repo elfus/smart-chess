@@ -112,13 +112,24 @@ void BoardState::reset() {
 	assert(!mBlackPieces.empty());
 }
 
+bool BoardState::hasPieceAt(BoardPosition pos)
+{
+	try {
+		if(getSquareAt(pos).hasPiece())
+			return true;
+	} catch(const BoardPositionException& e) {
+		cerr << "WARNING: " << e.what() << endl;
+	}
+	return false;
+}
+
 BoardSquare BoardState::getSquareAt(BoardPosition pos)
 {
 	for(auto& s : mSquares) {
 		if(s.mPosition == pos)
 			return s;
 	}
-	assert(false && "Invalid path");
+	throw BoardPositionException(pos);
 }
 
 } /* namespace sch */
