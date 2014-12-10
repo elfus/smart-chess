@@ -121,6 +121,16 @@ bool BoardState::isValidPosition(BoardPosition pos)
 	return false;
 }
 
+shared_ptr<ChessPiece> BoardState::getPieceAt(BoardPosition pos)
+{
+	shared_ptr<ChessPiece> piece(nullptr);
+	try {
+		piece = getSquareAt(pos).getPiece();
+	} catch (const BoardPositionException& e) {
+		cerr << "WARNING[BoardState::getPieceAt]: " << e.what() << endl;
+	}
+	return piece;
+}
 
 bool BoardState::hasPieceAt(BoardPosition pos)
 {

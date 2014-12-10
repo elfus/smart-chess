@@ -51,6 +51,7 @@ public:
 		return mBlackPieces;
 	}
 
+	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos);
 	BoardSquare getSquareAt(BoardPosition pos);
 	bool hasPieceAt(BoardPosition pos);
 	bool isValidPosition(BoardPosition pos);
