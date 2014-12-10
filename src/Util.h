@@ -31,6 +31,8 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
+#include <sstream>
+
 namespace sch
 {
 enum BoardRow {
@@ -87,6 +89,27 @@ struct BoardSquare {
 
 private:
 	std::shared_ptr<ChessPiece> piece;
+};
+
+std::ostream& operator <<(std::ostream& os, BoardRow r);
+std::ostream& operator <<(std::ostream& os, BoardColumn c);
+
+class ChessException : public std::exception{
+public:
+	virtual const char * what() const noexcept { return mMsg.c_str(); }
+protected:
+	std::string mMsg;
+};
+
+class BoardPositionException : public ChessException {
+public:
+	BoardPositionException(BoardPosition p) : mPos(p) {
+		std::stringstream ss;
+		ss << "Invalid BoardPosition at row:" << mPos.row << ", columm: " << mPos.column;
+		mMsg = ss.str();
+	}
+private:
+	BoardPosition mPos;
 };
 
 }
