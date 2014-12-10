@@ -112,6 +112,16 @@ void BoardState::reset() {
 	assert(!mBlackPieces.empty());
 }
 
+bool BoardState::isValidPosition(BoardPosition pos)
+{
+	for(auto& s : mSquares) {
+		if(s.mPosition == pos)
+			return true;
+	}
+	return false;
+}
+
+
 bool BoardState::hasPieceAt(BoardPosition pos)
 {
 	try {

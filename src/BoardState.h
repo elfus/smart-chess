@@ -53,6 +53,7 @@ public:
 
 	BoardSquare getSquareAt(BoardPosition pos);
 	bool hasPieceAt(BoardPosition pos);
+	bool isValidPosition(BoardPosition pos);
 
 private:
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
