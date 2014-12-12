@@ -174,7 +174,7 @@ void BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 	});
 
 	auto news = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
-			if(s.mPosition == ptr->getPosition())
+			if(s.mPosition == pos)
 				return true;
 			return false;
 		});

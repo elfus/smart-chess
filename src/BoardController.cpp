@@ -42,7 +42,6 @@ void BoardController::chessBoardClicked(BoardSquare s)
 			auto moves = mSelectedPiece->getPossibleMoves(*mState);
 			auto it = find(moves.begin(), moves.end(), s.mPosition);
 			if(it != moves.end()) {
-				// update the squares
 				mState->move(mSelectedPiece, *it);
 			}
 			mSelectedPiece->setSelected(false);
