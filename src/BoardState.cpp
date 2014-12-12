@@ -58,7 +58,7 @@ void BoardState::initWhitePieces() {
 	mWhitePieces.push_back(make_shared<Bishop>(BoardPosition(ONE, F), PieceType::WHITE_BISHOP));
 
 	for(int i=0; i<MAX_COL; ++i)
-		mWhitePieces.push_back(make_shared<Pawn>(BoardPosition(TWO, BoardColumn(i)), PieceType::WHITE_PAWN));
+		mWhitePieces.push_back(make_shared<Pawn>(BoardPosition(TWO, Column(i)), PieceType::WHITE_PAWN));
 }
 
 void BoardState::initBlackPieces() {
@@ -71,13 +71,13 @@ void BoardState::initBlackPieces() {
 	mBlackPieces.push_back(make_shared<Bishop>(BoardPosition(EIGHT, C), PieceType::BLACK_BISHOP));
 	mBlackPieces.push_back(make_shared<Bishop>(BoardPosition(EIGHT, F), PieceType::BLACK_BISHOP));
 	for(int i=0; i<8; ++i)
-		mBlackPieces.push_back(make_shared<Pawn>(BoardPosition(SEVEN, BoardColumn(i)), PieceType::BLACK_PAWN));
+		mBlackPieces.push_back(make_shared<Pawn>(BoardPosition(SEVEN, Column(i)), PieceType::BLACK_PAWN));
 }
 
 void BoardState::initSquares() {
-	for(int i = 0; i < BoardColumn::MAX_COL; ++i) {
-		for(int j = 0; j < BoardRow::MAX_ROW; ++j) {
-			mSquares.push_back(BoardSquare(BoardPosition(BoardRow(j),BoardColumn(i))));
+	for(int i = 0; i < Column::MAX_COL; ++i) {
+		for(int j = 0; j < Row::MAX_ROW; ++j) {
+			mSquares.push_back(BoardSquare(BoardPosition(Row(j),Column(i))));
 		}
 	}
 }

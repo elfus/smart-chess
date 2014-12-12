@@ -35,7 +35,7 @@
 
 namespace sch
 {
-enum BoardRow {
+enum Row {
 	MAX_ROW = 8,
 	ONE = 7,
 	TWO = 6,
@@ -47,7 +47,7 @@ enum BoardRow {
 	EIGHT = 0
 };
 
-enum BoardColumn {
+enum Column {
 	A = 0,
 	B,
 	C,
@@ -60,9 +60,9 @@ enum BoardColumn {
 };
 
 struct BoardPosition {
-	BoardRow row;
-	BoardColumn column;
-	BoardPosition(BoardRow r, BoardColumn c) : row(r), column(c) {}
+	Row row;
+	Column column;
+	BoardPosition(Row r, Column c) : row(r), column(c) {}
 
 	bool operator ==(const BoardPosition& that) const {
 		return row == that.row && column == that.column;
@@ -91,8 +91,8 @@ private:
 	std::shared_ptr<ChessPiece> piece;
 };
 
-std::ostream& operator <<(std::ostream& os, BoardRow r);
-std::ostream& operator <<(std::ostream& os, BoardColumn c);
+std::ostream& operator <<(std::ostream& os, Row r);
+std::ostream& operator <<(std::ostream& os, Column c);
 
 class ChessException : public std::exception{
 public:

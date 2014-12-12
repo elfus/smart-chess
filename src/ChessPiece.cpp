@@ -127,14 +127,14 @@ vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
 	vector<BoardPosition> moves;
 	BoardPosition p0 = getPosition();
 
-	BoardPosition p1(BoardRow(p0.row - 2), BoardColumn(p0.column - 1));
-	BoardPosition p2(BoardRow(p0.row - 2), BoardColumn(p0.column + 1));
-	BoardPosition p3(BoardRow(p0.row - 1), BoardColumn(p0.column - 2));
-	BoardPosition p4(BoardRow(p0.row - 1), BoardColumn(p0.column + 2));
-	BoardPosition p5(BoardRow(p0.row + 1), BoardColumn(p0.column - 2));
-	BoardPosition p6(BoardRow(p0.row + 1), BoardColumn(p0.column + 2));
-	BoardPosition p7(BoardRow(p0.row + 2), BoardColumn(p0.column - 1));
-	BoardPosition p8(BoardRow(p0.row + 2), BoardColumn(p0.column + 1));
+	BoardPosition p1(Row(p0.row - 2), Column(p0.column - 1));
+	BoardPosition p2(Row(p0.row - 2), Column(p0.column + 1));
+	BoardPosition p3(Row(p0.row - 1), Column(p0.column - 2));
+	BoardPosition p4(Row(p0.row - 1), Column(p0.column + 2));
+	BoardPosition p5(Row(p0.row + 1), Column(p0.column - 2));
+	BoardPosition p6(Row(p0.row + 1), Column(p0.column + 2));
+	BoardPosition p7(Row(p0.row + 2), Column(p0.column - 1));
+	BoardPosition p8(Row(p0.row + 2), Column(p0.column + 1));
 
 	if(s.isValidPosition(p1)) {
 		if(!s.hasPieceAt(p1) || (s.hasPieceAt(p1) && isWhite() != s.getPieceAt(p1)->isWhite()))
@@ -189,22 +189,22 @@ vector<BoardPosition> Pawn::getPossibleMoves(BoardState s) const {
 		direction = 1;
 	BoardPosition pos = getPosition();
 
-	BoardPosition pos_1(BoardRow(pos.row + direction), pos.column);
+	BoardPosition pos_1(Row(pos.row + direction), pos.column);
 	if(s.hasPieceAt(pos_1) == false) {
 		moves.push_back(pos_1);
 
 		if(!mMovedOnce) {
-			BoardPosition pos_2(BoardRow(pos.row + (direction*2)), pos.column);
+			BoardPosition pos_2(Row(pos.row + (direction*2)), pos.column);
 			if(s.hasPieceAt(pos_2) == false)
 				moves.push_back(pos_2);
 		}
 	}
 
-	BoardPosition pos_3(BoardRow(pos.row + direction), BoardColumn(pos.column-1));
+	BoardPosition pos_3(Row(pos.row + direction), Column(pos.column-1));
 	if(s.hasPieceAt(pos_3) && isWhite() != s.getPieceAt(pos_3)->isWhite())
 		moves.push_back(pos_3);
 
-	BoardPosition pos_4(BoardRow(pos.row + direction), BoardColumn(pos.column+1));
+	BoardPosition pos_4(Row(pos.row + direction), Column(pos.column+1));
 	if(s.hasPieceAt(pos_4) && isWhite() != s.getPieceAt(pos_4)->isWhite())
 		moves.push_back(pos_4);
 

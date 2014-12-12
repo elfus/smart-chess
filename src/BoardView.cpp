@@ -78,9 +78,9 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	assert( j < SQUARE_NUM);
 
 	if(mController->gameInProgress())
-	 return mController->getState()->getSquareAt(BoardPosition(BoardRow(j), BoardColumn(i)));
+	 return mController->getState()->getSquareAt(BoardPosition(Row(j), Column(i)));
 	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable, creating new BoardSquare" << endl;
-	return BoardSquare(BoardPosition(BoardRow(j), BoardColumn(i)));
+	return BoardSquare(BoardPosition(Row(j), Column(i)));
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)
@@ -209,34 +209,34 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	return true;
 }
 
-std::ostream& operator <<(std::ostream& os, BoardRow r)
+std::ostream& operator <<(std::ostream& os, Row r)
 {
 	switch (r) {
-	case BoardRow::ONE: os << 1; break;
-	case BoardRow::TWO: os << 2; break;
-	case BoardRow::THREE: os << 3; break;
-	case BoardRow::FOUR: os << 4; break;
-	case BoardRow::FIVE: os << 5; break;
-	case BoardRow::SIX: os << 6; break;
-	case BoardRow::SEVEN: os << 7; break;
-	case BoardRow::EIGHT: os << 8; break;
+	case Row::ONE: os << 1; break;
+	case Row::TWO: os << 2; break;
+	case Row::THREE: os << 3; break;
+	case Row::FOUR: os << 4; break;
+	case Row::FIVE: os << 5; break;
+	case Row::SIX: os << 6; break;
+	case Row::SEVEN: os << 7; break;
+	case Row::EIGHT: os << 8; break;
 	default:
 		os << "<Invalid BoardRow(" << int(r) << ")>";
 		break;
 	}
 	return os;
 }
-std::ostream& operator <<(std::ostream& os, BoardColumn c)
+std::ostream& operator <<(std::ostream& os, Column c)
 {
 	switch(c) {
-	case BoardColumn::A: os << "A"; break;
-	case BoardColumn::B: os << "B"; break;
-	case BoardColumn::C: os << "C"; break;
-	case BoardColumn::D: os << "D"; break;
-	case BoardColumn::E: os << "E"; break;
-	case BoardColumn::F: os << "F"; break;
-	case BoardColumn::G: os << "G"; break;
-	case BoardColumn::H: os << "H"; break;
+	case Column::A: os << "A"; break;
+	case Column::B: os << "B"; break;
+	case Column::C: os << "C"; break;
+	case Column::D: os << "D"; break;
+	case Column::E: os << "E"; break;
+	case Column::F: os << "F"; break;
+	case Column::G: os << "G"; break;
+	case Column::H: os << "H"; break;
 	default:
 		os << "<Invalid BoardColumn(" << int(c) << ")>";
 		break;
