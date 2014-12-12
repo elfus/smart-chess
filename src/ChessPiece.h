@@ -88,6 +88,9 @@ protected:
 	// Used internally to detect special conditions for each piece which
 	// movement depends on whether the piece has been moved or not
 	bool mMovedOnce;
+
+	std::vector<BoardPosition> getHorizontalVerticalMoves(BoardState s) const;
+	std::vector<BoardPosition> getDiagonalMoves(BoardState s) const;
 };
 
 class King : public ChessPiece{

@@ -99,19 +99,7 @@ bool ChessPiece::isBlack() const{
 	return !isWhite();
 }
 
-vector<BoardPosition> King::getPossibleMoves(BoardState s) const {
-	vector<BoardPosition> moves;
-	moves.push_back(BoardPosition(SIX, G));
-	return moves;
-}
-
-vector<BoardPosition> Queen::getPossibleMoves(BoardState s) const {
-	vector<BoardPosition> moves;
-	moves.push_back(BoardPosition(SIX, G));
-	return moves;
-}
-
-vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
+std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(BoardState s) const {
 	vector<BoardPosition> moves;
 	BoardPosition current = getPosition();
 
@@ -157,7 +145,7 @@ vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
 	return moves;
 }
 
-vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
+std::vector<BoardPosition> ChessPiece::getDiagonalMoves(BoardState s) const {
 	vector<BoardPosition> moves;
 	BoardPosition current = getPosition();
 
@@ -203,8 +191,31 @@ vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
 		}
 		moves.push_back(p);
 	}
+	return moves;
+}
 
+vector<BoardPosition> King::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves;
+	moves.push_back(BoardPosition(SIX, G));
+	return moves;
+}
 
+vector<BoardPosition> Queen::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves_1 = getHorizontalVerticalMoves(s);
+	vector<BoardPosition> moves_2 = getDiagonalMoves(s);
+	vector<BoardPosition> moves;
+	moves.insert(moves.end(), moves_1.begin(), moves_1.end());
+	moves.insert(moves.end(), moves_2.begin(), moves_2.end());
+	return moves;
+}
+
+vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves = getHorizontalVerticalMoves(s);
+	return moves;
+}
+
+vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
+	vector<BoardPosition> moves = getDiagonalMoves(s);
 	return moves;
 }
 
