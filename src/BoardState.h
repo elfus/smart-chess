@@ -51,10 +51,13 @@ public:
 		return mBlackPieces;
 	}
 
-	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos);
-	BoardSquare getSquareAt(BoardPosition pos);
-	bool hasPieceAt(const BoardPosition& pos);
-	bool isValidPosition(BoardPosition pos);
+	void move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
+
+	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos) const;
+	const BoardSquare& getSquareAt(BoardPosition pos) const;
+	BoardSquare& getSquareAt(BoardPosition pos);
+	bool hasPieceAt(const BoardPosition& pos) const;
+	bool isValidPosition(BoardPosition pos) const;
 
 private:
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;

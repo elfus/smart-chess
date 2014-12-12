@@ -99,7 +99,7 @@ bool ChessPiece::isBlack() const{
 	return !isWhite();
 }
 
-std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(BoardState s) const {
+std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
 	BoardPosition current = getPosition();
 
@@ -145,7 +145,7 @@ std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(BoardState s) 
 	return moves;
 }
 
-std::vector<BoardPosition> ChessPiece::getDiagonalMoves(BoardState s) const {
+std::vector<BoardPosition> ChessPiece::getDiagonalMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
 	BoardPosition current = getPosition();
 
@@ -194,7 +194,7 @@ std::vector<BoardPosition> ChessPiece::getDiagonalMoves(BoardState s) const {
 	return moves;
 }
 
-vector<BoardPosition> King::getPossibleMoves(BoardState s) const {
+vector<BoardPosition> King::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
 	BoardPosition p0 = getPosition();
 
@@ -250,7 +250,7 @@ vector<BoardPosition> King::getPossibleMoves(BoardState s) const {
 	return moves;
 }
 
-vector<BoardPosition> Queen::getPossibleMoves(BoardState s) const {
+vector<BoardPosition> Queen::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves_1 = getHorizontalVerticalMoves(s);
 	vector<BoardPosition> moves_2 = getDiagonalMoves(s);
 	vector<BoardPosition> moves;
@@ -259,17 +259,17 @@ vector<BoardPosition> Queen::getPossibleMoves(BoardState s) const {
 	return moves;
 }
 
-vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
+vector<BoardPosition> Rook::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves = getHorizontalVerticalMoves(s);
 	return moves;
 }
 
-vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
+vector<BoardPosition> Bishop::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves = getDiagonalMoves(s);
 	return moves;
 }
 
-vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
+vector<BoardPosition> Knight::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
 	BoardPosition p0 = getPosition();
 
@@ -325,7 +325,7 @@ vector<BoardPosition> Knight::getPossibleMoves(BoardState s) const {
 	return moves;
 }
 
-vector<BoardPosition> Pawn::getPossibleMoves(BoardState s) const {
+vector<BoardPosition> Pawn::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
 	int direction = 0;
 	// @note For the moment we assume white player is always at the bottom.

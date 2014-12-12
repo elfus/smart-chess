@@ -80,7 +80,7 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	if(mController->gameInProgress())
 	 return mController->getState()->getSquareAt(BoardPosition(Row(j), Column(i)));
 	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable, creating new BoardSquare" << endl;
-	return BoardSquare(BoardPosition(Row(j), Column(i)));
+	return mController->getState()->getSquareAt(BoardPosition(static_cast<Row>(j), static_cast<Column>(i)));
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)

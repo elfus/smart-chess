@@ -39,6 +39,12 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	else {
 		cout << "NO PIECE" << endl;
 		if(mSelectedPiece) {
+			auto moves = mSelectedPiece->getPossibleMoves(*mState);
+			auto it = find(moves.begin(), moves.end(), s.mPosition);
+			if(it != moves.end()) {
+				// update the squares
+				mState->move(mSelectedPiece, *it);
+			}
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece.reset();
 		}

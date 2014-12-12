@@ -75,7 +75,7 @@ public:
 	void setSelected(bool s = true) { mSelected = s;}
 	bool isSelected() const { return mSelected; }
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const = 0;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const = 0;
 
 	static void loadImages();
 protected:
@@ -89,50 +89,50 @@ protected:
 	// movement depends on whether the piece has been moved or not
 	bool mMovedOnce;
 
-	std::vector<BoardPosition> getHorizontalVerticalMoves(BoardState s) const;
-	std::vector<BoardPosition> getDiagonalMoves(BoardState s) const;
+	std::vector<BoardPosition> getHorizontalVerticalMoves(const BoardState& s) const;
+	std::vector<BoardPosition> getDiagonalMoves(const BoardState& s) const;
 };
 
 class King : public ChessPiece{
 public:
 	King(BoardPosition p, PieceType t) : ChessPiece(p, t){ }
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
 
 class Queen : public ChessPiece {
 public:
 	Queen(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
 
 class Rook : public ChessPiece {
 public:
 	Rook(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
 
 class Bishop : public ChessPiece {
 public:
 	Bishop(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
 
 class Knight : public ChessPiece {
 public:
 	Knight(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
 
 class Pawn : public ChessPiece {
 public:
 	Pawn(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
 
-	virtual std::vector<BoardPosition> getPossibleMoves(BoardState s) const;
+	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
 
 } /* namespace sch */

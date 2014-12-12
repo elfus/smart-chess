@@ -80,6 +80,8 @@ void BoardState::initSquares() {
 			mSquares.push_back(BoardSquare(BoardPosition(Row(j),Column(i))));
 		}
 	}
+	// Used for special cases
+	mSquares.push_back(BoardSquare(BoardPosition(Row::MAX_ROW, Column::MAX_COL)));
 }
 
 
@@ -112,7 +114,7 @@ void BoardState::reset() {
 	assert(!mBlackPieces.empty());
 }
 
-bool BoardState::isValidPosition(BoardPosition pos)
+bool BoardState::isValidPosition(BoardPosition pos) const
 {
 	for(auto& s : mSquares) {
 		if(s.mPosition == pos)
@@ -121,7 +123,7 @@ bool BoardState::isValidPosition(BoardPosition pos)
 	return false;
 }
 
-shared_ptr<ChessPiece> BoardState::getPieceAt(BoardPosition pos)
+shared_ptr<ChessPiece> BoardState::getPieceAt(BoardPosition pos) const
 {
 	shared_ptr<ChessPiece> piece(nullptr);
 	try {
@@ -132,7 +134,7 @@ shared_ptr<ChessPiece> BoardState::getPieceAt(BoardPosition pos)
 	return piece;
 }
 
-bool BoardState::hasPieceAt(const BoardPosition& pos)
+bool BoardState::hasPieceAt(const BoardPosition& pos) const
 {
 	try {
 		if(getSquareAt(pos).hasPiece())
@@ -143,13 +145,42 @@ bool BoardState::hasPieceAt(const BoardPosition& pos)
 	return false;
 }
 
-BoardSquare BoardState::getSquareAt(BoardPosition pos)
+const BoardSquare& BoardState::getSquareAt(BoardPosition pos) const
 {
 	for(auto& s : mSquares) {
 		if(s.mPosition == pos)
 			return s;
 	}
+
 	throw BoardPositionException(pos);
+}
+
+BoardSquare& BoardState::getSquareAt(BoardPosition pos)
+{
+	for(auto& s : mSquares) {
+		if(s.mPosition == pos)
+			return s;
+	}
+
+	throw BoardPositionException(pos);
+}
+
+void BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
+{
+	auto olds = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
+		if(s.mPosition == ptr->getPosition())
+			return true;
+		return false;
+	});
+
+	auto news = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
+			if(s.mPosition == ptr->getPosition())
+				return true;
+			return false;
+		});
+
+	(*news).setPiece((*olds).removePiece());
+	ptr->setPosition(pos);
 }
 
 } /* namespace sch */
