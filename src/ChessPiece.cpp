@@ -159,7 +159,52 @@ vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
 
 vector<BoardPosition> Bishop::getPossibleMoves(BoardState s) const {
 	vector<BoardPosition> moves;
-	moves.push_back(BoardPosition(SIX, G));
+	BoardPosition current = getPosition();
+
+	for(int r = current.row-1, c = current.column-1; r >= 0 && c >=0; --r, --c) {
+		BoardPosition p(static_cast<Row>(r), static_cast<Column>(c));
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+	for(int r = current.row+1, c = current.column-1;
+			r < Row::MAX_ROW && c >= 0; ++r, --c) {
+		BoardPosition p(static_cast<Row>(r), static_cast<Column>(c));
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+	for(int r = current.row-1, c = current.column+1;
+			r >= 0 && c < Column::MAX_COL; --r,  ++c) {
+		BoardPosition p(static_cast<Row>(r), static_cast<Column>(c));
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+	for(int r = current.row+1, c = current.column+1;
+			r < Row::MAX_ROW && c < Column::MAX_COL; ++r,  ++c) {
+		BoardPosition p(static_cast<Row>(r), static_cast<Column>(c));
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+
 	return moves;
 }
 
