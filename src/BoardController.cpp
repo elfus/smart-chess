@@ -30,8 +30,14 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << ", ";
 	cout << "PIECE: ";
 	if(s.hasPiece()) {
-		if(mSelectedPiece)
+		if(mSelectedPiece) {
+			auto moves = mSelectedPiece->getPossibleMoves(*mState);
+			auto it = find(moves.begin(), moves.end(), s.getPiece()->getPosition());
+			if(it != moves.end()) {
+				mState->capture(mSelectedPiece, s.getPiece());
+			}
 			mSelectedPiece->setSelected(false);
+		}
 		mSelectedPiece = s.getPiece();
 		mSelectedPiece->setSelected();
 		cout << s.getPiece()->getPieceType() << endl;

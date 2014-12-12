@@ -165,18 +165,34 @@ BoardSquare& BoardState::getSquareAt(BoardPosition pos)
 	throw BoardPositionException(pos);
 }
 
+void BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
+{
+	if(hostage->isWhite()) {
+		auto it =find_if(mWhitePieces.begin(), mWhitePieces.end(), [&](const shared_ptr<ChessPiece>& p) {
+				return p->getPosition() == hostage->getPosition();
+				});
+		mWhitePieces.erase(it);
+		mWhiteHostages.push_back(hostage);
+	}
+	else {
+		auto it = find_if(mBlackPieces.begin(), mBlackPieces.end(), [&](const shared_ptr<ChessPiece>& p) {
+						return p->getPosition() == hostage->getPosition();
+						});
+		mBlackPieces.erase(it);
+		mBlackHostages.push_back(hostage);
+	}
+
+	move(capturer, hostage->getPosition());
+}
+
 void BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 {
 	auto olds = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
-		if(s.mPosition == ptr->getPosition())
-			return true;
-		return false;
+		return s.mPosition == ptr->getPosition();
 	});
 
 	auto news = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
-			if(s.mPosition == pos)
-				return true;
-			return false;
+			return s.mPosition == pos;
 		});
 
 	(*news).setPiece((*olds).removePiece());

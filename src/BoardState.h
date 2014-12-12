@@ -52,6 +52,7 @@ public:
 	}
 
 	void move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
+	void capture(std::shared_ptr<ChessPiece> capturer, std::shared_ptr<ChessPiece> hostage);
 
 	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos) const;
 	const BoardSquare& getSquareAt(BoardPosition pos) const;
@@ -62,6 +63,8 @@ public:
 private:
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
 	std::vector<std::shared_ptr<ChessPiece>> mBlackPieces;
+	std::vector<std::shared_ptr<ChessPiece>> mWhiteHostages;
+	std::vector<std::shared_ptr<ChessPiece>> mBlackHostages;
 	std::vector<BoardSquare> mSquares;
 
 	void initWhitePieces();
