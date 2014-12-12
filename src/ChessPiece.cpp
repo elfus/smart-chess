@@ -113,7 +113,47 @@ vector<BoardPosition> Queen::getPossibleMoves(BoardState s) const {
 
 vector<BoardPosition> Rook::getPossibleMoves(BoardState s) const {
 	vector<BoardPosition> moves;
-	moves.push_back(BoardPosition(SIX, G));
+	BoardPosition current = getPosition();
+
+	for(int r = current.row-1; r >= 0; --r) {
+		BoardPosition p(Row(r), current.column);
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+	for(int r = current.row+1; r < Row::MAX_ROW; ++r) {
+		BoardPosition p(Row(r), current.column);
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+	for(int c = current.column-1; c >= 0; --c) {
+		BoardPosition p(current.row, Column(c));
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
+
+	for(int c = current.column+1; c < Column::MAX_COL; ++c) {
+		BoardPosition p(current.row, Column(c));
+		if(s.hasPieceAt(p)) {
+			if(isWhite() != s.getPieceAt(p)->isWhite())
+				moves.push_back(p);
+			break;
+		}
+		moves.push_back(p);
+	}
 	return moves;
 }
 

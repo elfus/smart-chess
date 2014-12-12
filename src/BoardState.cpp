@@ -52,7 +52,7 @@ void BoardState::initWhitePieces() {
 	mWhitePieces.push_back(make_shared<Queen>(BoardPosition(ONE, D), PieceType::WHITE_QUEEN));
 	mWhitePieces.push_back(make_shared<Knight>(BoardPosition(ONE, B), PieceType::WHITE_KNIGHT));
 	mWhitePieces.push_back(make_shared<Knight>(BoardPosition(ONE, G), PieceType::WHITE_KNIGHT));
-	mWhitePieces.push_back(make_shared<Rook>(BoardPosition(ONE, A), PieceType::WHITE_ROOK));
+	mWhitePieces.push_back(make_shared<Rook>(BoardPosition(FOUR, D), PieceType::WHITE_ROOK));
 	mWhitePieces.push_back(make_shared<Rook>(BoardPosition(ONE, H),PieceType::WHITE_ROOK));
 	mWhitePieces.push_back(make_shared<Bishop>(BoardPosition(ONE, C), PieceType::WHITE_BISHOP));
 	mWhitePieces.push_back(make_shared<Bishop>(BoardPosition(ONE, F), PieceType::WHITE_BISHOP));
