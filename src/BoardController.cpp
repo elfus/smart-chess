@@ -31,50 +31,51 @@ BoardController::~BoardController() {
 void BoardController::chessBoardClicked(BoardSquare s)
 {
 	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << ", ";
-	cout << "PIECE: ";
 
-	if(s.hasPiece()) {
-		if(mSelectedPiece) {
-			// check if the user is capturing a piece
-			auto moves = mSelectedPiece->getPossibleMoves(*mState);
-			auto it = find(moves.begin(), moves.end(), s.getPiece()->getPosition());
-			if(it != moves.end()) {
-				mState->capture(mSelectedPiece, s.getPiece());
-				mCurrentPlayer = (mCurrentPlayer==Player::WHITE_PLAYER) ? Player::BLACK_PLAYER : Player::WHITE_PLAYER;
-			}
+	if(s.hasPiece() && mSelectedPiece) {
+		if(s.getPiece()->isWhite() == mSelectedPiece->isWhite()) {
 			mSelectedPiece->setSelected(false);
+			mSelectedPiece = s.getPiece();
+			mSelectedPiece->setSelected();
+			cout << "Selected2: " << s.getPiece()->getPieceType() << endl;
 		}
-		mSelectedPiece = s.getPiece();
-
-		if((mCurrentPlayer == Player::WHITE_PLAYER && mSelectedPiece->isBlack()) ||
-			(mCurrentPlayer == Player::BLACK_PLAYER && mSelectedPiece->isWhite())) {
-			cout << "Not your turn" << endl;
-			return;
+		// check if the user is capturing a piece
+		auto moves = mSelectedPiece->getPossibleMoves(*mState);
+		auto it = find(moves.begin(), moves.end(), s.getPiece()->getPosition());
+		if(it != moves.end()) {
+			mState->capture(mSelectedPiece, s.getPiece());
+			mCurrentPlayer = (mCurrentPlayer==Player::WHITE_PLAYER) ? Player::BLACK_PLAYER : Player::WHITE_PLAYER;
+			mSelectedPiece->setSelected(false);
+			mSelectedPiece = nullptr;
 		}
-
-		mSelectedPiece->setSelected();
-
-		cout << s.getPiece()->getPieceType() << endl;
+	} else if(s.hasPiece() && !mSelectedPiece) {
+		if((mCurrentPlayer == Player::WHITE_PLAYER && s.getPiece()->isWhite()) ||
+			(mCurrentPlayer == Player::BLACK_PLAYER && s.getPiece()->isBlack())) {
+			mSelectedPiece = s.getPiece();
+			mSelectedPiece->setSelected();
+			cout << "Selected1: " << s.getPiece()->getPieceType() << endl;
+		}
 	}
-	else {
-		cout << "NO PIECE" << endl;
-		if(mSelectedPiece) {
-			// check if the user just wants to move
-			auto moves = mSelectedPiece->getPossibleMoves(*mState);
-			auto it = find(moves.begin(), moves.end(), s.mPosition);
-			if(it != moves.end()) {
-				mState->move(mSelectedPiece, *it);
-				mCurrentPlayer = (mCurrentPlayer==Player::WHITE_PLAYER) ? Player::BLACK_PLAYER : Player::WHITE_PLAYER;
-			}
-			mSelectedPiece->setSelected(false);
-			mSelectedPiece.reset();
-		}
+	else if(!s.hasPiece() && mSelectedPiece){
+		// check if the user just wants to move
+		auto moves = mSelectedPiece->getPossibleMoves(*mState);
+		auto it = find(moves.begin(), moves.end(), s.mPosition);
+		if(it != moves.end()) {
+			mState->move(mSelectedPiece, *it);
+			mCurrentPlayer = (mCurrentPlayer==Player::WHITE_PLAYER) ? Player::BLACK_PLAYER : Player::WHITE_PLAYER;
+		} else
+			cout << "Empty square1" << endl;
+		mSelectedPiece->setSelected(false);
+		mSelectedPiece.reset();
+	} else if(!s.hasPiece() && !mSelectedPiece) {
+		cout << "Empty square2" << endl;
 	}
 
 	Glib::ustring msg((mCurrentPlayer==Player::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	mStatus->pop();
 	mStatus->push(msg);
 	mView->force_redraw();
+	cout.flush();
 }
 
 void BoardController::startGame() {
