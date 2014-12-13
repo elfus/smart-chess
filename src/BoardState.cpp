@@ -155,15 +155,6 @@ const BoardSquare& BoardState::getSquareAt(BoardPosition pos) const
 	throw BoardPositionException(pos);
 }
 
-BoardSquare& BoardState::getSquareAt(BoardPosition pos)
-{
-	for(auto& s : mSquares) {
-		if(s.mPosition == pos)
-			return s;
-	}
-
-	throw BoardPositionException(pos);
-}
 
 void BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
 {

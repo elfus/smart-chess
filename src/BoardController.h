@@ -18,9 +18,14 @@ namespace sch {
 
 class BoardController {
 public:
-enum class Player {
+enum class PlayerColor {
 	WHITE_PLAYER,
 	BLACK_PLAYER
+};
+
+enum class PlayerType {
+	HUMAN_PLAYER,
+	ALGORITHM_PLAYER
 };
 	BoardController();
 	virtual ~BoardController();
@@ -40,7 +45,8 @@ private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<BoardView> mView;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
-	Player mCurrentPlayer;
+	PlayerColor mCurrentPlayer;
+	std::map<PlayerType, PlayerColor> mPlayers;
 	Gtk::Statusbar *mStatus;
 };
 

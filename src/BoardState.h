@@ -56,7 +56,7 @@ public:
 
 	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos) const;
 	const BoardSquare& getSquareAt(BoardPosition pos) const;
-	BoardSquare& getSquareAt(BoardPosition pos);
+
 	bool hasPieceAt(const BoardPosition& pos) const;
 	bool isValidPosition(BoardPosition pos) const;
 

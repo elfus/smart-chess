@@ -18,10 +18,11 @@ BoardController::BoardController()
 : mState(nullptr),
   mView(nullptr),
   mSelectedPiece(nullptr),
-  mCurrentPlayer(Player::WHITE_PLAYER),
+  mCurrentPlayer(PlayerColor::WHITE_PLAYER),
+  mPlayers(),
   mStatus(nullptr){
-
-
+	mPlayers[PlayerType::HUMAN_PLAYER] = PlayerColor::WHITE_PLAYER;
+	mPlayers[PlayerType::ALGORITHM_PLAYER] = PlayerColor::BLACK_PLAYER;
 }
 
 BoardController::~BoardController() {
@@ -44,13 +45,13 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		auto it = find(moves.begin(), moves.end(), s.getPiece()->getPosition());
 		if(it != moves.end()) {
 			mState->capture(mSelectedPiece, s.getPiece());
-			mCurrentPlayer = (mCurrentPlayer==Player::WHITE_PLAYER) ? Player::BLACK_PLAYER : Player::WHITE_PLAYER;
+			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece = nullptr;
 		}
 	} else if(s.hasPiece() && !mSelectedPiece) {
-		if((mCurrentPlayer == Player::WHITE_PLAYER && s.getPiece()->isWhite()) ||
-			(mCurrentPlayer == Player::BLACK_PLAYER && s.getPiece()->isBlack())) {
+		if((mCurrentPlayer == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
+			(mCurrentPlayer == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
 			mSelectedPiece = s.getPiece();
 			mSelectedPiece->setSelected();
 			cout << "Selected1: " << s.getPiece()->getPieceType() << endl;
@@ -62,7 +63,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		auto it = find(moves.begin(), moves.end(), s.mPosition);
 		if(it != moves.end()) {
 			mState->move(mSelectedPiece, *it);
-			mCurrentPlayer = (mCurrentPlayer==Player::WHITE_PLAYER) ? Player::BLACK_PLAYER : Player::WHITE_PLAYER;
+			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 		} else
 			cout << "Empty square1" << endl;
 		mSelectedPiece->setSelected(false);
@@ -71,7 +72,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		cout << "Empty square2" << endl;
 	}
 
-	Glib::ustring msg((mCurrentPlayer==Player::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
+	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	mStatus->pop();
 	mStatus->push(msg);
 	mView->force_redraw();
@@ -81,7 +82,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 void BoardController::startGame() {
 	cout << "BoardController::startGame" << endl;
 	mState = make_shared<BoardState>();
-	mCurrentPlayer = Player::WHITE_PLAYER;
+	mCurrentPlayer = PlayerColor::WHITE_PLAYER;
 	mStatus->push("White player's turn.");
 	mView->force_redraw();
 }
