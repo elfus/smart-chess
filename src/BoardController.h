@@ -10,11 +10,18 @@
 
 #include "BoardState.h"
 
+namespace Gtk {
+	class Statusbar;
+}
+
 namespace sch {
 
 class BoardController {
 public:
-
+enum class Player {
+	WHITE_PLAYER,
+	BLACK_PLAYER
+};
 	BoardController();
 	virtual ~BoardController();
 
@@ -24,6 +31,7 @@ public:
 	std::shared_ptr<BoardState> getState() const {return mState; }
 
 	void setBoardView(std::shared_ptr<BoardView> v) { mView = v; }
+	void setStatusbar(Gtk::Statusbar *s) { mStatus = s; }
 
 	void startGame();
 	void endGame();
@@ -32,6 +40,8 @@ private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<BoardView> mView;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
+	Player mCurrentPlayer;
+	Gtk::Statusbar *mStatus;
 };
 
 } /* namespace sch */

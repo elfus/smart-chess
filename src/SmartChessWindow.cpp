@@ -31,6 +31,7 @@
 #include "SmartChessWindow.h"
 #include <iostream>
 #include <gtkmm/button.h>
+#include <gtkmm/statusbar.h>
 
 using namespace std;
 
@@ -59,6 +60,11 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 
 	mBoardView->setBoardController(mBoardController);
 	mBoardController->setBoardView(mBoardView);
+
+	Gtk::Statusbar * bar = nullptr;
+	builder->get_widget("StatusBar", bar);
+	bar->push("Welcome to Smart Chess!",1);
+	mBoardController->setStatusbar(bar);
 
 	// setup the buttons that control the game
 	Gtk::Button *b = nullptr;
