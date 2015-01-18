@@ -137,8 +137,7 @@ shared_ptr<ChessPiece> BoardState::getPieceAt(BoardPosition pos) const
 bool BoardState::hasPieceAt(const BoardPosition& pos) const
 {
 	try {
-		if(getSquareAt(pos).hasPiece())
-			return true;
+		return getSquareAt(pos).hasPiece();
 	} catch(const BoardPositionException& e) {
 		cerr << "WARNING: " << e.what() << endl;
 	}
@@ -155,6 +154,18 @@ const BoardSquare& BoardState::getSquareAt(BoardPosition pos) const
 	throw BoardPositionException(pos);
 }
 
+bool BoardState::isCheckmate() const
+{
+	assert(false && "Implement this method.");
+	return false;
+}
+
+
+bool BoardState::isStalemate() const
+{
+	assert(false && "Implement this method.");
+	return false;
+}
 
 void BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
 {
