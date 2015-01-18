@@ -12,6 +12,7 @@
 
 namespace Gtk {
 	class Statusbar;
+	class Grid;
 }
 
 namespace sch {
@@ -28,6 +29,7 @@ public:
 
 	void setBoardView(std::shared_ptr<BoardView> v) { mView = v; }
 	void setStatusbar(Gtk::Statusbar *s) { mStatus = s; }
+	void setOptionsGrid(Gtk::Grid *g) { mOptionsGrid = g; }
 
 	void startGame();
 	void endGame();
@@ -39,6 +41,9 @@ private:
 	PlayerColor mCurrentPlayer;
 	std::map<PlayerType, PlayerColor> mPlayers;
 	Gtk::Statusbar *mStatus;
+	Gtk::Grid *mOptionsGrid;
+
+	bool validGameOptions() const;
 };
 
 } /* namespace sch */

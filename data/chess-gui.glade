@@ -397,6 +397,7 @@
                         </child>
                         <child>
                           <object class="GtkComboBoxText" id="ColorComboBox1">
+                            <property name="name">ColorComboBox1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
@@ -413,6 +414,7 @@
                         </child>
                         <child>
                           <object class="GtkComboBoxText" id="ColorComboBox2">
+                            <property name="name">ColorComboBox2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>

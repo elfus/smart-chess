@@ -66,6 +66,9 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	bar->push("Welcome to Smart Chess!",1);
 	mBoardController->setStatusbar(bar);
 
+	Gtk::Grid* options_grid{nullptr};
+	builder->get_widget("OptionsGrid", options_grid);
+	mBoardController->setOptionsGrid(options_grid);
 	// setup the buttons that control the game
 	Gtk::Button *b = nullptr;
 	builder->get_widget("StartButton", b);

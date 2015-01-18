@@ -9,6 +9,9 @@
 #include "ChessPiece.h"
 #include <iostream>
 #include <gtkmm/statusbar.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/comboboxtext.h>
 
 using namespace std;
 
@@ -20,7 +23,8 @@ BoardController::BoardController()
   mSelectedPiece(nullptr),
   mCurrentPlayer(PlayerColor::WHITE_PLAYER),
   mPlayers(),
-  mStatus(nullptr){
+  mStatus(nullptr),
+  mOptionsGrid(nullptr){
 	mPlayers[PlayerType::HUMAN_PLAYER] = PlayerColor::WHITE_PLAYER;
 	mPlayers[PlayerType::ALGORITHM_PLAYER] = PlayerColor::BLACK_PLAYER;
 }
@@ -79,18 +83,54 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	cout.flush();
 }
 
+bool BoardController::validGameOptions() const
+{
+	vector<Gtk::Widget*> children = mOptionsGrid->get_children();
+	Gtk::ComboBoxText *cbt1 {nullptr};
+	Gtk::ComboBoxText *cbt2 {nullptr};
+	for(Gtk::Widget*& ptr : children) {
+		if(ptr->get_name() == "ColorComboBox1")
+			cbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+		if(ptr->get_name() == "ColorComboBox2")
+			cbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+	}
+
+	// Check player colors
+	if(!cbt1 || !cbt2)
+		return false;
+
+	if(cbt1->get_active_text() == "" || cbt2->get_active_text() == "")
+		return false;
+
+	if(cbt1->get_active_text() == "Black" && cbt2->get_active_text() == "Black")
+		return false;
+
+	if(cbt1->get_active_text() == "White" && cbt2->get_active_text() == "White")
+		return false;
+
+	return true;
+}
+
 void BoardController::startGame() {
 	cout << "BoardController::startGame" << endl;
-	mState = make_shared<BoardState>();
-	mCurrentPlayer = PlayerColor::WHITE_PLAYER;
-	mStatus->push("White player's turn.");
-	mView->force_redraw();
+	if(validGameOptions()) {
+		mState = make_shared<BoardState>();
+		mOptionsGrid->set_sensitive(false);
+		mCurrentPlayer = PlayerColor::WHITE_PLAYER;
+		mState->setCurrentPlayer(mCurrentPlayer);
+		mStatus->push("White player's turn.");
+		mView->force_redraw();
+	} else {
+		Gtk::MessageDialog msg("Invalid Game Options");
+		msg.run();
+	}
 }
 
 void BoardController::endGame() {
 	cout << "BoardController::endGame" << endl;
 	// process current game state, then delete;
 	mState.reset();
+	mOptionsGrid->set_sensitive(true);
 	mStatus->remove_all_messages();
 	mView->force_redraw();
 }
