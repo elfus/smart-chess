@@ -51,7 +51,36 @@ public:
 		return mBlackPieces;
 	}
 
+	/// Returns true if the current state is a checkmate
+	bool isCheckmate() const;
+
+	/// Returns true if the current state is a stalemate
+	bool isStalemate() const;
+
+	/**
+	 * Moves the ChessPiece pointed to by ptr to the given BoardPosition pointed
+	 * to by pos.
+	 *
+	 * @param[in] ptr The ChessPiece to move.
+	 * @param[in] pos The BoardPosition where we are moving the piece.
+	 *
+	 * @note This method does not check any chess rule or pre-condition for the
+	 * move to done. It assumes the move can be done. The game logic is managed
+	 * by the BoardController class.
+	 */
 	void move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
+
+	/**
+	 * The ChessPiece pointed to by capturer captures the ChessPiece pointed
+	 * to by hostage.
+	 *
+	 * @param[in] capturer The ChessPiece that is capturing.
+	 * @param[in] hostage The ChessPiece that is being captured.
+	 *
+	 * @note This method does not check any chess rule or pre-condition for the
+	 * move to done. It assumes the move can be done. The game logic is managed
+	 * by the BoardController class.
+	 */
 	void capture(std::shared_ptr<ChessPiece> capturer, std::shared_ptr<ChessPiece> hostage);
 
 	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos) const;
@@ -61,15 +90,26 @@ public:
 	bool isValidPosition(BoardPosition pos) const;
 
 private:
+	/// The active white pieces
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
+
+	/// The active black pieces
 	std::vector<std::shared_ptr<ChessPiece>> mBlackPieces;
+
+	/// White pieces captured by black player
 	std::vector<std::shared_ptr<ChessPiece>> mWhiteHostages;
+
+	/// Black pieces captured by white player
 	std::vector<std::shared_ptr<ChessPiece>> mBlackHostages;
+
+	/// The 64 squares in a board plus one extra square used to mark the end of it.
 	std::vector<BoardSquare> mSquares;
 
 	void initWhitePieces();
 	void initBlackPieces();
 	void initSquares();
+
+	/// Every square in the board can point to a ChessPiece.
 	void bindPiecesToSquares();
 	void reset();
 };
