@@ -59,6 +59,16 @@ enum Column {
 	MAX_COL
 };
 
+enum class PlayerColor {
+	WHITE_PLAYER,
+	BLACK_PLAYER
+};
+
+enum class PlayerType {
+	HUMAN_PLAYER,
+	ALGORITHM_PLAYER
+};
+
 struct BoardPosition {
 	Row row;
 	Column column;

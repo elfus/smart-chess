@@ -18,15 +18,6 @@ namespace sch {
 
 class BoardController {
 public:
-enum class PlayerColor {
-	WHITE_PLAYER,
-	BLACK_PLAYER
-};
-
-enum class PlayerType {
-	HUMAN_PLAYER,
-	ALGORITHM_PLAYER
-};
 	BoardController();
 	virtual ~BoardController();
 
