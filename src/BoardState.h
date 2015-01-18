@@ -39,6 +39,7 @@
 namespace sch {
 
 class BoardState {
+	friend class BoardController;
 public:
 	BoardState();
 	~BoardState();
@@ -56,6 +57,15 @@ public:
 
 	/// Returns true if the current state is a stalemate
 	bool isStalemate() const;
+
+	/**
+	 * This method checks the current state of the game and returns a vector
+	 * with only the ChessPieces that can be moved right now.
+	 *
+	 * @note Use the public methods in ChessPiece class to find out more
+	 * about the possible moves for each ChessPiece.
+	 */
+	std::vector<std::shared_ptr<ChessPiece>> getPossibleMoves() const;
 
 	/**
 	 * Moves the ChessPiece pointed to by ptr to the given BoardPosition pointed
@@ -89,6 +99,7 @@ public:
 	bool hasPieceAt(const BoardPosition& pos) const;
 	bool isValidPosition(BoardPosition pos) const;
 
+	PlayerColor getCurrentPlayer() const { return mCurrentPlayer; }
 private:
 	/// The active white pieces
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
@@ -105,6 +116,8 @@ private:
 	/// The 64 squares in a board plus one extra square used to mark the end of it.
 	std::vector<BoardSquare> mSquares;
 
+	PlayerColor mCurrentPlayer;
+
 	void initWhitePieces();
 	void initBlackPieces();
 	void initSquares();
@@ -112,6 +125,8 @@ private:
 	/// Every square in the board can point to a ChessPiece.
 	void bindPiecesToSquares();
 	void reset();
+
+	void setCurrentPlayer(PlayerColor c) { mCurrentPlayer = c; }
 };
 
 } /* namespace sch */

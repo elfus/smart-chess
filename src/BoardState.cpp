@@ -167,6 +167,23 @@ bool BoardState::isStalemate() const
 	return false;
 }
 
+std::vector<std::shared_ptr<ChessPiece>> BoardState::getPossibleMoves() const
+{
+	std::vector<std::shared_ptr<ChessPiece>> moves;
+
+	if(getCurrentPlayer() == PlayerColor::WHITE_PLAYER) {
+		for(auto p : mWhitePieces)
+			if(p->canMove(*this))
+				moves.push_back(p);
+	} else {
+		for(auto p : mBlackPieces)
+			if(p->canMove(*this))
+				moves.push_back(p);
+	}
+
+	return moves;
+}
+
 void BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
 {
 	if(hostage->isWhite()) {

@@ -68,7 +68,11 @@ public:
 	bool isWhite() const;
 	bool isBlack() const;
 	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
+
+	// @todo Make this method private
 	void setPosition(BoardPosition pos) { mPosition = pos; mMovedOnce = true;}
+
+
 	BoardPosition getPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
 
@@ -76,6 +80,7 @@ public:
 	bool isSelected() const { return mSelected; }
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const = 0;
+	bool canMove(const BoardState& s) const { return getPossibleMoves(s).size(); }
 
 	static void loadImages();
 protected:
