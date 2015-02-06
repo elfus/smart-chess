@@ -99,7 +99,8 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 			mCbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
 	}
 	assert(mCbt1 && mCbt2);
-
+	mCbt1->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player1ColorChanged));
+	mCbt2->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player2ColorChanged));
 
 	show_all_children();
 
@@ -109,6 +110,26 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 
 SmartChessWindow::~SmartChessWindow() {
 	cerr << "SmartChessWindow Destructor" << endl;
+}
+
+void SmartChessWindow::player1ColorChanged()
+{
+	cout << "Player 1 color changed" << endl;
+	if(mCbt1->get_active_text() == "White")
+		mCbt2->set_active_text("Black");
+
+	if(mCbt1->get_active_text() == "Black")
+			mCbt2->set_active_text("White");
+}
+
+void SmartChessWindow::player2ColorChanged()
+{
+	cout << "Player 2 color changed" << endl;
+	if(mCbt2->get_active_text() == "White")
+		mCbt1->set_active_text("Black");
+
+	if(mCbt2->get_active_text() == "Black")
+			mCbt1->set_active_text("White");
 }
 
 } /* namespace sch */

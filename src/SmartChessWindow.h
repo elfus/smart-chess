@@ -58,6 +58,9 @@ private:
 
 	Gtk::ComboBoxText *mCbt1 {nullptr};
 	Gtk::ComboBoxText *mCbt2 {nullptr};
+
+	void player1ColorChanged();
+	void player2ColorChanged();
 };
 
 } /* namespace sch */
