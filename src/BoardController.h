@@ -57,6 +57,7 @@ public:
 	void startGame();
 	void endGame();
 	void resetGame();
+	bool mainGameLogic();
 private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<BoardView> mView;
@@ -65,6 +66,7 @@ private:
 	std::map<PlayerType, PlayerColor> mPlayers;
 	Gtk::Statusbar *mStatus;
 	Gtk::Grid *mOptionsGrid;
+	sigc::connection mConnection; // Connection to the game logic.
 
 	bool validGameOptions() const;
 };

@@ -12,6 +12,7 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/comboboxtext.h>
+#include <glibmm.h>
 
 using namespace std;
 
@@ -33,6 +34,13 @@ BoardController::~BoardController() {
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * Member function callback whenever there is a human player against A.I.
+ *
+ * This method controls the logic of the game.
+ *
+ * @note Enable this callback when there is a human player.
+ */
 void BoardController::chessBoardClicked(BoardSquare s)
 {
 	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << ", ";
@@ -83,6 +91,18 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	cout.flush();
 }
 
+/**
+ * Callback method which gets called whenever the GUI is idle and calls the
+ * AI algorithm and checks the of the current game.
+ *
+ * @see Programming with gtkmm, section 24 timeout and idle functions
+ */
+bool BoardController::mainGameLogic()
+{
+	cout << "Doing game logic" << endl;
+	return true;
+}
+
 bool BoardController::validGameOptions() const
 {
 	vector<Gtk::Widget*> children = mOptionsGrid->get_children();
@@ -120,6 +140,7 @@ void BoardController::startGame() {
 		mState->setCurrentPlayer(mCurrentPlayer);
 		mStatus->push("White player's turn.");
 		mView->force_redraw();
+		mConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::mainGameLogic));
 	} else {
 		Gtk::MessageDialog msg("Invalid Game Options");
 		msg.run();
@@ -132,6 +153,7 @@ void BoardController::endGame() {
 	mState.reset();
 	mOptionsGrid->set_sensitive(true);
 	mStatus->remove_all_messages();
+	mConnection.disconnect();
 	mView->force_redraw();
 }
 
@@ -140,5 +162,7 @@ void BoardController::resetGame() {
 	endGame();
 	startGame();
 }
+
+
 
 } /* namespace sch */
