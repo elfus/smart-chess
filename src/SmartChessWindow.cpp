@@ -92,11 +92,25 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 
 	// Make sure the color ius mutually exclusive
 	vector<Gtk::Widget*> children = options_grid->get_children();
+	Gtk::ComboBoxText *player {nullptr};
+	// Start the game with some default options
 	for(Gtk::Widget*& ptr : children) {
-		if(ptr->get_name() == "ColorComboBox1")
+		if(ptr->get_name() == "ColorComboBox1") {
 			mCbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-		if(ptr->get_name() == "ColorComboBox2")
+			mCbt1->set_active_text("White");
+		}
+		if(ptr->get_name() == "ColorComboBox2") {
 			mCbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+			mCbt2->set_active_text("Black");
+		}
+		if(ptr->get_name() == "PlayerComboBox1") {
+			player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+			player->set_active_text("Human");
+		}
+		if(ptr->get_name() == "PlayerComboBox2") {
+			player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+			player->set_active_text("Algorithm");
+		}
 	}
 	assert(mCbt1 && mCbt2);
 	mCbt1->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player1ColorChanged));
