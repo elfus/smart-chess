@@ -32,15 +32,16 @@
 #define SMARTCHESSWINDOW_H_
 
 #include <gtkmm/window.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/aspectframe.h>
-#include <cairomm/refptr.h>
-#include <cairomm/context.h>
-#include <memory>
 #include "BoardController.h"
 #include "BoardView.h"
 #include "BoardState.h"
+
+namespace Gtk {
+class Builder;
+class ComboBoxText;
+class Grid;
+class Window;
+}
 
 namespace sch { // sch stands for Smart Chess :)
 
@@ -54,6 +55,9 @@ private:
 	std::shared_ptr<BoardView> mBoardView;
 	std::shared_ptr<BoardState> mBoardState;
 	std::shared_ptr<BoardController> mBoardController;
+
+	Gtk::ComboBoxText *mCbt1 {nullptr};
+	Gtk::ComboBoxText *mCbt2 {nullptr};
 };
 
 } /* namespace sch */

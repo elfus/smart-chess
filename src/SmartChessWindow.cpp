@@ -30,8 +30,12 @@
 
 #include "SmartChessWindow.h"
 #include <iostream>
+#include <gtkmm/aspectframe.h>
+#include <gtkmm/builder.h>
 #include <gtkmm/button.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/statusbar.h>
+#include <gtkmm/comboboxtext.h>
 
 using namespace std;
 
@@ -85,6 +89,18 @@ SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
 	assert(b);
 	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::resetGame));
 	b = nullptr;
+
+	// Make sure the color ius mutually exclusive
+	vector<Gtk::Widget*> children = options_grid->get_children();
+	for(Gtk::Widget*& ptr : children) {
+		if(ptr->get_name() == "ColorComboBox1")
+			mCbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+		if(ptr->get_name() == "ColorComboBox2")
+			mCbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+	}
+	assert(mCbt1 && mCbt2);
+
+
 	show_all_children();
 
 	// start a game

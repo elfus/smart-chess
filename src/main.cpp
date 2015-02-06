@@ -29,6 +29,7 @@
 //===----------------------------------------------------------------------===//
 #include "ChessPiece.h"
 #include "SmartChessWindow.h"
+#include <gtkmm/builder.h>
 #include <iostream>
 #include <exception>
 
