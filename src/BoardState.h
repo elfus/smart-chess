@@ -65,7 +65,7 @@ public:
 	 * @note Use the public methods in ChessPiece class to find out more
 	 * about the possible moves for each ChessPiece.
 	 */
-	std::vector<std::shared_ptr<ChessPiece>> getPossibleMoves() const;
+	std::vector<std::shared_ptr<ChessPiece>> getPiecesThatCanBeMoved() const;
 
 	/**
 	 * Moves the ChessPiece pointed to by ptr to the given BoardPosition pointed

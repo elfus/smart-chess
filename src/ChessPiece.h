@@ -67,11 +67,6 @@ public:
 
 	bool isWhite() const;
 	bool isBlack() const;
-	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
-
-	// @todo Make this method private
-	void setPosition(BoardPosition pos) { mPosition = pos; mMovedOnce = true;}
-
 
 	BoardPosition getPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
@@ -82,6 +77,7 @@ public:
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const = 0;
 	bool canMove(const BoardState& s) const { return getPossibleMoves(s).size(); }
 
+	/// @note Call only once at the beginning of the program.
 	static void loadImages();
 protected:
 	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
@@ -96,6 +92,13 @@ protected:
 
 	std::vector<BoardPosition> getHorizontalVerticalMoves(const BoardState& s) const;
 	std::vector<BoardPosition> getDiagonalMoves(const BoardState& s) const;
+
+
+	friend class BoardState; // BoardState accesses the setPosition method.
+	void setPosition(BoardPosition pos) { mPosition = pos; mMovedOnce = true;}
+
+	friend class BoardView; // BoardView accesses the getImage() method.
+	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
 };
 
 class King : public ChessPiece{

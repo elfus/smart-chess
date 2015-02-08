@@ -167,7 +167,7 @@ bool BoardState::isStalemate() const
 	return false;
 }
 
-std::vector<std::shared_ptr<ChessPiece>> BoardState::getPossibleMoves() const
+std::vector<std::shared_ptr<ChessPiece>> BoardState::getPiecesThatCanBeMoved() const
 {
 	std::vector<std::shared_ptr<ChessPiece>> moves;
 
