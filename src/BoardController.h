@@ -70,6 +70,7 @@ private:
 	Gtk::Grid *mOptionsGrid;
 	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.
 	sigc::connection mHumanConnection; // Connection to the game logic.
+	bool mPlayingAgainstHuman;
 
 	bool validGameOptions() const;
 	void createChessPlayerObjects();

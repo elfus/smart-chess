@@ -26,7 +26,8 @@ BoardController::BoardController()
   mCurrentPlayer(PlayerColor::WHITE_PLAYER),
   mPlayers(),
   mStatus(nullptr),
-  mOptionsGrid(nullptr){
+  mOptionsGrid(nullptr),
+  mPlayingAgainstHuman(false){
 
 }
 
@@ -141,9 +142,14 @@ bool BoardController::AlgorithmLogic()
 	cout.flush();
 
 	// Let the human play
-	mHumanConnection = mView->getSignalClickedReleased().connect(
-					sigc::mem_fun(*this,&BoardController::chessBoardClicked));
-	return false;
+	if(mPlayingAgainstHuman) {
+		mHumanConnection = mView->getSignalClickedReleased().connect(
+						sigc::mem_fun(*this,&BoardController::chessBoardClicked));
+		return false;
+	} else {
+		return true;
+	}
+
 }
 
 bool BoardController::isValidMove(const BoardState& s, const Move& m) const
@@ -205,6 +211,7 @@ void BoardController::createChessPlayerObjects() {
 			color2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
 	}
 	if(cbt1->get_active_text() == "Human") {
+		mPlayingAgainstHuman = true;
 		mPlayers.push_back(unique_ptr<Human>(new Human()));
 		mHumanConnection = mView->getSignalClickedReleased().connect(
 				sigc::mem_fun(*this,&BoardController::chessBoardClicked));
@@ -220,8 +227,10 @@ void BoardController::createChessPlayerObjects() {
 	else if(color1->get_active_text() == "Black")
 		mPlayers.back()->setColor(PlayerColor::BLACK_PLAYER);
 
-	if(cbt2->get_active_text() == "Human")
+	if(cbt2->get_active_text() == "Human") {
+		mPlayingAgainstHuman = true;
 		mPlayers.push_back(unique_ptr<Human>(new Human()));
+	}
 	else if(cbt2->get_active_text() == "Algorithm")
 		mPlayers.push_back(unique_ptr<Algorithm>(new Algorithm()));
 
@@ -252,9 +261,11 @@ void BoardController::startGame() {
 void BoardController::endGame() {
 	cout << "BoardController::endGame" << endl;
 	// process current game state, then delete;
+	mPlayingAgainstHuman = false;
 	mState.reset();
 	mOptionsGrid->set_sensitive(true);
 	mStatus->remove_all_messages();
+	mHumanConnection.disconnect();
 	mAlgorithmConnection.disconnect();
 	mPlayers.clear();
 	mView->force_redraw();
