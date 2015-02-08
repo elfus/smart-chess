@@ -42,6 +42,9 @@ class BoardState {
 	friend class BoardController;
 public:
 	BoardState();
+	BoardState(const BoardState& rhs);
+	BoardState& operator = (const BoardState& rhs);
+
 	~BoardState();
 
 	auto getWhitePieces() -> std::vector<std::shared_ptr<ChessPiece>> {
@@ -127,6 +130,9 @@ private:
 	void reset();
 
 	void setCurrentPlayer(PlayerColor c) { mCurrentPlayer = c; }
+
+	void copy(const BoardState& rhs);
+	std::shared_ptr<ChessPiece>  copyPiece(std::shared_ptr<ChessPiece> piece);
 };
 
 } /* namespace sch */

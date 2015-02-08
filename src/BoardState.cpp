@@ -38,9 +38,69 @@ using namespace std;
 namespace sch {
 
 BoardState::BoardState()
-: mWhitePieces(), mBlackPieces(), mSquares() {
+: mWhitePieces(), mBlackPieces(), mWhiteHostages(), mBlackHostages(),
+  mSquares(), mCurrentPlayer(PlayerColor::WHITE_PLAYER) {
 	reset();
 	cout << "BoardState Constructor" << endl;
+}
+
+BoardState::BoardState(const BoardState& rhs)
+: mCurrentPlayer(rhs.mCurrentPlayer)
+{
+	copy(rhs);
+	cout << "BoardState COPY Constructor" << endl;
+}
+
+BoardState& BoardState::operator = (const BoardState& rhs)
+{
+	copy(rhs);
+	cout << "BoardState ASSIGNMENT OPERATOR" << endl;
+	return *this;
+}
+
+std::shared_ptr<ChessPiece>  BoardState::copyPiece(std::shared_ptr<ChessPiece> piece) {
+	std::shared_ptr<ChessPiece> ptr {nullptr};
+	switch(piece->getPieceType()) {
+	case PieceType::WHITE_KING:
+	case PieceType::BLACK_KING:
+		ptr = make_shared<King>(BoardPosition(ONE, E), PieceType::WHITE_KING);
+		break;
+	case PieceType::WHITE_QUEEN:
+	case PieceType::BLACK_QUEEN:
+		ptr = make_shared<Queen>(BoardPosition(ONE, E), PieceType::WHITE_KING);
+		break;
+	case PieceType::WHITE_KNIGHT:
+	case PieceType::BLACK_KNIGHT:
+		ptr = make_shared<Knight>(BoardPosition(ONE, E), PieceType::WHITE_KING);
+		break;
+	case PieceType::WHITE_ROOK:
+	case PieceType::BLACK_ROOK:
+		ptr = make_shared<Rook>(BoardPosition(ONE, E), PieceType::WHITE_KING);
+		break;
+	case PieceType::WHITE_BISHOP:
+	case PieceType::BLACK_BISHOP:
+		ptr = make_shared<Bishop>(BoardPosition(ONE, E), PieceType::WHITE_KING);
+		break;
+	}
+	*ptr = *piece;
+	return ptr;
+}
+
+void BoardState::copy(const BoardState& rhs) {
+	for(auto piece : rhs.mWhitePieces)
+		mWhitePieces.push_back(copyPiece(piece));
+
+	for(auto piece : rhs.mBlackPieces)
+		mBlackPieces.push_back(copyPiece(piece));
+
+	for(auto piece : rhs.mWhiteHostages)
+		mWhitePieces.push_back(copyPiece(piece));
+
+	for(auto piece : rhs.mBlackHostages)
+		mBlackPieces.push_back(copyPiece(piece));
+
+	for(auto sq : rhs.mSquares)
+		mSquares.push_back(BoardSquare(sq));
 }
 
 BoardState::~BoardState() {

@@ -69,7 +69,8 @@ struct BoardPosition {
 	Row row;
 	Column column;
 	BoardPosition(Row r, Column c) : row(r), column(c) {}
-
+	BoardPosition(const BoardPosition& rhs) : row(rhs.row), column(rhs.column) {}
+	BoardPosition() : row(Row::MAX_ROW), column(Column::MAX_COL) {}
 	bool operator ==(const BoardPosition& that) const {
 		return row == that.row && column == that.column;
 	}
@@ -79,6 +80,9 @@ class ChessPiece;
 
 struct BoardSquare {
 	BoardSquare(BoardPosition pos) : mPosition(pos), piece(nullptr){}
+	BoardSquare(const BoardSquare& rhs) : mPosition(rhs.mPosition),
+			piece(rhs.piece) {}
+
 	BoardPosition mPosition;
 
 	void setPiece(std::shared_ptr<ChessPiece> p) { piece = p; }

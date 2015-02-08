@@ -63,6 +63,23 @@ ChessPiece::~ChessPiece() {
 	// TODO Auto-generated destructor stub
 }
 
+ChessPiece::ChessPiece(const ChessPiece& rhs) {
+	copy(rhs);
+}
+
+ChessPiece& ChessPiece::operator = (const ChessPiece& rhs) {
+	copy(rhs);
+	return *this;
+}
+
+void ChessPiece::copy(const ChessPiece& rhs) {
+	mPieceType = rhs.mPieceType;
+	mImage = rhs.mImage;
+	mPosition = rhs.mPosition;
+	mSelected = rhs.mSelected;
+	mMovedOnce = rhs.mMovedOnce;
+}
+
 /// @note This method MUST be called at the beginning of the program.
 void ChessPiece::loadImages()
 {

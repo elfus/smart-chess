@@ -64,6 +64,8 @@ public:
 	: mPieceType(color),  mImage(images[mPieceType]), mPosition(p),
 	  mSelected(false), mMovedOnce(false) {}
 	virtual ~ChessPiece();
+	ChessPiece(const ChessPiece& rhs);
+	ChessPiece& operator = (const ChessPiece& rhs);
 
 	bool isWhite() const;
 	bool isBlack() const;
@@ -99,11 +101,15 @@ protected:
 
 	friend class BoardView; // BoardView accesses the getImage() method.
 	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
+
+private:
+	void copy(const ChessPiece& rhs);
 };
 
 class King : public ChessPiece{
 public:
 	King(BoardPosition p, PieceType t) : ChessPiece(p, t){ }
+	King(const King& k) : ChessPiece(k) {}
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
@@ -111,6 +117,7 @@ public:
 class Queen : public ChessPiece {
 public:
 	Queen(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+	Queen(const Queen& k) : ChessPiece(k) {}
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
@@ -118,6 +125,7 @@ public:
 class Rook : public ChessPiece {
 public:
 	Rook(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+	Rook(const Rook& k) : ChessPiece(k) {}
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
@@ -125,6 +133,7 @@ public:
 class Bishop : public ChessPiece {
 public:
 	Bishop(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+	Bishop(const Bishop& k) : ChessPiece(k) {}
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
@@ -132,6 +141,7 @@ public:
 class Knight : public ChessPiece {
 public:
 	Knight(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+	Knight(const Knight& k) : ChessPiece(k) {}
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
@@ -139,6 +149,7 @@ public:
 class Pawn : public ChessPiece {
 public:
 	Pawn(BoardPosition p, PieceType t) : ChessPiece(p, t) {}
+	Pawn(const Pawn& k) : ChessPiece(k) {}
 
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const;
 };
