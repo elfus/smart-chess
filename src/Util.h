@@ -32,6 +32,7 @@
 #define UTIL_H_
 
 #include <sstream>
+#include <memory>
 
 namespace sch
 {
@@ -62,11 +63,6 @@ enum Column {
 enum class PlayerColor {
 	WHITE_PLAYER,
 	BLACK_PLAYER
-};
-
-enum class PlayerType {
-	HUMAN_PLAYER,
-	ALGORITHM_PLAYER
 };
 
 struct BoardPosition {
@@ -101,8 +97,15 @@ private:
 	std::shared_ptr<ChessPiece> piece;
 };
 
+struct Move {
+	std::shared_ptr<ChessPiece> piece; // The piece we want to move
+	BoardPosition final_pos; // The final position where the piece will be moved
+	Move(std::shared_ptr<ChessPiece> p, BoardPosition pos) : piece(p), final_pos(pos) {}
+};
+
 std::ostream& operator <<(std::ostream& os, Row r);
 std::ostream& operator <<(std::ostream& os, Column c);
+std::ostream& operator <<(std::ostream& os, Move m);
 
 class ChessException : public std::exception{
 public:

@@ -40,6 +40,8 @@ namespace Gtk {
 
 namespace sch {
 
+class ChessPlayer;
+
 class BoardController {
 public:
 	BoardController();
@@ -57,18 +59,21 @@ public:
 	void startGame();
 	void endGame();
 	void resetGame();
-	bool mainGameLogic();
+	bool AlgorithmLogic();
 private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<BoardView> mView;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
 	PlayerColor mCurrentPlayer;
-	std::map<PlayerType, PlayerColor> mPlayers;
+	std::vector<std::unique_ptr<ChessPlayer>> mPlayers;
 	Gtk::Statusbar *mStatus;
 	Gtk::Grid *mOptionsGrid;
-	sigc::connection mConnection; // Connection to the game logic.
+	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.
+	sigc::connection mHumanConnection; // Connection to the game logic.
 
 	bool validGameOptions() const;
+	void createChessPlayerObjects();
+	bool isValidMove(const BoardState& s, const Move& m) const;
 };
 
 } /* namespace sch */

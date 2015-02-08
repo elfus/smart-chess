@@ -7,6 +7,7 @@
 
 #include "BoardController.h"
 #include "ChessPiece.h"
+#include "ChessPlayer.h"
 #include <iostream>
 #include <gtkmm/statusbar.h>
 #include <gtkmm/grid.h>
@@ -26,8 +27,7 @@ BoardController::BoardController()
   mPlayers(),
   mStatus(nullptr),
   mOptionsGrid(nullptr){
-	mPlayers[PlayerType::HUMAN_PLAYER] = PlayerColor::WHITE_PLAYER;
-	mPlayers[PlayerType::ALGORITHM_PLAYER] = PlayerColor::BLACK_PLAYER;
+
 }
 
 BoardController::~BoardController() {
@@ -60,6 +60,8 @@ void BoardController::chessBoardClicked(BoardSquare s)
 			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece = nullptr;
+			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
+			mHumanConnection.disconnect();
 		}
 	} else if(s.hasPiece() && !mSelectedPiece) {
 		if((mCurrentPlayer == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
@@ -76,6 +78,8 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		if(it != moves.end()) {
 			mState->move(mSelectedPiece, *it);
 			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
+			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
+			mHumanConnection.disconnect();
 		} else
 			cout << "Empty square1" << endl;
 		mSelectedPiece->setSelected(false);
@@ -84,6 +88,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		cout << "Empty square2" << endl;
 	}
 
+	mState->setCurrentPlayer(mCurrentPlayer);
 	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	mStatus->pop();
 	mStatus->push(msg);
@@ -97,10 +102,57 @@ void BoardController::chessBoardClicked(BoardSquare s)
  *
  * @see Programming with gtkmm, section 24 timeout and idle functions
  */
-bool BoardController::mainGameLogic()
+bool BoardController::AlgorithmLogic()
 {
-	cout << "Doing game logic" << endl;
-	return true;
+	// Check the player's turn
+	// let the current player move
+	// check if the move is valid
+	// 		if move is valid then do the move
+	// check any game post-conditions, i.e. checkmate
+	ChessPlayer *player {nullptr};
+
+	if(mPlayers[0]->getColor() == mCurrentPlayer)
+		player = mPlayers[0].get();
+	else if(mPlayers[1]->getColor() == mCurrentPlayer)
+		player = mPlayers[1].get();
+
+	if(typeid(*player) == typeid(Human)) {
+		cerr << "This method should not be called for a human!" << endl;
+	} else {
+		Move move = player->makeMove(*mState);
+		if(!isValidMove(*mState, move)) {
+			cerr << "Invalid move: " << move << endl;
+			return true;
+		} else {
+			mState->move(move.piece, move.final_pos);
+		}
+	}
+
+	mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
+	mState->setCurrentPlayer(mCurrentPlayer);
+	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
+	mStatus->pop();
+	mStatus->push(msg);
+	mView->force_redraw();
+	cout.flush();
+
+	// Let the human play
+	mHumanConnection = mView->getSignalClickedReleased().connect(
+					sigc::mem_fun(*this,&BoardController::chessBoardClicked));
+	return false;
+}
+
+bool BoardController::isValidMove(const BoardState& s, const Move& m) const
+{
+	bool valid = false;
+	auto moves = m.piece->getPossibleMoves(s);
+	for(auto& pos : moves) {
+		if(pos == m.final_pos) {
+			valid = true;
+			break;
+		}
+	}
+	return valid;
 }
 
 bool BoardController::validGameOptions() const
@@ -131,6 +183,52 @@ bool BoardController::validGameOptions() const
 	return true;
 }
 
+void BoardController::createChessPlayerObjects() {
+	mPlayers.clear();
+	vector<Gtk::Widget*> children = mOptionsGrid->get_children();
+	Gtk::ComboBoxText *cbt1 {nullptr};
+	Gtk::ComboBoxText *cbt2 {nullptr};
+	Gtk::ComboBoxText *color1 {nullptr};
+	Gtk::ComboBoxText *color2 {nullptr};
+	for(Gtk::Widget*& ptr : children) {
+		if(ptr->get_name() == "PlayerComboBox1")
+			cbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+		if(ptr->get_name() == "PlayerComboBox2")
+			cbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+		if(ptr->get_name() == "ColorComboBox1")
+			color1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+		if(ptr->get_name() == "ColorComboBox2")
+			color2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+	}
+	if(cbt1->get_active_text() == "Human") {
+		mPlayers.push_back(unique_ptr<Human>(new Human()));
+		mHumanConnection = mView->getSignalClickedReleased().connect(
+				sigc::mem_fun(*this,&BoardController::chessBoardClicked));
+	}
+	else if(cbt1->get_active_text() == "Algorithm") {
+		mPlayers.push_back(unique_ptr<Algorithm>(new Algorithm()));
+		// If player 1 one is the computer connect the callback method
+		mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
+	}
+
+	if(color1->get_active_text() == "White")
+		mPlayers.back()->setColor(PlayerColor::WHITE_PLAYER);
+	else if(color1->get_active_text() == "Black")
+		mPlayers.back()->setColor(PlayerColor::BLACK_PLAYER);
+
+	if(cbt2->get_active_text() == "Human")
+		mPlayers.push_back(unique_ptr<Human>(new Human()));
+	else if(cbt2->get_active_text() == "Algorithm")
+		mPlayers.push_back(unique_ptr<Algorithm>(new Algorithm()));
+
+	if(color2->get_active_text() == "White")
+		mPlayers.back()->setColor(PlayerColor::WHITE_PLAYER);
+	else if(color2->get_active_text() == "Black")
+		mPlayers.back()->setColor(PlayerColor::BLACK_PLAYER);
+
+	assert(mPlayers.size() == 2);
+}
+
 void BoardController::startGame() {
 	cout << "BoardController::startGame" << endl;
 	if(validGameOptions()) {
@@ -140,7 +238,7 @@ void BoardController::startGame() {
 		mState->setCurrentPlayer(mCurrentPlayer);
 		mStatus->push("White player's turn.");
 		mView->force_redraw();
-		mConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::mainGameLogic));
+		createChessPlayerObjects();
 	} else {
 		Gtk::MessageDialog msg("Invalid Game Options");
 		msg.run();
@@ -153,7 +251,8 @@ void BoardController::endGame() {
 	mState.reset();
 	mOptionsGrid->set_sensitive(true);
 	mStatus->remove_all_messages();
-	mConnection.disconnect();
+	mAlgorithmConnection.disconnect();
+	mPlayers.clear();
 	mView->force_redraw();
 }
 
