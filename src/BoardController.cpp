@@ -124,7 +124,11 @@ bool BoardController::AlgorithmLogic()
 			cerr << "Invalid move: " << move << endl;
 			return true;
 		} else {
-			mState->move(move.piece, move.final_pos);
+			// check if the algorithm is capturing a piece first
+			if(mState->hasPieceAt(move.final_pos))
+				mState->capture(move.piece, mState->getPieceAt(move.final_pos));
+			else
+				mState->move(move.piece, move.final_pos);
 		}
 	}
 
