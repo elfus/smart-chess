@@ -81,6 +81,10 @@ std::shared_ptr<ChessPiece>  BoardState::copyPiece(std::shared_ptr<ChessPiece> p
 	case PieceType::BLACK_BISHOP:
 		ptr = make_shared<Bishop>(BoardPosition(ONE, E), PieceType::WHITE_KING);
 		break;
+	case PieceType::WHITE_PAWN:
+	case PieceType::BLACK_PAWN:
+		ptr = make_shared<Pawn>(BoardPosition(ONE, E), PieceType::WHITE_KING);
+		break;
 	}
 	*ptr = *piece;
 	return ptr;
@@ -274,8 +278,9 @@ void BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 			return s.mPosition == pos;
 		});
 
-	(*news).setPiece((*olds).removePiece());
-	ptr->setPosition(pos);
+	std::shared_ptr<ChessPiece> p = (*olds).removePiece();
+	(*news).setPiece(p);
+	p->setPosition(pos);
 }
 
 } /* namespace sch */
