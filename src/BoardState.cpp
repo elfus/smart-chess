@@ -248,7 +248,7 @@ std::vector<std::shared_ptr<ChessPiece>> BoardState::getPiecesThatCanBeMoved() c
 	return moves;
 }
 
-void BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
+BoardState BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
 {
 	if(hostage->isWhite()) {
 		auto it =find_if(mWhitePieces.begin(), mWhitePieces.end(), [&](const shared_ptr<ChessPiece>& p) {
@@ -268,7 +268,7 @@ void BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece>
 	move(capturer, hostage->getPosition());
 }
 
-void BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
+BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 {
 	auto olds = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
 		return s.mPosition == ptr->getPosition();

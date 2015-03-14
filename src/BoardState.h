@@ -81,7 +81,7 @@ public:
 	 * move to done. It assumes the move can be done. The game logic is managed
 	 * by the BoardController class.
 	 */
-	void move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
+	BoardState move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
 
 	/**
 	 * The ChessPiece pointed to by capturer captures the ChessPiece pointed
@@ -94,7 +94,7 @@ public:
 	 * move to done. It assumes the move can be done. The game logic is managed
 	 * by the BoardController class.
 	 */
-	void capture(std::shared_ptr<ChessPiece> capturer, std::shared_ptr<ChessPiece> hostage);
+	BoardState capture(std::shared_ptr<ChessPiece> capturer, std::shared_ptr<ChessPiece> hostage);
 
 	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos) const;
 	const BoardSquare& getSquareAt(BoardPosition pos) const;
