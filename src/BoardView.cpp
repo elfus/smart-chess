@@ -249,6 +249,7 @@ std::ostream& operator <<(std::ostream& os, Move m)
 {
 	os << "Move : "<<m.piece->getPieceType() << " to "
 		<< m.final_pos.column << m.final_pos.row << endl;
+	return os;
 }
 
 } /* namespace sch */
