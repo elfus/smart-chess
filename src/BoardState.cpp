@@ -270,17 +270,21 @@ BoardState BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<Chess
 
 BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 {
-	auto olds = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
+	BoardState ns(*this); // new state
+
+	auto olds = find_if(ns.mSquares.begin(), ns.mSquares.end(), [&](BoardSquare& s) {
 		return s.mPosition == ptr->getPosition();
 	});
 
-	auto news = find_if(mSquares.begin(), mSquares.end(), [&](BoardSquare& s) {
+	auto news = find_if(ns.mSquares.begin(), ns.mSquares.end(), [&](BoardSquare& s) {
 			return s.mPosition == pos;
 		});
 
 	std::shared_ptr<ChessPiece> p = (*olds).removePiece();
 	(*news).setPiece(p);
 	p->setPosition(pos);
+
+	return ns;
 }
 
 } /* namespace sch */
