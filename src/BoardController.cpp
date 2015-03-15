@@ -77,7 +77,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		auto moves = mSelectedPiece->getPossibleMoves(*mState);
 		auto it = find(moves.begin(), moves.end(), s.mPosition);
 		if(it != moves.end()) {
-			mState->move(mSelectedPiece, *it);
+			*mState = mState->move(mSelectedPiece, *it);
 			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
 			mHumanConnection.disconnect();

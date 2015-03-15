@@ -106,6 +106,8 @@ std::shared_ptr<ChessPiece>  BoardState::copyPiece(std::shared_ptr<ChessPiece> p
 }
 
 void BoardState::copy(const BoardState& rhs) {
+	mCurrentPlayer = rhs.mCurrentPlayer;
+
 	for(auto piece : rhs.mWhitePieces)
 		mWhitePieces.push_back(copyPiece(piece));
 
