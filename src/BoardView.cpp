@@ -61,11 +61,19 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 {
 	int  i = 0, j = 0;
 	bool found = false;
-	for(; i < SQUARE_NUM; ++i) {
-		if((i*mSquareWidth) < x && x <= ((i*mSquareWidth) + mSquareWidth)) {
-			for(; j < SQUARE_NUM; ++j) {
-				if((j*mSquareHeight) < y &&
-					y <= ((j*mSquareHeight) +mSquareHeight)) {
+	const int BORDER = BORDER_WIDTH/2;
+
+	if(x < BORDER || y < BORDER || x > (SQUARE_NUM*mSquareWidth) + BORDER
+		|| y > (SQUARE_NUM*mSquareHeight) + BORDER) {
+		clog << "Invalid square clicked" << endl;
+		return BoardSquare(BoardPosition());
+	}
+
+	for(i=0; i < SQUARE_NUM; ++i) {
+		if( ((i*mSquareWidth)+BORDER) < x && x <= ((i*mSquareWidth)+BORDER + mSquareWidth)) {
+			for(j=0; j < SQUARE_NUM; ++j) {
+				if(((j*mSquareHeight)+BORDER) < y &&
+					y <= ((j*mSquareHeight) +BORDER+mSquareHeight) ) {
 					found = true;
 					break;
 				}
@@ -93,7 +101,9 @@ bool BoardView::clickReleased(GdkEventButton* event)
 				return false;
 			}
 			BoardSquare s = calculateSquare(event->x, event->y);
-			mSignalClickReleased(s);
+			// notifiy when we have a square with a valid position
+			if(s.mPosition.isValid())
+				mSignalClickReleased(s);
 		}
 	}
 	return false;

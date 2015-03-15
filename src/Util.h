@@ -74,6 +74,9 @@ struct BoardPosition {
 	bool operator ==(const BoardPosition& that) const {
 		return row == that.row && column == that.column;
 	}
+	bool isValid() const {
+		return row != Row::MAX_ROW && column != Column::MAX_COL;
+	}
 };
 
 class ChessPiece;
