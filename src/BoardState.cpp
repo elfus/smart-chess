@@ -281,8 +281,10 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 		});
 
 	std::shared_ptr<ChessPiece> p = (*olds).removePiece();
-	(*news).setPiece(p);
-	p->setPosition(pos);
+	if(p) {
+		(*news).setPiece(p);
+		p->setPosition(pos);
+	}
 
 	return ns;
 }
