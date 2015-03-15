@@ -45,7 +45,7 @@ public:
 	PlayerColor getColor() const { return mColor; }
 	void setColor(PlayerColor c) { mColor = c; }
 
-	virtual Move makeMove(BoardState state) = 0;
+	virtual Move makeMove(const BoardState& state) = 0;
 private:
 	PlayerColor mColor;
 };
@@ -55,7 +55,7 @@ public:
 	Human();
 	virtual ~Human();
 
-	Move makeMove(BoardState state);
+	Move makeMove(const BoardState& state);
 };
 
 class Algorithm : public ChessPlayer {
@@ -63,7 +63,7 @@ public:
 	Algorithm();
 	virtual ~Algorithm();
 
-	Move makeMove(BoardState state);
+	Move makeMove(const BoardState& state);
 };
 
 } /* namespace sch */

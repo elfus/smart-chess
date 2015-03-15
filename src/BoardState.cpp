@@ -48,13 +48,28 @@ BoardState::BoardState(const BoardState& rhs)
 : mCurrentPlayer(rhs.mCurrentPlayer)
 {
 	copy(rhs);
-	cout << "BoardState COPY Constructor" << endl;
+	clog << "BoardState COPY Constructor" << endl;
+}
+
+BoardState::BoardState(BoardState&& rhs) : mCurrentPlayer{rhs.mCurrentPlayer}
+{
+	mWhitePieces.swap(rhs.mWhitePieces);
+
+	mBlackPieces.swap(rhs.mBlackPieces);
+
+	mWhiteHostages.swap(rhs.mWhiteHostages);
+
+	mBlackHostages.swap(rhs.mBlackHostages);
+
+	mSquares.swap(rhs.mSquares);
+
+	clog << "BoardState MOVE Constructor" << endl;
 }
 
 BoardState& BoardState::operator = (const BoardState& rhs)
 {
 	copy(rhs);
-	cout << "BoardState ASSIGNMENT OPERATOR" << endl;
+	clog << "BoardState ASSIGNMENT OPERATOR" << endl;
 	return *this;
 }
 
@@ -108,7 +123,7 @@ void BoardState::copy(const BoardState& rhs) {
 }
 
 BoardState::~BoardState() {
-	cout << "BoardState Destructor" << endl;
+	clog << "BoardState Destructor" << endl;
 }
 
 void BoardState::initWhitePieces() {
@@ -265,7 +280,7 @@ BoardState BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<Chess
 		mBlackHostages.push_back(hostage);
 	}
 
-	move(capturer, hostage->getPosition());
+	return std::move(move(capturer, hostage->getPosition()));
 }
 
 BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
@@ -286,7 +301,7 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 		p->setPosition(pos);
 	}
 
-	return ns;
+	return std::move(ns);
 }
 
 } /* namespace sch */

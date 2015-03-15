@@ -43,15 +43,16 @@ class BoardState {
 public:
 	BoardState();
 	BoardState(const BoardState& rhs);
+	BoardState(BoardState&& rhs);
 	BoardState& operator = (const BoardState& rhs);
 
 	~BoardState();
 
-	auto getWhitePieces() -> std::vector<std::shared_ptr<ChessPiece>> {
+	auto getWhitePieces() const -> std::vector<std::shared_ptr<ChessPiece>> {
 		return mWhitePieces;
 	}
 
-	auto getBlackPieces() -> std::vector<std::shared_ptr<ChessPiece>> {
+	auto getBlackPieces() const -> std::vector<std::shared_ptr<ChessPiece>>  {
 		return mBlackPieces;
 	}
 

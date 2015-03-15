@@ -50,7 +50,7 @@ Human::~Human() {
 
 }
 
-Move Human::makeMove(BoardState state) {
+Move Human::makeMove(const BoardState& state) {
 
 }
 
@@ -62,7 +62,7 @@ Algorithm::~Algorithm() {
 
 }
 
-Move Algorithm::makeMove(BoardState state) {
+Move Algorithm::makeMove(const BoardState& state) {
 	assert(state.getCurrentPlayer() == getColor());
 
 	std::vector<std::shared_ptr<ChessPiece>> pieces;
