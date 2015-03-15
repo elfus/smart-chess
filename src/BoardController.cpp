@@ -44,14 +44,14 @@ BoardController::~BoardController() {
  */
 void BoardController::chessBoardClicked(BoardSquare s)
 {
-	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << ", ";
+	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << endl;
 
 	if(s.hasPiece() && mSelectedPiece) {
 		if(s.getPiece()->isWhite() == mSelectedPiece->isWhite()) {
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece = s.getPiece();
 			mSelectedPiece->setSelected();
-			cout << "Selected2: " << s.getPiece()->getPieceType() << endl;
+			cout << "\tSelected2: " << s.getPiece()->getPieceType() << endl;
 		}
 		// check if the user is capturing a piece
 		auto moves = mSelectedPiece->getPossibleMoves(*mState);
@@ -69,7 +69,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 			(mCurrentPlayer == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
 			mSelectedPiece = s.getPiece();
 			mSelectedPiece->setSelected();
-			cout << "Selected1: " << s.getPiece()->getPieceType() << endl;
+			cout << "\tSelected1: " << s.getPiece()->getPieceType() << endl;
 		}
 	}
 	else if(!s.hasPiece() && mSelectedPiece){
@@ -82,11 +82,11 @@ void BoardController::chessBoardClicked(BoardSquare s)
 			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
 			mHumanConnection.disconnect();
 		} else
-			cout << "Empty square1" << endl;
+			cout << "\tEmpty square1" << endl;
 		mSelectedPiece->setSelected(false);
 		mSelectedPiece.reset();
 	} else if(!s.hasPiece() && !mSelectedPiece) {
-		cout << "Empty square2" << endl;
+		cout << "\tEmpty square2" << endl;
 	}
 
 	mState->setCurrentPlayer(mCurrentPlayer);
