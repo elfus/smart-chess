@@ -57,7 +57,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		auto moves = mSelectedPiece->getPossibleMoves(*mState);
 		auto it = find(moves.begin(), moves.end(), s.getPiece()->getPosition());
 		if(it != moves.end()) {
-			mState->capture(mSelectedPiece, s.getPiece());
+			*mState = mState->capture(mSelectedPiece, s.getPiece());
 			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece = nullptr;
@@ -127,9 +127,9 @@ bool BoardController::AlgorithmLogic()
 		} else {
 			// check if the algorithm is capturing a piece first
 			if(mState->hasPieceAt(move.final_pos))
-				mState->capture(move.piece, mState->getPieceAt(move.final_pos));
+				*mState = mState->capture(move.piece, mState->getPieceAt(move.final_pos));
 			else
-				mState->move(move.piece, move.final_pos);
+				*mState = mState->move(move.piece, move.final_pos);
 		}
 	}
 
