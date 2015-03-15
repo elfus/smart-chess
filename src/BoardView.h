@@ -57,6 +57,7 @@ private:
 	static const int SQUARE_NUM = 8;
 	static const int MIN_BOARD_W = 400;
 	static const int MIN_BOARD_H = MIN_BOARD_W;
+	static const int BORDER_WIDTH = 48;
 
 	int mBoardWidth;
 	int mBoardHeight;
@@ -66,6 +67,8 @@ private:
 
 	sigc::signal<void, BoardSquare> mSignalClickReleased;
 
+	void drawBorders(const Cairo::RefPtr<Cairo::Context>& ctx,
+				int board_width, int board_height);
 	void drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 			int board_width, int board_height);
 

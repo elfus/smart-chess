@@ -99,16 +99,32 @@ bool BoardView::clickReleased(GdkEventButton* event)
 	return false;
 }
 
+void BoardView::drawBorders(const Cairo::RefPtr<Cairo::Context>& ctx,
+				int board_width, int board_height)
+{
+	ctx->save();
+	ctx->move_to(0,0);
+	ctx->set_source_rgb(0.6, 0.6, 1.0);
+	ctx->set_line_width(BORDER_WIDTH);
+	ctx->rectangle(0,0, board_width, board_height);
+	ctx->fill();
+	ctx->stroke();
+	ctx->restore();
+}
+
 void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 		int board_width, int board_height)
 {
+	board_width -= BORDER_WIDTH;
+	board_height -= BORDER_WIDTH;
 	mSquareWidth = board_width / SQUARE_NUM;
 	mSquareHeight = board_height / SQUARE_NUM;
-	int x = 0, y = 0;
-	ctx->set_source_rgb(1.0, 1.0, 1.0);
+	int x = BORDER_WIDTH, y = BORDER_WIDTH;
 	bool is_white = true;
+
+	ctx->set_source_rgb(1.0, 1.0, 1.0);
 	for(int i=0; i < SQUARE_NUM; ++i) {
-		x = i * mSquareWidth;
+		x = (i * mSquareWidth) + (BORDER_WIDTH/2);
 		for(int j=0; j < SQUARE_NUM; ++j) {
 			if(is_white) {
 				ctx->set_source_rgb(1.0, 1.0, 1.0);
@@ -118,7 +134,7 @@ void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 				ctx->set_source_rgb(.3, .3, .3);
 				is_white = true;
 			}
-			y = j * mSquareHeight;
+			y = (j * mSquareHeight) + (BORDER_WIDTH/2);
 			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
 			ctx->fill();
 		}
@@ -139,7 +155,7 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	auto image = p.getImage();
 	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
 	BoardPosition pos = p.getPosition();
-	Gdk::Cairo::set_source_pixbuf(ctx, image, 0 + mSquareWidth*pos.column, 0 + mSquareHeight*pos.row);
+	Gdk::Cairo::set_source_pixbuf(ctx, image, (BORDER_WIDTH/2) + mSquareWidth*pos.column, (BORDER_WIDTH/2) + mSquareHeight*pos.row);
 	ctx->save();
 	ctx->paint();
 	ctx->restore();
@@ -147,8 +163,8 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	if(p.isSelected()) {
 		// Draw a fancy blue square when the piece is selected
 		const double LINE_W = 8.0;
-		const double orig_x = 0 + mSquareWidth*pos.column + (LINE_W/2);
-		const double orig_y = 0 + mSquareHeight*pos.row + (LINE_W/2);
+		const double orig_x = (BORDER_WIDTH/2) + mSquareWidth*pos.column + (LINE_W/2);
+		const double orig_y = (BORDER_WIDTH/2) + mSquareHeight*pos.row + (LINE_W/2);
 		ctx->save();
 		ctx->set_source_rgba(0, 0.0, 0.9, 1.0);
 		ctx->set_line_width(LINE_W);
@@ -166,8 +182,8 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
 		for(BoardPosition p : options) {
 			ctx->save();
-			const double x = 0 + mSquareWidth*p.column;
-			const double y = 0 + mSquareHeight*p.row;
+			const double x = (BORDER_WIDTH/2) + mSquareWidth*p.column;
+			const double y = (BORDER_WIDTH/2) + mSquareHeight*p.row;
 			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
 			ctx->fill();
 			ctx->stroke();
@@ -192,6 +208,7 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	mBoardWidth = allocation.get_width();
 	mBoardHeight = allocation.get_height();
 
+	drawBorders(ctx, mBoardWidth, mBoardHeight);
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
 	// @todo Remove mState variable from this class
