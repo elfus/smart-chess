@@ -103,12 +103,67 @@ void BoardView::drawBorders(const Cairo::RefPtr<Cairo::Context>& ctx,
 				int board_width, int board_height)
 {
 	ctx->save();
+	// draw the main background
 	ctx->move_to(0,0);
 	ctx->set_source_rgb(0.6, 0.6, 1.0);
 	ctx->set_line_width(BORDER_WIDTH);
 	ctx->rectangle(0,0, board_width, board_height);
 	ctx->fill();
 	ctx->stroke();
+
+	// Draw the text
+	ctx->set_source_rgb(0.0, 0.0, 0.0);
+	mSquareWidth = (board_width-BORDER_WIDTH) / SQUARE_NUM;
+	mSquareHeight = (board_height-BORDER_WIDTH) / SQUARE_NUM;
+
+	Pango::FontDescription font;
+	font.set_family("Monospace");
+	font.set_weight(Pango::WEIGHT_BOLD);
+	// http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
+
+	// Position the text on top of the board
+	for(int i = Column::A; i <Column::MAX_COL; ++i) {
+		stringstream ss;
+		ss << static_cast<Column>(i);
+		Glib::RefPtr<Pango::Layout> layout = create_pango_layout(ss.str());
+		layout->set_font_description(font);
+		int text_width;
+		int text_height;
+		//get the text dimensions (it updates the variables -- by reference)
+		layout->get_pixel_size(text_width, text_height);
+
+		// top part
+		ctx->move_to((BORDER_WIDTH/2) + (mSquareWidth/2) + mSquareWidth*i - (text_width/2),
+				 (text_height/2));
+		layout->show_in_cairo_context(ctx);
+
+		// bottom part
+		ctx->move_to((BORDER_WIDTH/2) + (mSquareWidth/2) + mSquareWidth*i - (text_width/2),
+				board_height - (BORDER_WIDTH/2) + (text_height/2));
+			layout->show_in_cairo_context(ctx);
+	}
+
+	// Position the text on top of the board
+	for(int i = 0; i <Row::MAX_ROW; ++i) {
+		stringstream ss;
+		ss << static_cast<Row>(i);
+		Glib::RefPtr<Pango::Layout> layout = create_pango_layout(ss.str());
+		layout->set_font_description(font);
+		int text_width;
+		int text_height;
+		//get the text dimensions (it updates the variables -- by reference)
+		layout->get_pixel_size(text_width, text_height);
+
+		// top part
+		ctx->move_to((text_width), (BORDER_WIDTH/2) + (mSquareHeight/2) + mSquareHeight*i - (text_height/2));
+		layout->show_in_cairo_context(ctx);
+
+		// bottom part
+		ctx->move_to(board_width - (BORDER_WIDTH/2) + (text_width),
+				(BORDER_WIDTH/2) + (mSquareHeight/2) + mSquareHeight*i - (text_height/2));
+		layout->show_in_cairo_context(ctx);
+	}
+
 	ctx->restore();
 }
 
