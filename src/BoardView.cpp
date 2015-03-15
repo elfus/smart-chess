@@ -145,6 +145,7 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	ctx->restore();
 
 	if(p.isSelected()) {
+		// Draw a fancy blue square when the piece is selected
 		const double LINE_W = 8.0;
 		const double orig_x = 0 + mSquareWidth*pos.column + (LINE_W/2);
 		const double orig_y = 0 + mSquareHeight*pos.row + (LINE_W/2);
@@ -197,12 +198,12 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	if(mController->gameInProgress()) {
 		auto mState = mController->getState();
 		auto black_pieces = mState->getBlackPieces();
-		assert(!black_pieces.empty());
+		assert(black_pieces.size() == 16);
 		for(auto p : black_pieces)
 			drawPiece(ctx, *p);
 
 		auto white_pieces = mState->getWhitePieces();
-		assert(!white_pieces.empty());
+		assert(white_pieces.size() == 16);
 		for(auto p : white_pieces)
 			drawPiece(ctx, *p);
 	}

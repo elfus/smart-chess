@@ -63,6 +63,8 @@ BoardState::BoardState(BoardState&& rhs) : mCurrentPlayer{rhs.mCurrentPlayer}
 
 	mSquares.swap(rhs.mSquares);
 
+	assert(mWhitePieces.size() == 16);
+	assert(mBlackPieces.size() == 16);
 	clog << "BoardState MOVE Constructor" << endl;
 }
 
@@ -108,18 +110,23 @@ std::shared_ptr<ChessPiece>  BoardState::copyPiece(std::shared_ptr<ChessPiece> p
 void BoardState::copy(const BoardState& rhs) {
 	mCurrentPlayer = rhs.mCurrentPlayer;
 
+	mWhitePieces.clear();
 	for(auto piece : rhs.mWhitePieces)
 		mWhitePieces.push_back(copyPiece(piece));
 
+	mBlackPieces.clear();
 	for(auto piece : rhs.mBlackPieces)
 		mBlackPieces.push_back(copyPiece(piece));
 
+	mWhiteHostages.clear();
 	for(auto piece : rhs.mWhiteHostages)
-		mWhitePieces.push_back(copyPiece(piece));
+		mWhiteHostages.push_back(copyPiece(piece));
 
+	mBlackHostages.clear();
 	for(auto piece : rhs.mBlackHostages)
-		mBlackPieces.push_back(copyPiece(piece));
+		mBlackHostages.push_back(copyPiece(piece));
 
+	mSquares.clear();
 	for(auto sq : rhs.mSquares)
 		mSquares.push_back(BoardSquare(sq));
 }
@@ -297,12 +304,12 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 			return s.mPosition == pos;
 		});
 
-	std::shared_ptr<ChessPiece> p = (*olds).removePiece();
-	if(p) {
+	if(olds != ns.mSquares.end() && news != ns.mSquares.end()) {
+		std::shared_ptr<ChessPiece> p = (*olds).removePiece();
 		(*news).setPiece(p);
-		p->setPosition(pos);
-	}
-
+		if(p)p->setPosition(pos);
+	} else
+		cerr << "Failed to move piece " << ptr->getPieceType() << endl;
 	return std::move(ns);
 }
 
