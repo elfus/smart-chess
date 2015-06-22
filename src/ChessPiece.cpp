@@ -81,21 +81,21 @@ void ChessPiece::copy(const ChessPiece& rhs) {
 }
 
 /// @note This method MUST be called at the beginning of the program.
-void ChessPiece::loadImages()
+void ChessPiece::loadImages(std::string data_dir)
 {
-	images[PieceType::WHITE_KING] = Gdk::Pixbuf::create_from_file("data/kingw.gif");
-	images[PieceType::WHITE_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenw.gif");
-	images[PieceType::WHITE_ROOK] = Gdk::Pixbuf::create_from_file("data/rookw.gif");
-	images[PieceType::WHITE_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopw.gif");
-	images[PieceType::WHITE_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightw.gif");
-	images[PieceType::WHITE_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnw.gif");
+	images[PieceType::WHITE_KING] = Gdk::Pixbuf::create_from_file(data_dir + "/kingw.gif");
+	images[PieceType::WHITE_QUEEN] = Gdk::Pixbuf::create_from_file(data_dir + "/queenw.gif");
+	images[PieceType::WHITE_ROOK] = Gdk::Pixbuf::create_from_file(data_dir + "/rookw.gif");
+	images[PieceType::WHITE_BISHOP] = Gdk::Pixbuf::create_from_file(data_dir +"/bishopw.gif");
+	images[PieceType::WHITE_KNIGHT] = Gdk::Pixbuf::create_from_file(data_dir + "/knightw.gif");
+	images[PieceType::WHITE_PAWN] = Gdk::Pixbuf::create_from_file(data_dir + "/pawnw.gif");
 
-	images[PieceType::BLACK_KING] = Gdk::Pixbuf::create_from_file("data/kingb.gif");
-	images[PieceType::BLACK_QUEEN] = Gdk::Pixbuf::create_from_file("data/queenb.gif");
-	images[PieceType::BLACK_ROOK] = Gdk::Pixbuf::create_from_file("data/rookb.gif");
-	images[PieceType::BLACK_BISHOP] = Gdk::Pixbuf::create_from_file("data/bishopb.gif");
-	images[PieceType::BLACK_KNIGHT] = Gdk::Pixbuf::create_from_file("data/knightb.gif");
-	images[PieceType::BLACK_PAWN] = Gdk::Pixbuf::create_from_file("data/pawnb.gif");
+	images[PieceType::BLACK_KING] = Gdk::Pixbuf::create_from_file(data_dir + "/kingb.gif");
+	images[PieceType::BLACK_QUEEN] = Gdk::Pixbuf::create_from_file(data_dir + "/queenb.gif");
+	images[PieceType::BLACK_ROOK] = Gdk::Pixbuf::create_from_file(data_dir + "/rookb.gif");
+	images[PieceType::BLACK_BISHOP] = Gdk::Pixbuf::create_from_file(data_dir + "/bishopb.gif");
+	images[PieceType::BLACK_KNIGHT] = Gdk::Pixbuf::create_from_file(data_dir + "/knightb.gif");
+	images[PieceType::BLACK_PAWN] = Gdk::Pixbuf::create_from_file(data_dir + "/pawnb.gif");
 }
 
 bool ChessPiece::isWhite() const{

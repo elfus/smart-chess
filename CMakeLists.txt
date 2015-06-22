@@ -14,7 +14,7 @@ configure_file(
   "${SMARTCHESS_BINARY_DIR}/SmartChessConfig.h"
 )
 
-include_directories ({SmartChess_BINARY_DIR})
+include_directories (${SMARTCHESS_BINARY_DIR})
 
 add_subdirectory(data)
 add_subdirectory(src)

@@ -29,6 +29,7 @@
 //===----------------------------------------------------------------------===//
 #include "ChessPiece.h"
 #include "SmartChessWindow.h"
+#include "SmartChessConfig.h"
 #include <gtkmm/builder.h>
 #include <iostream>
 #include <exception>
@@ -41,12 +42,11 @@ int main(int argc, char * argv[])
 		Glib::RefPtr<Gtk::Application> app =
 				Gtk::Application::create(argc, argv);
 
-		sch::ChessPiece::loadImages();
+		string data_dir = SMARTCHESS_DATA_DIR;
+		sch::ChessPiece::loadImages(data_dir);
 
-		// @todo Improve how we retrieve the resource files, we don't want
-		// harcoded stuff.
 		Glib::RefPtr<Gtk::Builder> builder =
-				Gtk::Builder::create_from_file("data/chess-gui.glade");
+				Gtk::Builder::create_from_file(data_dir + "/chess-gui.glade");
 
 		sch::SmartChessWindow* main_window = nullptr;
 		builder->get_widget_derived("MainWindow", main_window);

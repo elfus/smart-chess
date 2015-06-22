@@ -80,7 +80,7 @@ public:
 	bool canMove(const BoardState& s) const { return getPossibleMoves(s).size(); }
 
 	/// @note Call only once at the beginning of the program.
-	static void loadImages();
+	static void loadImages(std::string data_dir);
 protected:
 	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
 
