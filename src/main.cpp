@@ -48,12 +48,9 @@ int main(int argc, char * argv[])
 		Glib::RefPtr<Gtk::Builder> builder =
 				Gtk::Builder::create_from_file(data_dir + "/chess-gui.glade");
 
-		sch::SmartChessWindow* main_window = nullptr;
-		builder->get_widget_derived("MainWindow", main_window);
+		sch::SmartChessWindow main_window;
 
-		unique_ptr<Gtk::Window> uptr_window(main_window);
-
-		app->run(*uptr_window);
+		app->run(main_window);
 	} catch (const std::exception& e) {
 		cerr << e.what() << endl;
 	}

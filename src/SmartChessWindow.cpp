@@ -41,106 +41,134 @@ using namespace std;
 
 namespace sch {
 
-SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
-		const Glib::RefPtr<Gtk::Builder>& builder)
-: Gtk::Window(cobject), mMainGrid(nullptr),
-  mBoardView(new BoardView),
-  mBoardState(),
-  mBoardController(new BoardController){
-	Gtk::Grid* grid = nullptr;
-	builder->get_widget("MainGrid", grid);
-	if(grid)
-		mMainGrid.reset(grid);
+	SmartChessWindow::SmartChessWindow() {
+		Gtk::Grid* main_grid = configureMainGrid();
+		add(*main_grid);
 
-	Gtk::AspectFrame* af;
-	builder->get_widget("AspectFrameBoard", af);
-	af->set_vexpand();
-	af->set_hexpand();
+		BoardView* view = Gtk::manage(new BoardView());
+		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
 
-	af->add(*mBoardView);
-
-	mBoardView->setBoardController(mBoardController);
-	mBoardController->setBoardView(mBoardView);
-
-	Gtk::Statusbar * bar = nullptr;
-	builder->get_widget("StatusBar", bar);
-	bar->push("Welcome to Smart Chess!",1);
-	mBoardController->setStatusbar(bar);
-
-	Gtk::Grid* options_grid{nullptr};
-	builder->get_widget("OptionsGrid", options_grid);
-	mBoardController->setOptionsGrid(options_grid);
-	// setup the buttons that control the game
-	Gtk::Button *b = nullptr;
-	builder->get_widget("StartButton", b);
-	assert(b);
-	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::startGame));
-	b = nullptr;
-
-	builder->get_widget("EndButton", b);
-	assert(b);
-	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::endGame));
-	b = nullptr;
-
-	builder->get_widget("ResetButton", b);
-	assert(b);
-	b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::resetGame));
-	b = nullptr;
-
-	// Make sure the color ius mutually exclusive
-	vector<Gtk::Widget*> children = options_grid->get_children();
-	Gtk::ComboBoxText *player {nullptr};
-	// Start the game with some default options
-	for(Gtk::Widget*& ptr : children) {
-		if(ptr->get_name() == "ColorComboBox1") {
-			mCbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-			mCbt1->set_active_text("White");
-		}
-		if(ptr->get_name() == "ColorComboBox2") {
-			mCbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-			mCbt2->set_active_text("Black");
-		}
-		if(ptr->get_name() == "PlayerComboBox1") {
-			player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-			player->set_active_text("Human");
-		}
-		if(ptr->get_name() == "PlayerComboBox2") {
-			player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-			player->set_active_text("Algorithm");
-		}
+		show_all_children();
 	}
-	assert(mCbt1 && mCbt2);
-	mCbt1->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player1ColorChanged));
-	mCbt2->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player2ColorChanged));
 
-	show_all_children();
+    Gtk::Grid * SmartChessWindow::configureMainGrid() {
+        Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
+        grid->set_row_homogeneous(false);
+        grid->set_column_homogeneous(true);
+        grid->set_vexpand();
+        grid->set_hexpand();
 
-	// start a game
-	mBoardController->startGame();
-}
+        for(unsigned i = 0; i < ROW_COUNT; ++i)
+            grid->insert_row(i);
 
-SmartChessWindow::~SmartChessWindow() {
-	cerr << "SmartChessWindow Destructor" << endl;
-}
+        for(unsigned i = 0; i < COLUMN_COUNT; ++i)
+            grid->insert_column(i);
 
-void SmartChessWindow::player1ColorChanged()
-{
-	cout << "Player 1 color changed" << endl;
-	if(mCbt1->get_active_text() == "White")
-		mCbt2->set_active_text("Black");
+        return grid;
+    }
 
-	if(mCbt1->get_active_text() == "Black")
-			mCbt2->set_active_text("White");
-}
+    SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
+            const Glib::RefPtr<Gtk::Builder>& builder)
+    : Gtk::Window(cobject), mMainGrid(nullptr),
+      mBoardView(new BoardView),
+      mBoardState(),
+      mBoardController(new BoardController){
+        Gtk::Grid* grid = nullptr;
+        builder->get_widget("MainGrid", grid);
+        if(grid)
+            mMainGrid.reset(grid);
 
-void SmartChessWindow::player2ColorChanged()
-{
-	cout << "Player 2 color changed" << endl;
-	if(mCbt2->get_active_text() == "White")
-		mCbt1->set_active_text("Black");
+        Gtk::AspectFrame* af;
+        builder->get_widget("AspectFrameBoard", af);
+        af->set_vexpand();
+        af->set_hexpand();
 
-	if(mCbt2->get_active_text() == "Black")
-			mCbt1->set_active_text("White");
-}
+        af->add(*mBoardView);
+
+        mBoardView->setBoardController(mBoardController);
+        mBoardController->setBoardView(mBoardView);
+
+        Gtk::Statusbar * bar = nullptr;
+        builder->get_widget("StatusBar", bar);
+        bar->push("Welcome to Smart Chess!",1);
+        mBoardController->setStatusbar(bar);
+
+        Gtk::Grid* options_grid{nullptr};
+        builder->get_widget("OptionsGrid", options_grid);
+        mBoardController->setOptionsGrid(options_grid);
+        // setup the buttons that control the game
+        Gtk::Button *b = nullptr;
+        builder->get_widget("StartButton", b);
+        assert(b);
+        b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::startGame));
+        b = nullptr;
+
+        builder->get_widget("EndButton", b);
+        assert(b);
+        b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::endGame));
+        b = nullptr;
+
+        builder->get_widget("ResetButton", b);
+        assert(b);
+        b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::resetGame));
+        b = nullptr;
+
+        // Make sure the color ius mutually exclusive
+        vector<Gtk::Widget*> children = options_grid->get_children();
+        Gtk::ComboBoxText *player {nullptr};
+        // Start the game with some default options
+        for(Gtk::Widget*& ptr : children) {
+            if(ptr->get_name() == "ColorComboBox1") {
+                mCbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+                mCbt1->set_active_text("White");
+            }
+            if(ptr->get_name() == "ColorComboBox2") {
+                mCbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+                mCbt2->set_active_text("Black");
+            }
+            if(ptr->get_name() == "PlayerComboBox1") {
+                player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+                player->set_active_text("Human");
+            }
+            if(ptr->get_name() == "PlayerComboBox2") {
+                player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
+                player->set_active_text("Algorithm");
+            }
+        }
+        assert(mCbt1 && mCbt2);
+        mCbt1->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player1ColorChanged));
+        mCbt2->signal_changed().connect(sigc::mem_fun(*this, &SmartChessWindow::player2ColorChanged));
+
+        show_all_children();
+
+        // start a game
+        mBoardController->startGame();
+    }
+
+    SmartChessWindow::~SmartChessWindow() {
+        cerr << "SmartChessWindow Destructor" << endl;
+    }
+
+    void SmartChessWindow::player1ColorChanged()
+    {
+        cout << "Player 1 color changed" << endl;
+        if(mCbt1->get_active_text() == "White")
+            mCbt2->set_active_text("Black");
+
+        if(mCbt1->get_active_text() == "Black")
+                mCbt2->set_active_text("White");
+    }
+
+    void SmartChessWindow::player2ColorChanged()
+    {
+        cout << "Player 2 color changed" << endl;
+        if(mCbt2->get_active_text() == "White")
+            mCbt1->set_active_text("Black");
+
+        if(mCbt2->get_active_text() == "Black")
+                mCbt1->set_active_text("White");
+    }
+
+
 
 } /* namespace sch */

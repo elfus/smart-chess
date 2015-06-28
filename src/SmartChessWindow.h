@@ -45,12 +45,23 @@ class Window;
 
 namespace sch { // sch stands for Smart Chess :)
 
-class SmartChessWindow : public Gtk::Window{
+class SmartChessWindow : public Gtk::Window {
 public:
 	SmartChessWindow(BaseObjectType* cobject,
 			const Glib::RefPtr<Gtk::Builder>& builder);
+
+	SmartChessWindow();
+
 	virtual ~SmartChessWindow();
 private:
+    const unsigned ROW_COUNT = 3;
+    const unsigned COLUMN_COUNT = 3;
+
+    /**
+     * Creates, configures and returns a Gtk::manage'd Gtk::Grid
+     */
+    Gtk::Grid * configureMainGrid();
+
 	std::unique_ptr<Gtk::Grid> mMainGrid;
 	std::shared_ptr<BoardView> mBoardView;
 	std::shared_ptr<BoardState> mBoardState;

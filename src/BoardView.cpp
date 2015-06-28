@@ -277,7 +277,7 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
 	// @todo Remove mState variable from this class
-	if(mController->gameInProgress()) {
+	if(mController && mController->gameInProgress()) {
 		auto mState = mController->getState();
 		auto black_pieces = mState->getBlackPieces();
 		assert(black_pieces.size() == 16);

@@ -36,29 +36,29 @@
 
 namespace sch
 {
-enum Row {
-	MAX_ROW = 8,
-	ONE = 7,
-	TWO = 6,
-	THREE = 5,
-	FOUR = 4,
-	FIVE = 3,
-	SIX = 2,
-	SEVEN = 1,
-	EIGHT = 0
-};
+    enum Row {
+        MAX_ROW = 8,
+        ONE = 7,
+        TWO = 6,
+        THREE = 5,
+        FOUR = 4,
+        FIVE = 3,
+        SIX = 2,
+        SEVEN = 1,
+        EIGHT = 0
+    };
 
-enum Column {
-	A = 0,
-	B,
-	C,
-	D,
-	E,
-	F,
-	G,
-	H,
-	MAX_COL
-};
+    enum Column {
+        A = 0,
+        B,
+        C,
+        D,
+        E,
+        F,
+        G,
+        H,
+        MAX_COL
+    };
 
 enum class PlayerColor {
 	WHITE_PLAYER,
