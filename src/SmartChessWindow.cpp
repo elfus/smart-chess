@@ -36,6 +36,8 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/statusbar.h>
 #include <gtkmm/comboboxtext.h>
+#include <gtkmm/menubar.h>
+#include <gtkmm/uimanager.h>
 
 using namespace std;
 
@@ -44,6 +46,9 @@ namespace sch {
 	SmartChessWindow::SmartChessWindow() {
 		Gtk::Grid* main_grid = configureMainGrid();
 		add(*main_grid);
+
+        Gtk::MenuBar* menu_bar = configureMenuBar();
+        main_grid->attach(*menu_bar, 0, 0, COLUMN_COUNT, 1);
 
 		BoardView* view = Gtk::manage(new BoardView());
 		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
@@ -54,7 +59,7 @@ namespace sch {
     Gtk::Grid * SmartChessWindow::configureMainGrid() {
         Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
         grid->set_row_homogeneous(false);
-        grid->set_column_homogeneous(true);
+        grid->set_column_homogeneous(false);
         grid->set_vexpand();
         grid->set_hexpand();
 
@@ -70,7 +75,6 @@ namespace sch {
     SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
             const Glib::RefPtr<Gtk::Builder>& builder)
     : Gtk::Window(cobject), mMainGrid(nullptr),
-      mBoardView(new BoardView),
       mBoardState(),
       mBoardController(new BoardController){
         Gtk::Grid* grid = nullptr;
@@ -82,11 +86,6 @@ namespace sch {
         builder->get_widget("AspectFrameBoard", af);
         af->set_vexpand();
         af->set_hexpand();
-
-        af->add(*mBoardView);
-
-        mBoardView->setBoardController(mBoardController);
-        mBoardController->setBoardView(mBoardView);
 
         Gtk::Statusbar * bar = nullptr;
         builder->get_widget("StatusBar", bar);
@@ -170,5 +169,56 @@ namespace sch {
     }
 
 
+    Gtk::MenuBar *SmartChessWindow::configureMenuBar() {
+        Glib::RefPtr<Gtk::ActionGroup> action_group = configureActionGroup();
 
+        mUIManager = configureUIManager(action_group);
+
+        Gtk::Widget* menu_bar = mUIManager->get_widget("/MenuBar");
+        if(nullptr == menu_bar)
+            cerr << "Could not create the menu bar" << endl;
+
+        menu_bar->set_hexpand(false);
+        menu_bar->set_vexpand(false);
+
+        return dynamic_cast<Gtk::MenuBar*>(Gtk::manage(menu_bar));
+    }
+
+    void SmartChessWindow::onQuit() {
+        hide();
+    }
+
+    Glib::RefPtr<Gtk::ActionGroup> SmartChessWindow::configureActionGroup() {
+        auto action_group = Gtk::ActionGroup::create();
+
+        action_group->add(Gtk::Action::create("MenuFile", "_File"));
+        action_group->add(Gtk::Action::create_with_icon_name("Quit", "application-exit", "_Quit", "Quits the application"),
+                          Gtk::AccelKey("<control>q"), sigc::mem_fun(*this, &SmartChessWindow::onQuit));
+
+        return action_group;
+    }
+
+    Glib::RefPtr<Gtk::UIManager> SmartChessWindow::configureUIManager(
+            Glib::RefPtr<Gtk::ActionGroup> action_group) {
+        auto ui_manager = Gtk::UIManager::create();
+
+        ui_manager->insert_action_group(action_group);
+        add_accel_group(ui_manager->get_accel_group());
+
+        Glib::ustring ui_info =
+                "<ui>"
+                "  <menubar name='MenuBar'>"
+                "    <menu action='MenuFile'>"
+                "      <separator/>"
+                "      <menuitem action='Quit'/>"
+                "    </menu>"
+                "  </menubar>"
+                "  <toolbar  name='ToolBar'>"
+                "    <toolitem action='Quit'/>"
+                "  </toolbar>"
+                "</ui>";
+
+        ui_manager->add_ui_from_string(ui_info);
+        return ui_manager;
+    }
 } /* namespace sch */

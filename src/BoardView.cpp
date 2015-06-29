@@ -51,7 +51,7 @@ BoardView::~BoardView() {
 }
 
 sigc::signal<void, BoardSquare>
-BoardView::getSignalClickedReleased()
+BoardView::signalClickedReleased()
 {
 	return mSignalClickReleased;
 }
@@ -85,27 +85,22 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
 
-	if(mController->gameInProgress())
-	 return mController->getState()->getSquareAt(BoardPosition(Row(j), Column(i)));
-	cerr << "WARNING: BoardView::calculateSquare: BoardState unavailable, creating new BoardSquare" << endl;
-	return mController->getState()->getSquareAt(BoardPosition(static_cast<Row>(j), static_cast<Column>(i)));
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)
 {
-	if(mController->gameInProgress()) {
-		if(event->button == 1)  {// 1 is left mouse
-			if(event->x > mBoardWidth || event->y > mBoardHeight) {
-				cerr << "Warning: Received click on invalid coordinate:"
-					 << event->x << ", " << event->y << endl;
-				return false;
-			}
-			BoardSquare s = calculateSquare(event->x, event->y);
-			// notifiy when we have a square with a valid position
-			if(s.mPosition.isValid())
-				mSignalClickReleased(s);
-		}
-	}
+    if(event->button == 1)  {// 1 is left mouse
+        if(event->x > mBoardWidth || event->y > mBoardHeight) {
+            cerr << "Warning: Received click on invalid coordinate:"
+                 << event->x << ", " << event->y << endl;
+            return false;
+        }
+//        BoardSquare s = calculateSquare(event->x, event->y);
+//        // notifiy when we have a square with a valid position
+//        if(s.mPosition.isValid())
+//            mSignalClickReleased(s);
+    }
+
 	return false;
 }
 
@@ -242,18 +237,18 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 		ctx->stroke();
 		ctx->restore();
 		// draw the possible squares that this piece can move to
-		vector<BoardPosition> options = p.getPossibleMoves(*mController->getState());
-
-		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
-		for(BoardPosition p : options) {
-			ctx->save();
-			const double x = (BORDER_WIDTH/2) + mSquareWidth*p.column;
-			const double y = (BORDER_WIDTH/2) + mSquareHeight*p.row;
-			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
-			ctx->fill();
-			ctx->stroke();
-			ctx->restore();
-		}
+//		vector<BoardPosition> options = p.getPossibleMoves(*mController->getState());
+//
+//		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
+//		for(BoardPosition p : options) {
+//			ctx->save();
+//			const double x = (BORDER_WIDTH/2) + mSquareWidth*p.column;
+//			const double y = (BORDER_WIDTH/2) + mSquareHeight*p.row;
+//			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
+//			ctx->fill();
+//			ctx->stroke();
+//			ctx->restore();
+//		}
 	}
 
 	ctx->restore();
@@ -277,18 +272,18 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
 	// @todo Remove mState variable from this class
-	if(mController && mController->gameInProgress()) {
-		auto mState = mController->getState();
-		auto black_pieces = mState->getBlackPieces();
-		assert(black_pieces.size() == 16);
-		for(auto p : black_pieces)
-			drawPiece(ctx, *p);
-
-		auto white_pieces = mState->getWhitePieces();
-		assert(white_pieces.size() == 16);
-		for(auto p : white_pieces)
-			drawPiece(ctx, *p);
-	}
+//	if(mController && mController->gameInProgress()) {
+//		auto mState = mController->getState();
+//		auto black_pieces = mState->getBlackPieces();
+//		assert(black_pieces.size() == 16);
+//		for(auto p : black_pieces)
+//			drawPiece(ctx, *p);
+//
+//		auto white_pieces = mState->getWhitePieces();
+//		assert(white_pieces.size() == 16);
+//		for(auto p : white_pieces)
+//			drawPiece(ctx, *p);
+//	}
 
 	return true;
 }

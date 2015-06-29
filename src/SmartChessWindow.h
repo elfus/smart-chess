@@ -32,6 +32,8 @@
 #define SMARTCHESSWINDOW_H_
 
 #include <gtkmm/window.h>
+#include <gtkmm/menubar.h>
+#include <gtkmm/uimanager.h>
 #include "BoardController.h"
 #include "BoardView.h"
 #include "BoardState.h"
@@ -63,15 +65,24 @@ private:
     Gtk::Grid * configureMainGrid();
 
 	std::unique_ptr<Gtk::Grid> mMainGrid;
-	std::shared_ptr<BoardView> mBoardView;
-	std::shared_ptr<BoardState> mBoardState;
+    std::shared_ptr<BoardState> mBoardState;
 	std::shared_ptr<BoardController> mBoardController;
+    Glib::RefPtr<Gtk::UIManager> mUIManager;
+
 
 	Gtk::ComboBoxText *mCbt1 {nullptr};
 	Gtk::ComboBoxText *mCbt2 {nullptr};
 
 	void player1ColorChanged();
 	void player2ColorChanged();
+
+    Gtk::MenuBar *configureMenuBar();
+    void onQuit();
+
+    Glib::RefPtr<Gtk::ActionGroup> configureActionGroup();
+
+    Glib::RefPtr<Gtk::UIManager> configureUIManager(
+            Glib::RefPtr<Gtk::ActionGroup> ptr);
 };
 
 } /* namespace sch */

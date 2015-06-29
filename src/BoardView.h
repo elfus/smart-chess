@@ -41,16 +41,12 @@ class BoardController;
 
 class BoardView: public Gtk::DrawingArea {
 public:
-
-
 	BoardView();
-	virtual ~BoardView();
+	~BoardView();
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& ctx);
 
-	sigc::signal<void, BoardSquare> getSignalClickedReleased();
-
-	void setBoardController(std::shared_ptr<BoardController> c) { mController = c; }
+	sigc::signal<void, BoardSquare> signalClickedReleased();
 
 	void force_redraw();
 private:
@@ -63,9 +59,8 @@ private:
 	int mBoardHeight;
 	int mSquareWidth;
 	int mSquareHeight;
-	std::shared_ptr<BoardController> mController;
 
-	sigc::signal<void, BoardSquare> mSignalClickReleased;
+    sigc::signal<void, BoardSquare> mSignalClickReleased;
 
 	void drawBorders(const Cairo::RefPtr<Cairo::Context>& ctx,
 				int board_width, int board_height);

@@ -143,7 +143,7 @@ bool BoardController::AlgorithmLogic()
 
 	// Let the human play
 	if(mPlayingAgainstHuman) {
-		mHumanConnection = mView->getSignalClickedReleased().connect(
+		mHumanConnection = mView->signalClickedReleased().connect(
 						sigc::mem_fun(*this,&BoardController::chessBoardClicked));
 		return false;
 	} else {
@@ -213,7 +213,7 @@ void BoardController::createChessPlayerObjects() {
 	if(cbt1->get_active_text() == "Human") {
 		mPlayingAgainstHuman = true;
 		mPlayers.push_back(unique_ptr<Human>(new Human()));
-		mHumanConnection = mView->getSignalClickedReleased().connect(
+		mHumanConnection = mView->signalClickedReleased().connect(
 				sigc::mem_fun(*this,&BoardController::chessBoardClicked));
 	}
 	else if(cbt1->get_active_text() == "Algorithm") {
