@@ -36,8 +36,6 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/statusbar.h>
 #include <gtkmm/comboboxtext.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/uimanager.h>
 #include <gtkmm/progressbar.h>
 
 using namespace std;
