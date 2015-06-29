@@ -59,11 +59,6 @@ private:
     const unsigned ROW_COUNT = 3;
     const unsigned COLUMN_COUNT = 3;
 
-    /**
-     * Creates, configures and returns a Gtk::manage'd Gtk::Grid
-     */
-    Gtk::Grid *createMainGrid();
-
 	std::unique_ptr<Gtk::Grid> mMainGrid;
     std::shared_ptr<BoardState> mBoardState;
 	std::shared_ptr<BoardController> mBoardController;
@@ -76,16 +71,21 @@ private:
 	void player1ColorChanged();
 	void player2ColorChanged();
 
-    Gtk::MenuBar *createMenuBar();
+
     void onQuit();
     void onAbout();
 
-    Glib::RefPtr<Gtk::ActionGroup> configureActionGroup();
+    Glib::RefPtr<Gtk::ActionGroup> createActionGroup();
 
-    Glib::RefPtr<Gtk::UIManager> configureUIManager(
-            Glib::RefPtr<Gtk::ActionGroup> ptr);
+    Glib::RefPtr<Gtk::UIManager> createUIManager(Glib::RefPtr<Gtk::ActionGroup> &ptr);
 
-    Gtk::Widget *createNotificationBar();
+    /**
+     * Creates, configures and returns a Gtk::manage'd Gtk::Grid
+     */
+    Gtk::Grid *createMainGrid() const;
+    Gtk::MenuBar *createMenuBar();
+    Gtk::Widget *createNotificationBar() const;
+    BoardView *createBoardView() const;
 };
 
 } /* namespace sch */

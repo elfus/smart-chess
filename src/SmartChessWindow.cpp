@@ -49,7 +49,7 @@ namespace sch {
         Gtk::MenuBar* menu_bar = createMenuBar();
         main_grid->attach(*menu_bar, 0, 0, COLUMN_COUNT, 1);
 
-		BoardView* view = Gtk::manage(new BoardView());
+		BoardView* view = createBoardView();
 		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
 
         Gtk::Widget* status_bar = createNotificationBar();
@@ -58,7 +58,11 @@ namespace sch {
 		show_all_children();
 	}
 
-    Gtk::Grid * SmartChessWindow::createMainGrid() {
+    BoardView *SmartChessWindow::createBoardView() const {
+        return manage(new BoardView());
+    }
+
+    Gtk::Grid * SmartChessWindow::createMainGrid() const {
         Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
         grid->set_row_homogeneous(false);
         grid->set_column_homogeneous(false);
@@ -172,9 +176,9 @@ namespace sch {
 
 
     Gtk::MenuBar *SmartChessWindow::createMenuBar() {
-        Glib::RefPtr<Gtk::ActionGroup> action_group = configureActionGroup();
+        Glib::RefPtr<Gtk::ActionGroup> action_group = createActionGroup();
 
-        mUIManager = configureUIManager(action_group);
+        mUIManager = createUIManager(action_group);
 
         Gtk::Widget* menu_bar = mUIManager->get_widget("/MenuBar");
         if(nullptr == menu_bar)
@@ -186,7 +190,7 @@ namespace sch {
         return dynamic_cast<Gtk::MenuBar*>(Gtk::manage(menu_bar));
     }
 
-    Gtk::Widget *SmartChessWindow::createNotificationBar() {
+    Gtk::Widget *SmartChessWindow::createNotificationBar() const {
         Gtk::Box* statusbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
         statusbox->set_vexpand(false);
         statusbox->set_hexpand();
@@ -208,7 +212,7 @@ namespace sch {
         hide();
     }
 
-    Glib::RefPtr<Gtk::ActionGroup> SmartChessWindow::configureActionGroup() {
+    Glib::RefPtr<Gtk::ActionGroup> SmartChessWindow::createActionGroup() {
         auto action_group = Gtk::ActionGroup::create();
 
         action_group->add(Gtk::Action::create("MenuFile", "_File"));
@@ -222,8 +226,8 @@ namespace sch {
         return action_group;
     }
 
-    Glib::RefPtr<Gtk::UIManager> SmartChessWindow::configureUIManager(
-            Glib::RefPtr<Gtk::ActionGroup> action_group) {
+    Glib::RefPtr<Gtk::UIManager> SmartChessWindow::createUIManager(
+            Glib::RefPtr<Gtk::ActionGroup> &action_group) {
         auto ui_manager = Gtk::UIManager::create();
 
         ui_manager->insert_action_group(action_group);
