@@ -62,7 +62,7 @@ private:
     /**
      * Creates, configures and returns a Gtk::manage'd Gtk::Grid
      */
-    Gtk::Grid * configureMainGrid();
+    Gtk::Grid *createMainGrid();
 
 	std::unique_ptr<Gtk::Grid> mMainGrid;
     std::shared_ptr<BoardState> mBoardState;
@@ -76,8 +76,9 @@ private:
 	void player1ColorChanged();
 	void player2ColorChanged();
 
-    Gtk::MenuBar *configureMenuBar();
+    Gtk::MenuBar *createMenuBar();
     void onQuit();
+    void onAbout();
 
     Glib::RefPtr<Gtk::ActionGroup> configureActionGroup();
 

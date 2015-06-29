@@ -44,10 +44,10 @@ using namespace std;
 namespace sch {
 
 	SmartChessWindow::SmartChessWindow() {
-		Gtk::Grid* main_grid = configureMainGrid();
+		Gtk::Grid* main_grid = createMainGrid();
 		add(*main_grid);
 
-        Gtk::MenuBar* menu_bar = configureMenuBar();
+        Gtk::MenuBar* menu_bar = createMenuBar();
         main_grid->attach(*menu_bar, 0, 0, COLUMN_COUNT, 1);
 
 		BoardView* view = Gtk::manage(new BoardView());
@@ -56,7 +56,7 @@ namespace sch {
 		show_all_children();
 	}
 
-    Gtk::Grid * SmartChessWindow::configureMainGrid() {
+    Gtk::Grid * SmartChessWindow::createMainGrid() {
         Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
         grid->set_row_homogeneous(false);
         grid->set_column_homogeneous(false);
@@ -169,7 +169,7 @@ namespace sch {
     }
 
 
-    Gtk::MenuBar *SmartChessWindow::configureMenuBar() {
+    Gtk::MenuBar *SmartChessWindow::createMenuBar() {
         Glib::RefPtr<Gtk::ActionGroup> action_group = configureActionGroup();
 
         mUIManager = configureUIManager(action_group);
@@ -195,6 +195,10 @@ namespace sch {
         action_group->add(Gtk::Action::create_with_icon_name("Quit", "application-exit", "_Quit", "Quits the application"),
                           Gtk::AccelKey("<control>q"), sigc::mem_fun(*this, &SmartChessWindow::onQuit));
 
+        action_group->add(Gtk::Action::create("MenuHelp", "_Help"));
+        action_group->add(Gtk::Action::create_with_icon_name("About", "help-about", "_About", "Display information about Smart Chess"),
+                          sigc::mem_fun(*this, &SmartChessWindow::onAbout));
+
         return action_group;
     }
 
@@ -212,6 +216,9 @@ namespace sch {
                 "      <separator/>"
                 "      <menuitem action='Quit'/>"
                 "    </menu>"
+                "       <menu action='MenuHelp'>"
+                "           <menuitem action='About' />"
+                "       </menu>"
                 "  </menubar>"
                 "  <toolbar  name='ToolBar'>"
                 "    <toolitem action='Quit'/>"
@@ -220,5 +227,9 @@ namespace sch {
 
         ui_manager->add_ui_from_string(ui_info);
         return ui_manager;
+    }
+
+    void SmartChessWindow::onAbout() {
+
     }
 } /* namespace sch */
