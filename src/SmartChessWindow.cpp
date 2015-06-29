@@ -38,6 +38,7 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/progressbar.h>
 
 using namespace std;
 
@@ -52,6 +53,9 @@ namespace sch {
 
 		BoardView* view = Gtk::manage(new BoardView());
 		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
+
+        Gtk::Widget* status_bar = createNotificationBar();
+        main_grid->attach(*status_bar, 0, ROW_COUNT-1, COLUMN_COUNT, 1);
 
 		show_all_children();
 	}
@@ -184,6 +188,24 @@ namespace sch {
         return dynamic_cast<Gtk::MenuBar*>(Gtk::manage(menu_bar));
     }
 
+    Gtk::Widget *SmartChessWindow::createNotificationBar() {
+        Gtk::Box* statusbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+        statusbox->set_vexpand(false);
+        statusbox->set_hexpand();
+
+        Gtk::Statusbar* statusbar = Gtk::manage(new Gtk::Statusbar());
+        statusbar->set_vexpand(false);
+        statusbar->set_hexpand();
+        statusbox->add(*statusbar);
+
+        Gtk::ProgressBar* progressbar = Gtk::manage(new Gtk::ProgressBar());
+        progressbar->set_hexpand(false);
+        progressbar->set_vexpand(false);
+        statusbox->add(*progressbar);
+
+        return statusbox;
+    }
+
     void SmartChessWindow::onQuit() {
         hide();
     }
@@ -232,4 +254,6 @@ namespace sch {
     void SmartChessWindow::onAbout() {
 
     }
+
+
 } /* namespace sch */

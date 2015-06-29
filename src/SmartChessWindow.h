@@ -84,6 +84,8 @@ private:
 
     Glib::RefPtr<Gtk::UIManager> configureUIManager(
             Glib::RefPtr<Gtk::ActionGroup> ptr);
+
+    Gtk::Widget *createNotificationBar();
 };
 
 } /* namespace sch */
