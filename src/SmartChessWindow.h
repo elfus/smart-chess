@@ -34,6 +34,8 @@
 #include <gtkmm/window.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/box.h>
+#include <gtkmm/toggleaction.h>
 #include "BoardController.h"
 #include "BoardView.h"
 #include "BoardState.h"
@@ -63,6 +65,7 @@ private:
     std::shared_ptr<BoardState> mBoardState;
 	std::shared_ptr<BoardController> mBoardController;
     Glib::RefPtr<Gtk::UIManager> mUIManager;
+    Gtk::Widget * mLogArea;
 
 
 	Gtk::ComboBoxText *mCbt1 {nullptr};
@@ -74,6 +77,8 @@ private:
 
     void onQuit();
     void onAbout();
+    void onToggleHideLogArea(
+            Glib::RefPtr<Gtk::ToggleAction> toggleAction);
 
     Glib::RefPtr<Gtk::ActionGroup> createActionGroup();
 
@@ -86,6 +91,8 @@ private:
     Gtk::MenuBar *createMenuBar();
     Gtk::Widget *createNotificationBar() const;
     BoardView *createBoardView() const;
+
+    Gtk::Box *createLogArea();
 };
 
 } /* namespace sch */

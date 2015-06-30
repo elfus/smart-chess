@@ -37,12 +37,15 @@
 #include <gtkmm/statusbar.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/progressbar.h>
+#include <gtkmm/textview.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/toggleaction.h>
 
 using namespace std;
 
 namespace sch {
 
-	SmartChessWindow::SmartChessWindow() {
+	SmartChessWindow::SmartChessWindow() : mLogArea(nullptr) {
 		Gtk::Grid* main_grid = createMainGrid();
 		add(*main_grid);
 
@@ -52,8 +55,11 @@ namespace sch {
 		BoardView* view = createBoardView();
 		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
 
-        Gtk::Widget* status_bar = createNotificationBar();
-        main_grid->attach(*status_bar, 0, ROW_COUNT-1, COLUMN_COUNT, 1);
+        mLogArea = createLogArea();
+        main_grid->attach(*mLogArea, COLUMN_COUNT-1, ROW_COUNT/2, 1, 1);
+
+        Gtk::Widget* notification_bar = createNotificationBar();
+        main_grid->attach(*notification_bar, 0, ROW_COUNT-1, COLUMN_COUNT, 1);
 
 		show_all_children();
 	}
@@ -219,6 +225,16 @@ namespace sch {
         action_group->add(Gtk::Action::create_with_icon_name("Quit", "application-exit", "_Quit", "Quits the application"),
                           Gtk::AccelKey("<control>q"), sigc::mem_fun(*this, &SmartChessWindow::onQuit));
 
+        action_group->add(Gtk::Action::create("MenuView", "_View"));
+        Glib::RefPtr<Gtk::ToggleAction> toggleAction = Gtk::ToggleAction::create("HideLogArea", "_Hide Log Area");
+        toggleAction->set_active(false);
+        action_group->add(toggleAction, Gtk::AccelKey("<control>h"),
+                          sigc::bind(
+                                  sigc::mem_fun(*this, &SmartChessWindow::onToggleHideLogArea),
+                                  toggleAction
+                                  )
+                          );
+
         action_group->add(Gtk::Action::create("MenuHelp", "_Help"));
         action_group->add(Gtk::Action::create_with_icon_name("About", "help-about", "_About", "Display information about Smart Chess"),
                           sigc::mem_fun(*this, &SmartChessWindow::onAbout));
@@ -240,6 +256,9 @@ namespace sch {
                 "      <separator/>"
                 "      <menuitem action='Quit'/>"
                 "    </menu>"
+                "       <menu action='MenuView'>"
+                "           <menuitem action='HideLogArea' />"
+                "       </menu>"
                 "       <menu action='MenuHelp'>"
                 "           <menuitem action='About' />"
                 "       </menu>"
@@ -258,4 +277,33 @@ namespace sch {
     }
 
 
+    Gtk::Box *SmartChessWindow::createLogArea() {
+        Gtk::Box * box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+        box->set_vexpand();
+        box->set_hexpand(false);
+
+        Gtk::TextView* pTextView = Gtk::manage(new Gtk::TextView(Gtk::TextBuffer::create()));
+        pTextView->set_vexpand();
+        pTextView->set_hexpand(false);
+
+        Gtk::ScrolledWindow* scrolledWindow = Gtk::manage(new Gtk::ScrolledWindow());
+        scrolledWindow->set_vexpand();
+        scrolledWindow->set_hexpand(false);
+        scrolledWindow->add(*pTextView);
+
+        box->pack_end(*scrolledWindow);
+
+        return box;
+    }
+
+    void SmartChessWindow::onToggleHideLogArea(
+            Glib::RefPtr<Gtk::ToggleAction> toggleAction) {
+        if(mLogArea == nullptr)
+            return;
+
+        if(toggleAction->get_active())
+            mLogArea->hide();
+        else
+            mLogArea->show_all();
+    }
 } /* namespace sch */
