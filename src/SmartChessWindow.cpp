@@ -28,18 +28,19 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include "Util.h"
 #include "SmartChessWindow.h"
+#include "GRadioColorGroup.h"
 #include <iostream>
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/statusbar.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/progressbar.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/toggleaction.h>
+#include <gtkmm/radiobutton.h>
 
 using namespace std;
 
@@ -68,7 +69,9 @@ namespace sch {
 	}
 
     BoardView *SmartChessWindow::createBoardView() const {
-        return manage(new BoardView());
+        BoardView *pBoardView = manage(new BoardView());
+        pBoardView->set_hexpand();
+        return pBoardView;
     }
 
     Gtk::Grid * SmartChessWindow::createMainGrid() const {
@@ -78,35 +81,97 @@ namespace sch {
         grid->set_vexpand();
         grid->set_hexpand();
 
-        for(unsigned i = 0; i < ROW_COUNT; ++i)
+        for(auto i : IntRange(ROW_COUNT))
             grid->insert_row(i);
 
-        for(unsigned i = 0; i < COLUMN_COUNT; ++i)
+        for(auto i : IntRange(COLUMN_COUNT))
             grid->insert_column(i);
 
         return grid;
     }
 
-    Gtk::Box * SmartChessWindow::createOptionsArea() {
-        Gtk::Box*options = Gtk::manage(new Gtk::VBox(Gtk::ORIENTATION_VERTICAL));
+    Gtk::Grid * SmartChessWindow::createOptionsArea() {
+        const int OPTIONS_ROWS = 4;
+        Gtk::Grid* options = Gtk::manage(new Gtk::Grid());
         options->set_vexpand();
         options->set_hexpand(false);
+        options->insert_column(0);
+
+        for(auto i : IntRange(OPTIONS_ROWS))
+            options->insert_row(i);
 
         Gtk::Button* b = Gtk::manage(new Gtk::Button("Start"));
         b->set_hexpand(false);
-        options->pack_start(*b, Gtk::PACK_SHRINK, 1);
+        options->attach(*b, 0, 0, 1, 1);
 
         b = Gtk::manage(new Gtk::Button("End"));
         b->set_hexpand(false);
-        options->pack_start(*b, Gtk::PACK_SHRINK, 1);
+        options->attach(*b, 0, 1, 1, 1);
 
         b = Gtk::manage(new Gtk::Button("Reset"));
         b->set_hexpand(false);
-        options->pack_start(*b, Gtk::PACK_SHRINK, 1);
+        options->attach(*b, 0, 2, 1, 1);
 
-//        mBoardController->setOptionsGrid(options);
+        auto suboptions = createSuboptionsArea();
+        options->attach(*suboptions, 0, 3, 1, 1);
 
         return options;
+    }
+
+    Gtk::Grid *SmartChessWindow::createSuboptionsArea() {
+        const int SUBOPTIONS_ROWS = 3;
+        const int SUBOPTIONS_COLS = 3;
+        const int MARGIN = 1;
+        Gtk::Grid* suboptions = Gtk::manage(new Gtk::Grid());
+        suboptions->set_vexpand();
+        suboptions->set_hexpand(false);
+        suboptions->set_column_homogeneous(true);
+        suboptions->insert_column(0);
+
+        for(auto i : IntRange(SUBOPTIONS_COLS))
+            suboptions->insert_column(i);
+
+        for(auto i : IntRange(SUBOPTIONS_ROWS))
+            suboptions->insert_row(i);
+
+        Gtk::Label* p1 = Gtk::manage(new Gtk::Label("Player 1"));
+        p1->set_margin_left(MARGIN);
+        p1->set_margin_right(MARGIN);
+        suboptions->attach(*p1, 0, 0, 1, 1);
+
+        Gtk::Label* vs = Gtk::manage(new Gtk::Label("V.S."));
+        vs->set_margin_left(MARGIN);
+        vs->set_margin_right(MARGIN);
+        suboptions->attach(*vs, 1, 0, 1, 1);
+
+        Gtk::Label* p2 = Gtk::manage(new Gtk::Label("Player 2"));
+        p2->set_margin_left(MARGIN);
+        p2->set_margin_right(MARGIN);
+        suboptions->attach(*p2, 2, 0, 1, 1);
+
+        Gtk::ComboBoxText* cb1 = Gtk::manage(new Gtk::ComboBoxText());
+        cb1->append("Human");
+        cb1->append("A.I.");
+        suboptions->attach(*cb1, 0, 1, 1, 1);
+
+        Gtk::ComboBoxText* cb2 = Gtk::manage(new Gtk::ComboBoxText());
+        cb2->append("Human");
+        cb2->append("A.I.");
+        suboptions->attach(*cb2, 2, 1, 1, 1);
+
+        GRadioColorGroup* rc1 = Gtk::manage(new GRadioColorGroup());
+        suboptions->attach(*rc1, 0, 2, 1, 1);
+
+        GRadioColorGroup* rc2 = Gtk::manage(new GRadioColorGroup());
+        suboptions->attach(*rc2, 2, 2, 1, 1);
+
+        rc1->signalClickedWhite().connect(sigc::mem_fun(rc2, &GRadioColorGroup::setBlack));
+        rc1->signalClickedBlack().connect(sigc::mem_fun(rc2, &GRadioColorGroup::setWhite));
+        rc2->signalClickedWhite().connect(sigc::mem_fun(rc1, &GRadioColorGroup::setBlack));
+        rc2->signalClickedBlack().connect(sigc::mem_fun(rc1, &GRadioColorGroup::setWhite));
+        rc1->setWhite();
+        rc2->setBlack();
+        return suboptions;
     }
 
     SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
@@ -329,5 +394,6 @@ namespace sch {
         else
             mLogArea->show_all();
     }
+
 
 } /* namespace sch */

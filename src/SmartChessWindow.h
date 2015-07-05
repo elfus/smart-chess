@@ -94,7 +94,9 @@ private:
 
     Gtk::Box *createLogArea();
 
-    Gtk::Box * createOptionsArea();
+    Gtk::Grid * createOptionsArea();
+
+    Gtk::Grid *createSuboptionsArea();
 };
 
 } /* namespace sch */
