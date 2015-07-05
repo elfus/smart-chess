@@ -314,6 +314,15 @@ namespace sch {
                           Gtk::AccelKey("<control>q"), sigc::mem_fun(*this, &SmartChessWindow::onQuit));
 
         action_group->add(Gtk::Action::create("MenuView", "_View"));
+        Glib::RefPtr<Gtk::ToggleAction> toggleOptionsAction = Gtk::ToggleAction::create("HideOptionsArea", "Hide _Options Area");
+        toggleOptionsAction->set_active(false);
+        action_group->add(toggleOptionsAction, Gtk::AccelKey("<control>o"),
+                          sigc::bind(
+                                  sigc::mem_fun(*this, &SmartChessWindow::onToggleHideOptionsArea),
+                                  toggleOptionsAction
+                          )
+        );
+
         Glib::RefPtr<Gtk::ToggleAction> toggleAction = Gtk::ToggleAction::create("HideLogArea", "_Hide Log Area");
         toggleAction->set_active(false);
         action_group->add(toggleAction, Gtk::AccelKey("<control>h"),
@@ -345,6 +354,7 @@ namespace sch {
                 "      <menuitem action='Quit'/>"
                 "    </menu>"
                 "       <menu action='MenuView'>"
+                "           <menuitem action='HideOptionsArea' />"
                 "           <menuitem action='HideLogArea' />"
                 "       </menu>"
                 "       <menu action='MenuHelp'>"
@@ -396,4 +406,11 @@ namespace sch {
     }
 
 
+    void SmartChessWindow::onToggleHideOptionsArea(
+            Glib::RefPtr<Gtk::ToggleAction> toggleAction) {
+        if(toggleAction->get_active())
+            mOptionsGrid->hide();
+        else
+            mOptionsGrid->show_all();
+    }
 } /* namespace sch */

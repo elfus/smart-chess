@@ -77,8 +77,8 @@ private:
 
     void onQuit();
     void onAbout();
-    void onToggleHideLogArea(
-            Glib::RefPtr<Gtk::ToggleAction> toggleAction);
+    void onToggleHideLogArea(Glib::RefPtr<Gtk::ToggleAction> toggleAction);
+    void onToggleHideOptionsArea(Glib::RefPtr<Gtk::ToggleAction> toggleAction);
 
     Glib::RefPtr<Gtk::ActionGroup> createActionGroup();
 
