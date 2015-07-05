@@ -71,10 +71,6 @@ private:
 	Gtk::ComboBoxText *mCbt1 {nullptr};
 	Gtk::ComboBoxText *mCbt2 {nullptr};
 
-	void player1ColorChanged();
-	void player2ColorChanged();
-
-
     void onQuit();
     void onAbout();
     void onToggleShowLogArea(Glib::RefPtr<Gtk::ToggleAction> toggleAction);
