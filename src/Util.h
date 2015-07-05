@@ -132,6 +132,38 @@ private:
 	BoardPosition mPos;
 };
 
+    /**
+     * Helper class to be used in a range based for. It will iterate from 0 to
+     * N-1 element. Where N is the parameter used to construct a IntRange.
+     */
+    class IntRange {
+    public:
+        class Iterator {
+        friend class IntRange;
+        public:
+            int operator*() const { return mValue; }
+            const Iterator& operator++() {++mValue; return *this;}
+            Iterator operator++(int) { Iterator copy(*this); ++mValue; return copy;}
+
+            bool operator==(const Iterator& rhs) { return mValue == rhs.mValue;}
+            bool operator!=(const Iterator& rhs) { return mValue != rhs.mValue;}
+
+        protected:
+            Iterator(int value) : mValue(value) {}
+
+        private:
+            int mValue;
+        };
+        IntRange(int N) : mBegin(0), mEnd(N) {}
+
+        Iterator begin() { return mBegin;};
+        Iterator end() {return mEnd;};
+
+    private:
+        Iterator mBegin;
+        Iterator mEnd;
+    };
+
 }
 
 
