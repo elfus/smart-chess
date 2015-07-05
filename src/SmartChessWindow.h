@@ -61,11 +61,11 @@ private:
     const unsigned ROW_COUNT = 3;
     const unsigned COLUMN_COUNT = 3;
 
-	std::unique_ptr<Gtk::Grid> mMainGrid;
     std::shared_ptr<BoardState> mBoardState;
 	std::shared_ptr<BoardController> mBoardController;
     Glib::RefPtr<Gtk::UIManager> mUIManager;
-    Gtk::Widget * mLogArea;
+    Gtk::Widget *mLogArea;
+    Gtk::Widget *mOptionsGrid;
 
 
 	Gtk::ComboBoxText *mCbt1 {nullptr};
@@ -93,6 +93,8 @@ private:
     BoardView *createBoardView() const;
 
     Gtk::Box *createLogArea();
+
+    Gtk::Box * createOptionsArea();
 };
 
 } /* namespace sch */

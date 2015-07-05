@@ -45,12 +45,15 @@ using namespace std;
 
 namespace sch {
 
-	SmartChessWindow::SmartChessWindow() : mLogArea(nullptr) {
+	SmartChessWindow::SmartChessWindow() : mLogArea(nullptr), mOptionsGrid(nullptr) {
 		Gtk::Grid* main_grid = createMainGrid();
 		add(*main_grid);
 
         Gtk::MenuBar* menu_bar = createMenuBar();
         main_grid->attach(*menu_bar, 0, 0, COLUMN_COUNT, 1);
+
+        mOptionsGrid = createOptionsArea();
+        main_grid->attach(*mOptionsGrid, 0, 1, 1, 1);
 
 		BoardView* view = createBoardView();
 		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
@@ -84,15 +87,35 @@ namespace sch {
         return grid;
     }
 
+    Gtk::Box * SmartChessWindow::createOptionsArea() {
+        Gtk::Box*options = Gtk::manage(new Gtk::VBox(Gtk::ORIENTATION_VERTICAL));
+        options->set_vexpand();
+        options->set_hexpand(false);
+
+        Gtk::Button* b = Gtk::manage(new Gtk::Button("Start"));
+        b->set_hexpand(false);
+        options->pack_start(*b, Gtk::PACK_SHRINK, 1);
+
+        b = Gtk::manage(new Gtk::Button("End"));
+        b->set_hexpand(false);
+        options->pack_start(*b, Gtk::PACK_SHRINK, 1);
+
+        b = Gtk::manage(new Gtk::Button("Reset"));
+        b->set_hexpand(false);
+        options->pack_start(*b, Gtk::PACK_SHRINK, 1);
+
+//        mBoardController->setOptionsGrid(options);
+
+        return options;
+    }
+
     SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
             const Glib::RefPtr<Gtk::Builder>& builder)
-    : Gtk::Window(cobject), mMainGrid(nullptr),
+    : Gtk::Window(cobject),
       mBoardState(),
       mBoardController(new BoardController){
         Gtk::Grid* grid = nullptr;
         builder->get_widget("MainGrid", grid);
-        if(grid)
-            mMainGrid.reset(grid);
 
         Gtk::AspectFrame* af;
         builder->get_widget("AspectFrameBoard", af);
@@ -306,4 +329,5 @@ namespace sch {
         else
             mLogArea->show_all();
     }
+
 } /* namespace sch */
