@@ -244,31 +244,31 @@ void BoardController::createChessPlayerObjects() {
 
 void BoardController::startGame() {
 	cout << "BoardController::startGame" << endl;
-	if(validGameOptions()) {
-		mState = make_shared<BoardState>();
-		mOptionsGrid->set_sensitive(false);
-		mCurrentPlayer = PlayerColor::WHITE_PLAYER;
-		mState->setCurrentPlayer(mCurrentPlayer);
-		mStatus->push("White player's turn.");
-		mView->force_redraw();
-		createChessPlayerObjects();
-	} else {
-		Gtk::MessageDialog msg("Invalid Game Options");
-		msg.run();
-	}
+//	if(validGameOptions()) {
+//		mState = make_shared<BoardState>();
+//		mOptionsGrid->set_sensitive(false);
+//		mCurrentPlayer = PlayerColor::WHITE_PLAYER;
+//		mState->setCurrentPlayer(mCurrentPlayer);
+//		mStatus->push("White player's turn.");
+//		mView->force_redraw();
+//		createChessPlayerObjects();
+//	} else {
+//		Gtk::MessageDialog msg("Invalid Game Options");
+//		msg.run();
+//	}
 }
 
 void BoardController::endGame() {
 	cout << "BoardController::endGame" << endl;
-	// process current game state, then delete;
-	mPlayingAgainstHuman = false;
-	mState.reset();
-	mOptionsGrid->set_sensitive(true);
-	mStatus->remove_all_messages();
-	mHumanConnection.disconnect();
-	mAlgorithmConnection.disconnect();
-	mPlayers.clear();
-	mView->force_redraw();
+//	// process current game state, then delete;
+//	mPlayingAgainstHuman = false;
+//	mState.reset();
+//	mOptionsGrid->set_sensitive(true);
+//	mStatus->remove_all_messages();
+//	mHumanConnection.disconnect();
+//	mAlgorithmConnection.disconnect();
+//	mPlayers.clear();
+//	mView->force_redraw();
 }
 
 void BoardController::resetGame() {

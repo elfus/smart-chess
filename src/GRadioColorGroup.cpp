@@ -56,4 +56,11 @@ namespace sch {
     void GRadioColorGroup::setBlack() {
         mBlackRadioButton->set_active();
     }
+
+    std::string GRadioColorGroup::getColor() const {
+        if(mWhiteRadioButton->get_active())
+            return "WHITE";
+        if(mBlackRadioButton->get_active())
+            return "BLACK";
+    }
 }

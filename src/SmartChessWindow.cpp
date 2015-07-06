@@ -102,14 +102,17 @@ namespace sch {
 
         Gtk::Button* b = Gtk::manage(new Gtk::Button("Start"));
         b->set_hexpand(false);
+        b->signal_clicked().connect(sigc::mem_fun(this, &SmartChessWindow::onStartGame));
         options->attach(*b, 0, 0, 1, 1);
 
         b = Gtk::manage(new Gtk::Button("End"));
         b->set_hexpand(false);
+        b->signal_clicked().connect(sigc::mem_fun(this, &SmartChessWindow::onEndGame));
         options->attach(*b, 0, 1, 1, 1);
 
         b = Gtk::manage(new Gtk::Button("Reset"));
         b->set_hexpand(false);
+        b->signal_clicked().connect(sigc::mem_fun(this, &SmartChessWindow::onResetGame));
         options->attach(*b, 0, 2, 1, 1);
 
         auto suboptions = createSuboptionsArea();
@@ -149,97 +152,29 @@ namespace sch {
         p2->set_margin_right(MARGIN);
         suboptions->attach(*p2, 2, 0, 1, 1);
 
-        Gtk::ComboBoxText* cb1 = Gtk::manage(new Gtk::ComboBoxText());
-        cb1->append("Human");
-        cb1->append("A.I.");
-        suboptions->attach(*cb1, 0, 1, 1, 1);
+        mCbt1 = Gtk::manage(new Gtk::ComboBoxText());
+        mCbt1->append("Human");
+        mCbt1->append("A.I.");
+        suboptions->attach(*mCbt1, 0, 1, 1, 1);
 
-        Gtk::ComboBoxText* cb2 = Gtk::manage(new Gtk::ComboBoxText());
-        cb2->append("Human");
-        cb2->append("A.I.");
-        suboptions->attach(*cb2, 2, 1, 1, 1);
+        mCbt2 = Gtk::manage(new Gtk::ComboBoxText());
+        mCbt2->append("Human");
+        mCbt2->append("A.I.");
+        suboptions->attach(*mCbt2, 2, 1, 1, 1);
 
-        GRadioColorGroup* rc1 = Gtk::manage(new GRadioColorGroup());
-        suboptions->attach(*rc1, 0, 2, 1, 1);
+        rcg1 = Gtk::manage(new GRadioColorGroup());
+        suboptions->attach(*rcg1, 0, 2, 1, 1);
 
-        GRadioColorGroup* rc2 = Gtk::manage(new GRadioColorGroup());
-        suboptions->attach(*rc2, 2, 2, 1, 1);
+        rcg2 = Gtk::manage(new GRadioColorGroup());
+        suboptions->attach(*rcg2, 2, 2, 1, 1);
 
-        rc1->signalClickedWhite().connect(sigc::mem_fun(rc2, &GRadioColorGroup::setBlack));
-        rc1->signalClickedBlack().connect(sigc::mem_fun(rc2, &GRadioColorGroup::setWhite));
-        rc2->signalClickedWhite().connect(sigc::mem_fun(rc1, &GRadioColorGroup::setBlack));
-        rc2->signalClickedBlack().connect(sigc::mem_fun(rc1, &GRadioColorGroup::setWhite));
-        rc1->setWhite();
-        rc2->setBlack();
+        rcg1->signalClickedWhite().connect(sigc::mem_fun(rcg2, &GRadioColorGroup::setBlack));
+        rcg1->signalClickedBlack().connect(sigc::mem_fun(rcg2, &GRadioColorGroup::setWhite));
+        rcg2->signalClickedWhite().connect(sigc::mem_fun(rcg1, &GRadioColorGroup::setBlack));
+        rcg2->signalClickedBlack().connect(sigc::mem_fun(rcg1, &GRadioColorGroup::setWhite));
+        rcg1->setWhite();
+        rcg2->setBlack();
         return suboptions;
-    }
-
-    SmartChessWindow::SmartChessWindow(BaseObjectType* cobject,
-            const Glib::RefPtr<Gtk::Builder>& builder)
-    : Gtk::Window(cobject),
-      mBoardState(),
-      mBoardController(new BoardController){
-        Gtk::Grid* grid = nullptr;
-        builder->get_widget("MainGrid", grid);
-
-        Gtk::AspectFrame* af;
-        builder->get_widget("AspectFrameBoard", af);
-        af->set_vexpand();
-        af->set_hexpand();
-
-        Gtk::Statusbar * bar = nullptr;
-        builder->get_widget("StatusBar", bar);
-        bar->push("Welcome to Smart Chess!",1);
-        mBoardController->setStatusbar(bar);
-
-        Gtk::Grid* options_grid{nullptr};
-        builder->get_widget("OptionsGrid", options_grid);
-        mBoardController->setOptionsGrid(options_grid);
-        // setup the buttons that control the game
-        Gtk::Button *b = nullptr;
-        builder->get_widget("StartButton", b);
-        assert(b);
-        b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::startGame));
-        b = nullptr;
-
-        builder->get_widget("EndButton", b);
-        assert(b);
-        b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::endGame));
-        b = nullptr;
-
-        builder->get_widget("ResetButton", b);
-        assert(b);
-        b->signal_clicked().connect(sigc::mem_fun(*mBoardController, &BoardController::resetGame));
-        b = nullptr;
-
-        // Make sure the color ius mutually exclusive
-        vector<Gtk::Widget*> children = options_grid->get_children();
-        Gtk::ComboBoxText *player {nullptr};
-        // Start the game with some default options
-        for(Gtk::Widget*& ptr : children) {
-            if(ptr->get_name() == "ColorComboBox1") {
-                mCbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-                mCbt1->set_active_text("White");
-            }
-            if(ptr->get_name() == "ColorComboBox2") {
-                mCbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-                mCbt2->set_active_text("Black");
-            }
-            if(ptr->get_name() == "PlayerComboBox1") {
-                player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-                player->set_active_text("Human");
-            }
-            if(ptr->get_name() == "PlayerComboBox2") {
-                player = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-                player->set_active_text("Algorithm");
-            }
-        }
-        assert(mCbt1 && mCbt2);
-
-        show_all_children();
-
-        // start a game
-        mBoardController->startGame();
     }
 
     SmartChessWindow::~SmartChessWindow() {
@@ -392,5 +327,42 @@ namespace sch {
             mOptionsGrid->show_all();
         else
             mOptionsGrid->hide();
+    }
+
+    void SmartChessWindow::onStartGame() {
+        cout << "SmartChessWindow::onStartGame" << endl;
+        string err;
+        if(validGameOptions(err)) {
+            cout << "Player 1: " << rcg1->getColor() << " " << mCbt1->get_active_text() << endl;
+            cout << "Player 2: " << rcg2->getColor() << " " << mCbt2->get_active_text() << endl;
+        } else {
+            cerr << err << endl;
+        }
+    }
+
+    void SmartChessWindow::onEndGame() {
+        cout << "SmartChessWindow::onEndGame" << endl;
+    }
+
+    void SmartChessWindow::onResetGame() {
+        cout << "SmartChessWindow::onResetGame" << endl;
+        onStartGame();
+        onEndGame();
+    }
+
+    bool SmartChessWindow::validGameOptions(std::string &error_msg) {
+        auto valid = true;
+
+        if(mCbt1->get_active_text().empty()) {
+            error_msg += "Choose a player type for player 1. ";
+            valid = false;
+        }
+
+        if(mCbt2->get_active_text().empty()) {
+            error_msg += "Choose a player type for player 2. ";
+            valid = false;
+        }
+
+        return valid;
     }
 } /* namespace sch */

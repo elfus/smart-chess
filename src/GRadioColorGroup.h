@@ -20,6 +20,7 @@ namespace sch {
         sigc::signal<void> signalClickedWhite();
         sigc::signal<void> signalClickedBlack();
 
+        std::string getColor() const;
         void setWhite();
         void setBlack();
     private:

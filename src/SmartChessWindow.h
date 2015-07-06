@@ -39,6 +39,7 @@
 #include "BoardController.h"
 #include "BoardView.h"
 #include "BoardState.h"
+#include "GRadioColorGroup.h"
 
 namespace Gtk {
 class Builder;
@@ -51,8 +52,6 @@ namespace sch { // sch stands for Smart Chess :)
 
 class SmartChessWindow : public Gtk::Window {
 public:
-	SmartChessWindow(BaseObjectType* cobject,
-			const Glib::RefPtr<Gtk::Builder>& builder);
 
 	SmartChessWindow();
 
@@ -62,7 +61,7 @@ private:
     const unsigned COLUMN_COUNT = 3;
 
     std::shared_ptr<BoardState> mBoardState;
-	std::shared_ptr<BoardController> mBoardController;
+	BoardController     mBoardController;
     Glib::RefPtr<Gtk::UIManager> mUIManager;
     Gtk::Widget *mLogArea;
     Gtk::Widget *mOptionsGrid;
@@ -71,6 +70,12 @@ private:
 	Gtk::ComboBoxText *mCbt1 {nullptr};
 	Gtk::ComboBoxText *mCbt2 {nullptr};
 
+    GRadioColorGroup* rcg1 {nullptr};
+    GRadioColorGroup* rcg2 {nullptr};
+
+    void onStartGame();
+    void onEndGame();
+    void onResetGame();
     void onQuit();
     void onAbout();
     void onToggleShowLogArea(Glib::RefPtr<Gtk::ToggleAction> toggleAction);
@@ -93,6 +98,8 @@ private:
     Gtk::Grid * createOptionsArea();
 
     Gtk::Grid *createSuboptionsArea();
+
+    bool validGameOptions(std::string &error_msg);
 };
 
 } /* namespace sch */
