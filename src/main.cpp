@@ -32,7 +32,6 @@
 #include "SmartChessConfig.h"
 #include <gtkmm/builder.h>
 #include <iostream>
-#include <exception>
 
 using namespace std;
 

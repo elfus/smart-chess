@@ -33,6 +33,7 @@
 
 #include <sstream>
 #include <memory>
+#include <gdkmm/pixbuf.h>
 
 namespace sch
 {
@@ -162,6 +163,35 @@ private:
     private:
         Iterator mBegin;
         Iterator mEnd;
+    };
+
+    enum class PieceType {
+        WHITE_KING,
+        BLACK_KING,
+        WHITE_QUEEN,
+        BLACK_QUEEN,
+        WHITE_ROOK,
+        BLACK_ROOK,
+        WHITE_BISHOP,
+        BLACK_BISHOP,
+        WHITE_KNIGHT,
+        BLACK_KNIGHT,
+        WHITE_PAWN,
+        BLACK_PAWN,
+        UNDEFINED
+    };
+
+    class ImageLoader {
+    public:
+        static ImageLoader& instance();
+
+        /// @note Call only once at the beginning of the program.
+        void loadImages(std::string data_dir);
+        Glib::RefPtr<Gdk::Pixbuf> getImage(PieceType type);
+    private:
+        std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
+
+        ImageLoader();
     };
 
 }

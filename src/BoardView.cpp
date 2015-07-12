@@ -212,7 +212,7 @@ void BoardView::drawSquares(const Cairo::RefPtr<Cairo::Context>& ctx,
 void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessPiece& p)
 {
 	ctx->save();
-	auto image = p.getImage();
+	auto image = ImageLoader::instance().getImage(p.getPieceType());
 	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
 	BoardPosition pos = p.getPosition();
 	Gdk::Cairo::set_source_pixbuf(ctx, image, (BORDER_WIDTH/2) + mSquareWidth*pos.column, (BORDER_WIDTH/2) + mSquareHeight*pos.row);

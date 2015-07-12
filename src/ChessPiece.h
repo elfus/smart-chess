@@ -38,31 +38,14 @@
 
 namespace sch {
 
-enum class PieceType {
-	WHITE_KING,
-	BLACK_KING,
-	WHITE_QUEEN,
-	BLACK_QUEEN,
-	WHITE_ROOK,
-	BLACK_ROOK,
-	WHITE_BISHOP,
-	BLACK_BISHOP,
-	WHITE_KNIGHT,
-	BLACK_KNIGHT,
-	WHITE_PAWN,
-	BLACK_PAWN,
-	UNDEFINED
-};
-
 std::ostream& operator << (std::ostream& os, PieceType t);
 
 class BoardState;
 
 class ChessPiece {
 public:
-	ChessPiece(BoardPosition p, PieceType color)
-	: mPieceType(color),  mImage(images[mPieceType]), mPosition(p),
-	  mSelected(false), mMovedOnce(false) {}
+	ChessPiece(BoardPosition p, PieceType color);
+
 	virtual ~ChessPiece();
 	ChessPiece(const ChessPiece& rhs);
 	ChessPiece& operator = (const ChessPiece& rhs);
@@ -85,9 +68,9 @@ protected:
 	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
 
 	PieceType mPieceType;
-	Glib::RefPtr<Gdk::Pixbuf> mImage;
-	BoardPosition mPosition;
-	bool mSelected; // Selected by the user
+    BoardPosition mPosition;
+	bool mSelected; //!< If selected by the user
+
 	// Used internally to detect special conditions for each piece which
 	// movement depends on whether the piece has been moved or not
 	bool mMovedOnce;
@@ -95,12 +78,8 @@ protected:
 	std::vector<BoardPosition> getHorizontalVerticalMoves(const BoardState& s) const;
 	std::vector<BoardPosition> getDiagonalMoves(const BoardState& s) const;
 
-
 	friend class BoardState; // BoardState accesses the setPosition method.
 	void setPosition(BoardPosition pos) { mPosition = pos; mMovedOnce = true;}
-
-	friend class BoardView; // BoardView accesses the getImage() method.
-	Glib::RefPtr<Gdk::Pixbuf> getImage() const { return mImage; }
 
 private:
 	void copy(const ChessPiece& rhs);

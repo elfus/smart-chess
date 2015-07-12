@@ -59,6 +59,12 @@ std::ostream& operator << (std::ostream& os, PieceType t)
 	return os;
 }
 
+    ChessPiece::ChessPiece(BoardPosition p, PieceType color)
+            : mPieceType(color),  mPosition(p),
+              mSelected(false), mMovedOnce(false) {
+
+    }
+
 ChessPiece::~ChessPiece() {
 	// TODO Auto-generated destructor stub
 }
@@ -74,7 +80,6 @@ ChessPiece& ChessPiece::operator = (const ChessPiece& rhs) {
 
 void ChessPiece::copy(const ChessPiece& rhs) {
 	mPieceType = rhs.mPieceType;
-	mImage = rhs.mImage;
 	mPosition = rhs.mPosition;
 	mSelected = rhs.mSelected;
 	mMovedOnce = rhs.mMovedOnce;
@@ -373,5 +378,6 @@ vector<BoardPosition> Pawn::getPossibleMoves(const BoardState& s) const {
 
 	return moves;
 }
+
 
 } /* namespace sch */
