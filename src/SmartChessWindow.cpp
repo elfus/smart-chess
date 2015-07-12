@@ -41,6 +41,8 @@
 #include <gtkmm/textview.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/radiobutton.h>
+#include <gtkmm/aboutdialog.h>
+#include <gtkmm/messagedialog.h>
 
 using namespace std;
 
@@ -286,7 +288,8 @@ namespace sch {
     }
 
     void SmartChessWindow::onAbout() {
-
+        Gtk::AboutDialog dialog;
+        dialog.set_program_name("Smart chess");
     }
 
 
@@ -336,7 +339,8 @@ namespace sch {
             cout << "Player 1: " << rcg1->getColor() << " " << mCbt1->get_active_text() << endl;
             cout << "Player 2: " << rcg2->getColor() << " " << mCbt2->get_active_text() << endl;
         } else {
-            cerr << err << endl;
+            Gtk::MessageDialog dialog(err, false, Gtk::MESSAGE_ERROR);
+            dialog.run();
         }
     }
 
