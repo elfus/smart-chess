@@ -41,12 +41,6 @@ int main(int argc, char * argv[])
 		Glib::RefPtr<Gtk::Application> app =
 				Gtk::Application::create(argc, argv);
 
-		string data_dir = SMARTCHESS_DATA_DIR;
-		sch::ChessPiece::loadImages(data_dir);
-
-		Glib::RefPtr<Gtk::Builder> builder =
-				Gtk::Builder::create_from_file(data_dir + "/chess-gui.glade");
-
 		sch::SmartChessWindow main_window;
 
 		app->run(main_window);

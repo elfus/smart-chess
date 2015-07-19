@@ -62,11 +62,7 @@ public:
 	virtual std::vector<BoardPosition> getPossibleMoves(const BoardState& s) const = 0;
 	bool canMove(const BoardState& s) const { return getPossibleMoves(s).size(); }
 
-	/// @note Call only once at the beginning of the program.
-	static void loadImages(std::string data_dir);
 protected:
-	static std::map<PieceType, Glib::RefPtr<Gdk::Pixbuf>> images;
-
 	PieceType mPieceType;
     BoardPosition mPosition;
 	bool mSelected; //!< If selected by the user

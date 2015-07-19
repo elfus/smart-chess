@@ -336,6 +336,7 @@ namespace sch {
         cout << "SmartChessWindow::onStartGame" << endl;
         string err;
         if(validGameOptions(err)) {
+            mBoardController.startGame();
             cout << "Player 1: " << rcg1->getColor() << " " << mCbt1->get_active_text() << endl;
             cout << "Player 2: " << rcg2->getColor() << " " << mCbt2->get_active_text() << endl;
         } else {
@@ -346,6 +347,7 @@ namespace sch {
 
     void SmartChessWindow::onEndGame() {
         cout << "SmartChessWindow::onEndGame" << endl;
+        mBoardController.endGame();
     }
 
     void SmartChessWindow::onResetGame() {
@@ -363,7 +365,7 @@ namespace sch {
         }
 
         if(mCbt2->get_active_text().empty()) {
-            error_msg += "Choose a player type for player 2. ";
+            error_msg += "\nChoose a player type for player 2. ";
             valid = false;
         }
 
