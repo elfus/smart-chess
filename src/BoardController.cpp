@@ -21,7 +21,6 @@ namespace sch {
 
 BoardController::BoardController()
 : mState(nullptr),
-  mView(nullptr),
   mSelectedPiece(nullptr),
   mCurrentPlayer(PlayerColor::WHITE_PLAYER),
   mPlayers(),
@@ -93,7 +92,6 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	mStatus->pop();
 	mStatus->push(msg);
-	mView->force_redraw();
 	cout.flush();
 }
 
@@ -138,13 +136,12 @@ bool BoardController::AlgorithmLogic()
 	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	mStatus->pop();
 	mStatus->push(msg);
-	mView->force_redraw();
 	cout.flush();
 
 	// Let the human play
 	if(mPlayingAgainstHuman) {
-		mHumanConnection = mView->signalClickedReleased().connect(
-						sigc::mem_fun(*this,&BoardController::chessBoardClicked));
+//		mHumanConnection = mView->signalClickedReleased().connect(
+//						sigc::mem_fun(*this,&BoardController::chessBoardClicked));
 		return false;
 	} else {
 		return true;
@@ -213,8 +210,8 @@ void BoardController::createChessPlayerObjects() {
 	if(cbt1->get_active_text() == "Human") {
 		mPlayingAgainstHuman = true;
 		mPlayers.push_back(unique_ptr<Human>(new Human()));
-		mHumanConnection = mView->signalClickedReleased().connect(
-				sigc::mem_fun(*this,&BoardController::chessBoardClicked));
+//		mHumanConnection = mView->signalClickedReleased().connect(
+//				sigc::mem_fun(*this,&BoardController::chessBoardClicked));
 	}
 	else if(cbt1->get_active_text() == "Algorithm") {
 		mPlayers.push_back(unique_ptr<Algorithm>(new Algorithm()));

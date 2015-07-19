@@ -52,7 +52,6 @@ public:
 	bool gameInProgress() { return mState.operator bool();}
 	std::shared_ptr<BoardState> getState() const {return mState; }
 
-	void setBoardView(std::shared_ptr<BoardView> v) { mView = v; }
 	void setStatusbar(Gtk::Statusbar *s) { mStatus = s; }
 	void setOptionsGrid(Gtk::Grid *g) { mOptionsGrid = g; }
 
@@ -62,7 +61,6 @@ public:
 	bool AlgorithmLogic();
 private:
 	std::shared_ptr<BoardState> mState;
-	std::shared_ptr<BoardView> mView;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
 	PlayerColor mCurrentPlayer;
 	std::vector<std::unique_ptr<ChessPlayer>> mPlayers;
