@@ -6,6 +6,7 @@
 #define SMARTCHESS_GRADIOCOLORGROUP_H
 
 #include <gtkmm/grid.h>
+#include "Util.h"
 
 namespace Gtk {
     class RadioButton;
@@ -20,7 +21,7 @@ namespace sch {
         sigc::signal<void> signalClickedWhite();
         sigc::signal<void> signalClickedBlack();
 
-        std::string getColor() const;
+        PlayerColor getColor() const;
         void setWhite();
         void setBlack();
     private:

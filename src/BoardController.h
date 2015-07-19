@@ -52,10 +52,11 @@ public:
 	bool gameInProgress() { return mState.operator bool();}
 	std::shared_ptr<BoardState> getState() const {return mState; }
 
-	void startGame();
+	void startGame(PlayerColor player1, PlayerColor player2);
 	void endGame();
 	void resetGame();
 	bool AlgorithmLogic();
+    sigc::signal<void,const BoardState&> signalBoardStateUpdated();
 private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
@@ -63,6 +64,7 @@ private:
 	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.
 	sigc::connection mHumanConnection; // Connection to the game logic.
 	bool mPlayingAgainstHuman;
+    sigc::signal<void, const BoardState&> mBoardStateUpdated;
 
 	bool isValidMove(const BoardState& s, const Move& m) const;
 };

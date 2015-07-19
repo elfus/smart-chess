@@ -60,11 +60,11 @@ private:
     const unsigned ROW_COUNT = 3;
     const unsigned COLUMN_COUNT = 3;
 
-    std::shared_ptr<BoardState> mBoardState;
 	BoardController     mBoardController;
     Glib::RefPtr<Gtk::UIManager> mUIManager;
     Gtk::Widget *mLogArea;
     Gtk::Widget *mOptionsGrid;
+    BoardView   *mView;
 
 
 	Gtk::ComboBoxText *mCbt1 {nullptr};
@@ -73,6 +73,7 @@ private:
     GRadioColorGroup* rcg1 {nullptr};
     GRadioColorGroup* rcg2 {nullptr};
 
+    void onBoardStateUpdate(const BoardState& state);
     void onStartGame();
     void onEndGame();
     void onResetGame();

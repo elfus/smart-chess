@@ -29,9 +29,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "BoardState.h"
-#include "ChessPiece.h"
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
@@ -39,7 +37,7 @@ namespace sch {
 
 BoardState::BoardState()
 : mWhitePieces(), mBlackPieces(), mWhiteHostages(), mBlackHostages(),
-  mSquares(), mCurrentPlayer(PlayerColor::WHITE_PLAYER) {
+  mSquares(), mCurrentPlayer(PlayerColor::WHITE_PLAYER), mGameInProgress(false) {
 	reset();
 	cout << "BoardState Constructor" << endl;
 }
@@ -51,7 +49,8 @@ BoardState::BoardState(const BoardState& rhs)
 	clog << "BoardState COPY Constructor" << endl;
 }
 
-BoardState::BoardState(BoardState&& rhs) : mCurrentPlayer{rhs.mCurrentPlayer}
+BoardState::BoardState(BoardState&& rhs)
+        : mCurrentPlayer{rhs.mCurrentPlayer}, mGameInProgress(rhs.mGameInProgress)
 {
 	mWhitePieces.swap(rhs.mWhitePieces);
 
@@ -109,6 +108,7 @@ std::shared_ptr<ChessPiece>  BoardState::copyPiece(std::shared_ptr<ChessPiece> p
 
 void BoardState::copy(const BoardState& rhs) {
 	mCurrentPlayer = rhs.mCurrentPlayer;
+    mGameInProgress = rhs.mGameInProgress;
 
 	mWhitePieces.clear();
 	for(auto piece : rhs.mWhitePieces)
@@ -319,5 +319,9 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
         else if(mCurrentPlayer == PlayerColor::BLACK_PLAYER)
             mCurrentPlayer = PlayerColor::WHITE_PLAYER;
 
+    }
+
+    bool BoardState::isGameInProgress() {
+        return mGameInProgress;
     }
 } /* namespace sch */

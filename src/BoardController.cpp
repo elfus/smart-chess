@@ -6,7 +6,6 @@
  */
 
 #include "BoardController.h"
-#include "ChessPiece.h"
 #include "ChessPlayer.h"
 #include <iostream>
 #include <gtkmm/statusbar.h>
@@ -153,11 +152,14 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 	return valid;
 }
 
-void BoardController::startGame() {
+void BoardController::startGame(PlayerColor player1, PlayerColor player2) {
 	cout << "BoardController::startGame" << endl;
 
     mState = make_shared<BoardState>();
-    mState->setCurrentPlayer(PlayerColor::WHITE_PLAYER);
+    mState->setCurrentPlayer(player1);
+    mState->setGameInProgress();
+
+    mBoardStateUpdated(*mState);
 }
 
 void BoardController::endGame() {
@@ -176,9 +178,12 @@ void BoardController::endGame() {
 void BoardController::resetGame() {
 	cout << "BoardController::resetGame" << endl;
 	endGame();
-	startGame();
+    /// @todo Save the initial player colors and also if they are human or not
+    startGame(PlayerColor::WHITE_PLAYER, PlayerColor::BLACK_PLAYER);
 }
 
 
-
+    sigc::signal<void, const BoardState&> BoardController::signalBoardStateUpdated() {
+        return mBoardStateUpdated;
+    }
 } /* namespace sch */

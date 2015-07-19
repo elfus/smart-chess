@@ -29,7 +29,6 @@
 //===----------------------------------------------------------------------===//
 #include "ChessPiece.h"
 #include "SmartChessWindow.h"
-#include "SmartChessConfig.h"
 #include <gtkmm/builder.h>
 #include <iostream>
 

@@ -105,6 +105,10 @@ public:
 
 	PlayerColor getCurrentPlayer() const { return mCurrentPlayer; }
     void switchPlayer();
+
+    void setGameInProgress(bool in_progress=true) {mGameInProgress=in_progress;}
+    bool isGameInProgress();
+
 private:
 	/// The active white pieces
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
@@ -122,6 +126,7 @@ private:
 	std::vector<BoardSquare> mSquares;
 
 	PlayerColor mCurrentPlayer;
+    bool mGameInProgress;
 
 	void initWhitePieces();
 	void initBlackPieces();

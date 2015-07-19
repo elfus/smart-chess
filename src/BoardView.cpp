@@ -29,16 +29,14 @@
 //===----------------------------------------------------------------------===//
 #include "BoardView.h"
 #include "BoardController.h"
-#include "ChessPiece.h"
 #include <iostream>
 #include <assert.h>
-#include <gdkmm.h>
 
 using namespace std;
 
 namespace sch {
 
-BoardView::BoardView() : Gtk::DrawingArea(){
+BoardView::BoardView() : Gtk::DrawingArea() {
 	set_vexpand();
 	set_size_request(MIN_BOARD_W, MIN_BOARD_H);
 	set_events(Gdk::EventMask::BUTTON_PRESS_MASK | Gdk::EventMask::BUTTON_RELEASE_MASK);
@@ -254,10 +252,11 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	ctx->restore();
 }
 
-void BoardView::force_redraw() {
+void BoardView::force_redraw(const BoardState &ptr) {
 	Glib::RefPtr<Gdk::Window> win = get_window();
 	if (win)
 	{
+        mCurrentState = ptr;
 		Gdk::Rectangle r(0, 0, get_allocation().get_width(), get_allocation().get_height());
 		win->invalidate_rect(r, false);
 	}
@@ -272,18 +271,17 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
 	// @todo Remove mState variable from this class
-//	if(mController && mController->gameInProgress()) {
-//		auto mState = mController->getState();
-//		auto black_pieces = mState->getBlackPieces();
-//		assert(black_pieces.size() == 16);
-//		for(auto p : black_pieces)
-//			drawPiece(ctx, *p);
-//
-//		auto white_pieces = mState->getWhitePieces();
-//		assert(white_pieces.size() == 16);
-//		for(auto p : white_pieces)
-//			drawPiece(ctx, *p);
-//	}
+	if(mCurrentState.isGameInProgress()) {
+		auto black_pieces = mCurrentState.getBlackPieces();
+		assert(black_pieces.size() == 16);
+		for(auto p : black_pieces)
+			drawPiece(ctx, *p);
+
+		auto white_pieces = mCurrentState.getWhitePieces();
+		assert(white_pieces.size() == 16);
+		for(auto p : white_pieces)
+			drawPiece(ctx, *p);
+	}
 
 	return true;
 }

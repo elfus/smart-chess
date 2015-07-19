@@ -30,7 +30,6 @@
 
 #include "Util.h"
 #include "SmartChessWindow.h"
-#include "GRadioColorGroup.h"
 #include <iostream>
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/builder.h>
@@ -58,8 +57,8 @@ namespace sch {
         mOptionsGrid = createOptionsArea();
         main_grid->attach(*mOptionsGrid, 0, 1, 1, 1);
 
-		BoardView* view = createBoardView();
-		main_grid->attach(*view, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
+		mView = createBoardView();
+		main_grid->attach(*mView, COLUMN_COUNT/2, ROW_COUNT/2, 1, 1);
 
         mLogArea = createLogArea();
         main_grid->attach(*mLogArea, COLUMN_COUNT-1, ROW_COUNT/2, 1, 1);
@@ -157,11 +156,13 @@ namespace sch {
         mCbt1 = Gtk::manage(new Gtk::ComboBoxText());
         mCbt1->append("Human");
         mCbt1->append("A.I.");
+        mCbt1->set_active(0);
         suboptions->attach(*mCbt1, 0, 1, 1, 1);
 
         mCbt2 = Gtk::manage(new Gtk::ComboBoxText());
         mCbt2->append("Human");
         mCbt2->append("A.I.");
+        mCbt2->set_active(1);
         suboptions->attach(*mCbt2, 2, 1, 1, 1);
 
         rcg1 = Gtk::manage(new GRadioColorGroup());
@@ -336,9 +337,9 @@ namespace sch {
         cout << "SmartChessWindow::onStartGame" << endl;
         string err;
         if(validGameOptions(err)) {
-            mBoardController.startGame();
-            cout << "Player 1: " << rcg1->getColor() << " " << mCbt1->get_active_text() << endl;
-            cout << "Player 2: " << rcg2->getColor() << " " << mCbt2->get_active_text() << endl;
+            mBoardController.signalBoardStateUpdated().connect(
+                    sigc::mem_fun(*this, &SmartChessWindow::onBoardStateUpdate));
+            mBoardController.startGame(rcg1->getColor(), rcg2->getColor());
         } else {
             Gtk::MessageDialog dialog(err, false, Gtk::MESSAGE_ERROR);
             dialog.run();
@@ -370,5 +371,10 @@ namespace sch {
         }
 
         return valid;
+    }
+
+    void SmartChessWindow::onBoardStateUpdate(const BoardState& state) {
+        cout << "BoardState Updated" << endl;
+        mView->force_redraw(state);
     }
 } /* namespace sch */

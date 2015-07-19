@@ -31,7 +31,6 @@
 #ifndef CHESSPIECE_H_
 #define CHESSPIECE_H_
 
-#include "BoardView.h"
 #include "Util.h"
 #include <gdkmm.h>
 #include <map>

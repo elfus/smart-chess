@@ -33,11 +33,13 @@
 
 #include <gtkmm/drawingarea.h>
 #include "Util.h"
+#include "BoardState.h"
 
 namespace sch {
 
 class ChessPiece;
 class BoardController;
+
 
 class BoardView: public Gtk::DrawingArea {
 public:
@@ -48,7 +50,7 @@ public:
 
 	sigc::signal<void, BoardSquare> signalClickedReleased();
 
-	void force_redraw();
+	void force_redraw(const BoardState &ptr);
 private:
 	static const int SQUARE_NUM = 8;
 	static const int MIN_BOARD_W = 400;
@@ -59,6 +61,7 @@ private:
 	int mBoardHeight;
 	int mSquareWidth;
 	int mSquareHeight;
+    BoardState mCurrentState;
 
     sigc::signal<void, BoardSquare> mSignalClickReleased;
 
