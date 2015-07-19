@@ -22,10 +22,7 @@ namespace sch {
 BoardController::BoardController()
 : mState(nullptr),
   mSelectedPiece(nullptr),
-  mCurrentPlayer(PlayerColor::WHITE_PLAYER),
   mPlayers(),
-  mStatus(nullptr),
-  mOptionsGrid(nullptr),
   mPlayingAgainstHuman(false){
 
 }
@@ -43,7 +40,7 @@ BoardController::~BoardController() {
  */
 void BoardController::chessBoardClicked(BoardSquare s)
 {
-	cout << "POSITION: " << s.mPosition.row << " " << s.mPosition.column << endl;
+	cout << "POSITION: " << s.getBoardPosition().row << " " << s.getBoardPosition().column << endl;
 
 	if(s.hasPiece() && mSelectedPiece) {
 		if(s.getPiece()->isWhite() == mSelectedPiece->isWhite()) {
@@ -54,18 +51,18 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		}
 		// check if the user is capturing a piece
 		auto moves = mSelectedPiece->getPossibleMoves(*mState);
-		auto it = find(moves.begin(), moves.end(), s.getPiece()->getPosition());
+		auto it = find(moves.begin(), moves.end(),
+                       s.getPiece()->getBoardPosition());
 		if(it != moves.end()) {
 			*mState = mState->capture(mSelectedPiece, s.getPiece());
-			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece = nullptr;
 			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
 			mHumanConnection.disconnect();
 		}
 	} else if(s.hasPiece() && !mSelectedPiece) {
-		if((mCurrentPlayer == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
-			(mCurrentPlayer == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
+		if((mState->getCurrentPlayer() == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
+			(mState->getCurrentPlayer() == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
 			mSelectedPiece = s.getPiece();
 			mSelectedPiece->setSelected();
 			cout << "\tSelected1: " << s.getPiece()->getPieceType() << endl;
@@ -74,10 +71,9 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	else if(!s.hasPiece() && mSelectedPiece){
 		// check if the user just wants to move
 		auto moves = mSelectedPiece->getPossibleMoves(*mState);
-		auto it = find(moves.begin(), moves.end(), s.mPosition);
+		auto it = find(moves.begin(), moves.end(), s.getBoardPosition());
 		if(it != moves.end()) {
 			*mState = mState->move(mSelectedPiece, *it);
-			mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
 			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
 			mHumanConnection.disconnect();
 		} else
@@ -88,10 +84,8 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		cout << "\tEmpty square2" << endl;
 	}
 
-	mState->setCurrentPlayer(mCurrentPlayer);
-	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
-	mStatus->pop();
-	mStatus->push(msg);
+	mState->switchPlayer();
+	Glib::ustring msg((mState->getCurrentPlayer()==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	cout.flush();
 }
 
@@ -110,9 +104,9 @@ bool BoardController::AlgorithmLogic()
 	// check any game post-conditions, i.e. checkmate
 	ChessPlayer *player {nullptr};
 
-	if(mPlayers[0]->getColor() == mCurrentPlayer)
+	if(mPlayers[0]->getColor() == mState->getCurrentPlayer())
 		player = mPlayers[0].get();
-	else if(mPlayers[1]->getColor() == mCurrentPlayer)
+	else if(mPlayers[1]->getColor() == mState->getCurrentPlayer())
 		player = mPlayers[1].get();
 
 	if(typeid(*player) == typeid(Human)) {
@@ -131,11 +125,8 @@ bool BoardController::AlgorithmLogic()
 		}
 	}
 
-	mCurrentPlayer = (mCurrentPlayer==PlayerColor::WHITE_PLAYER) ? PlayerColor::BLACK_PLAYER : PlayerColor::WHITE_PLAYER;
-	mState->setCurrentPlayer(mCurrentPlayer);
-	Glib::ustring msg((mCurrentPlayer==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
-	mStatus->pop();
-	mStatus->push(msg);
+	mState->switchPlayer();
+	Glib::ustring msg((mState->getCurrentPlayer()==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
 	cout.flush();
 
 	// Let the human play
@@ -162,97 +153,11 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 	return valid;
 }
 
-bool BoardController::validGameOptions() const
-{
-	vector<Gtk::Widget*> children = mOptionsGrid->get_children();
-	Gtk::ComboBoxText *cbt1 {nullptr};
-	Gtk::ComboBoxText *cbt2 {nullptr};
-	for(Gtk::Widget*& ptr : children) {
-		if(ptr->get_name() == "ColorComboBox1")
-			cbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-		if(ptr->get_name() == "ColorComboBox2")
-			cbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-	}
-
-	// Check player colors
-	if(!cbt1 || !cbt2)
-		return false;
-
-	if(cbt1->get_active_text() == "" || cbt2->get_active_text() == "")
-		return false;
-
-	if(cbt1->get_active_text() == "Black" && cbt2->get_active_text() == "Black")
-		return false;
-
-	if(cbt1->get_active_text() == "White" && cbt2->get_active_text() == "White")
-		return false;
-
-	return true;
-}
-
-void BoardController::createChessPlayerObjects() {
-	mPlayers.clear();
-	vector<Gtk::Widget*> children = mOptionsGrid->get_children();
-	Gtk::ComboBoxText *cbt1 {nullptr};
-	Gtk::ComboBoxText *cbt2 {nullptr};
-	Gtk::ComboBoxText *color1 {nullptr};
-	Gtk::ComboBoxText *color2 {nullptr};
-	for(Gtk::Widget*& ptr : children) {
-		if(ptr->get_name() == "PlayerComboBox1")
-			cbt1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-		if(ptr->get_name() == "PlayerComboBox2")
-			cbt2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-		if(ptr->get_name() == "ColorComboBox1")
-			color1 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-		if(ptr->get_name() == "ColorComboBox2")
-			color2 = dynamic_cast<Gtk::ComboBoxText*>(ptr);
-	}
-	if(cbt1->get_active_text() == "Human") {
-		mPlayingAgainstHuman = true;
-		mPlayers.push_back(unique_ptr<Human>(new Human()));
-//		mHumanConnection = mView->signalClickedReleased().connect(
-//				sigc::mem_fun(*this,&BoardController::chessBoardClicked));
-	}
-	else if(cbt1->get_active_text() == "Algorithm") {
-		mPlayers.push_back(unique_ptr<Algorithm>(new Algorithm()));
-		// If player 1 one is the computer connect the callback method
-		mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
-	}
-
-	if(color1->get_active_text() == "White")
-		mPlayers.back()->setColor(PlayerColor::WHITE_PLAYER);
-	else if(color1->get_active_text() == "Black")
-		mPlayers.back()->setColor(PlayerColor::BLACK_PLAYER);
-
-	if(cbt2->get_active_text() == "Human") {
-		mPlayingAgainstHuman = true;
-		mPlayers.push_back(unique_ptr<Human>(new Human()));
-	}
-	else if(cbt2->get_active_text() == "Algorithm")
-		mPlayers.push_back(unique_ptr<Algorithm>(new Algorithm()));
-
-	if(color2->get_active_text() == "White")
-		mPlayers.back()->setColor(PlayerColor::WHITE_PLAYER);
-	else if(color2->get_active_text() == "Black")
-		mPlayers.back()->setColor(PlayerColor::BLACK_PLAYER);
-
-	assert(mPlayers.size() == 2);
-}
-
 void BoardController::startGame() {
 	cout << "BoardController::startGame" << endl;
-//	if(validGameOptions()) {
-//		mState = make_shared<BoardState>();
-//		mOptionsGrid->set_sensitive(false);
-//		mCurrentPlayer = PlayerColor::WHITE_PLAYER;
-//		mState->setCurrentPlayer(mCurrentPlayer);
-//		mStatus->push("White player's turn.");
-//		mView->force_redraw();
-//		createChessPlayerObjects();
-//	} else {
-//		Gtk::MessageDialog msg("Invalid Game Options");
-//		msg.run();
-//	}
+
+    mState = make_shared<BoardState>();
+    mState->setCurrentPlayer(PlayerColor::WHITE_PLAYER);
 }
 
 void BoardController::endGame() {

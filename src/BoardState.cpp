@@ -177,14 +177,14 @@ void BoardState::bindPiecesToSquares()
 {
 	for(auto p : mWhitePieces) {
 		for(auto& s : mSquares) {
-			if(s.mPosition == p->getPosition())
+			if(s.getBoardPosition() == p->getBoardPosition())
 				s.setPiece(p);
 		}
 	}
 
 	for(auto p : mBlackPieces) {
 		for(auto& s : mSquares) {
-			if(s.mPosition == p->getPosition())
+			if(s.getBoardPosition() == p->getBoardPosition())
 				s.setPiece(p);
 		}
 	}
@@ -205,7 +205,7 @@ void BoardState::reset() {
 bool BoardState::isValidPosition(BoardPosition pos) const
 {
 	for(auto& s : mSquares) {
-		if(s.mPosition == pos)
+		if(s.getBoardPosition() == pos)
 			return true;
 	}
 	return false;
@@ -235,7 +235,7 @@ bool BoardState::hasPieceAt(const BoardPosition& pos) const
 const BoardSquare& BoardState::getSquareAt(BoardPosition pos) const
 {
 	for(auto& s : mSquares) {
-		if(s.mPosition == pos)
+		if(s.getBoardPosition() == pos)
 			return s;
 	}
 
@@ -276,20 +276,20 @@ BoardState BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<Chess
 {
 	if(hostage->isWhite()) {
 		auto it =find_if(mWhitePieces.begin(), mWhitePieces.end(), [&](const shared_ptr<ChessPiece>& p) {
-				return p->getPosition() == hostage->getPosition();
+				return p->getBoardPosition() == hostage->getBoardPosition();
 				});
 		mWhitePieces.erase(it);
 		mWhiteHostages.push_back(hostage);
 	}
 	else {
 		auto it = find_if(mBlackPieces.begin(), mBlackPieces.end(), [&](const shared_ptr<ChessPiece>& p) {
-						return p->getPosition() == hostage->getPosition();
+						return p->getBoardPosition() == hostage->getBoardPosition();
 						});
 		mBlackPieces.erase(it);
 		mBlackHostages.push_back(hostage);
 	}
 
-	return std::move(move(capturer, hostage->getPosition()));
+	return std::move(move(capturer, hostage->getBoardPosition()));
 }
 
 BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
@@ -297,11 +297,11 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 	BoardState ns(*this); // new state
 
 	auto olds = find_if(ns.mSquares.begin(), ns.mSquares.end(), [&](BoardSquare& s) {
-		return s.mPosition == ptr->getPosition();
+		return s.getBoardPosition() == ptr->getBoardPosition();
 	});
 
 	auto news = find_if(ns.mSquares.begin(), ns.mSquares.end(), [&](BoardSquare& s) {
-			return s.mPosition == pos;
+			return s.getBoardPosition() == pos;
 		});
 
 	if(olds != ns.mSquares.end() && news != ns.mSquares.end()) {
@@ -313,4 +313,11 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 	return std::move(ns);
 }
 
+    void BoardState::switchPlayer() {
+        if(mCurrentPlayer == PlayerColor::WHITE_PLAYER)
+            mCurrentPlayer = PlayerColor::BLACK_PLAYER;
+        else if(mCurrentPlayer == PlayerColor::BLACK_PLAYER)
+            mCurrentPlayer = PlayerColor::WHITE_PLAYER;
+
+    }
 } /* namespace sch */

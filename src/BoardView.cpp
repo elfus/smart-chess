@@ -214,7 +214,7 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 	ctx->save();
 	auto image = ImageLoader::instance().getImage(p.getPieceType());
 	image = image->scale_simple(mSquareWidth, mSquareHeight, Gdk::InterpType::INTERP_HYPER);
-	BoardPosition pos = p.getPosition();
+	BoardPosition pos = p.getBoardPosition();
 	Gdk::Cairo::set_source_pixbuf(ctx, image, (BORDER_WIDTH/2) + mSquareWidth*pos.column, (BORDER_WIDTH/2) + mSquareHeight*pos.row);
 	ctx->save();
 	ctx->paint();

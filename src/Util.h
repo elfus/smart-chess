@@ -87,7 +87,7 @@ struct BoardSquare {
 	BoardSquare(const BoardSquare& rhs) : mPosition(rhs.mPosition),
 			piece(rhs.piece) {}
 
-	BoardPosition mPosition;
+    BoardPosition getBoardPosition() const { return mPosition;}
 
 	void setPiece(std::shared_ptr<ChessPiece> p) { piece = p; }
 	bool hasPiece() const { return piece.operator bool(); }
@@ -102,6 +102,7 @@ struct BoardSquare {
 	}
 
 private:
+    BoardPosition mPosition;
 	std::shared_ptr<ChessPiece> piece;
 };
 

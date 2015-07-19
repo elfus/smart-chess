@@ -104,6 +104,7 @@ public:
 	bool isValidPosition(BoardPosition pos) const;
 
 	PlayerColor getCurrentPlayer() const { return mCurrentPlayer; }
+    void switchPlayer();
 private:
 	/// The active white pieces
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;

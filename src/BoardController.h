@@ -52,9 +52,6 @@ public:
 	bool gameInProgress() { return mState.operator bool();}
 	std::shared_ptr<BoardState> getState() const {return mState; }
 
-	void setStatusbar(Gtk::Statusbar *s) { mStatus = s; }
-	void setOptionsGrid(Gtk::Grid *g) { mOptionsGrid = g; }
-
 	void startGame();
 	void endGame();
 	void resetGame();
@@ -62,16 +59,11 @@ public:
 private:
 	std::shared_ptr<BoardState> mState;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
-	PlayerColor mCurrentPlayer;
 	std::vector<std::unique_ptr<ChessPlayer>> mPlayers;
-	Gtk::Statusbar *mStatus;
-	Gtk::Grid *mOptionsGrid;
 	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.
 	sigc::connection mHumanConnection; // Connection to the game logic.
 	bool mPlayingAgainstHuman;
 
-	bool validGameOptions() const;
-	void createChessPlayerObjects();
 	bool isValidMove(const BoardState& s, const Move& m) const;
 };
 

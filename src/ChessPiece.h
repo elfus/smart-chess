@@ -53,7 +53,7 @@ public:
 	bool isWhite() const;
 	bool isBlack() const;
 
-	BoardPosition getPosition() const { return mPosition; }
+	BoardPosition getBoardPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
 
 	void setSelected(bool s = true) { mSelected = s;}

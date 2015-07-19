@@ -103,7 +103,7 @@ bool ChessPiece::isBlack() const{
 
 std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
-	BoardPosition current = getPosition();
+	BoardPosition current = getBoardPosition();
 
 	for(int r = current.row-1; r >= 0; --r) {
 		BoardPosition p(Row(r), current.column);
@@ -149,7 +149,7 @@ std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(const BoardSta
 
 std::vector<BoardPosition> ChessPiece::getDiagonalMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
-	BoardPosition current = getPosition();
+	BoardPosition current = getBoardPosition();
 
 	for(int r = current.row-1, c = current.column-1; r >= 0 && c >=0; --r, --c) {
 		BoardPosition p(static_cast<Row>(r), static_cast<Column>(c));
@@ -198,7 +198,7 @@ std::vector<BoardPosition> ChessPiece::getDiagonalMoves(const BoardState& s) con
 
 vector<BoardPosition> King::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
-	BoardPosition p0 = getPosition();
+	BoardPosition p0 = getBoardPosition();
 
 	BoardPosition p1(Row(p0.row - 1), Column(p0.column - 1));
 	BoardPosition p2(Row(p0.row - 1), Column(p0.column));
@@ -273,7 +273,7 @@ vector<BoardPosition> Bishop::getPossibleMoves(const BoardState& s) const {
 
 vector<BoardPosition> Knight::getPossibleMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
-	BoardPosition p0 = getPosition();
+	BoardPosition p0 = getBoardPosition();
 
 	BoardPosition p1(Row(p0.row - 2), Column(p0.column - 1));
 	BoardPosition p2(Row(p0.row - 2), Column(p0.column + 1));
@@ -335,7 +335,7 @@ vector<BoardPosition> Pawn::getPossibleMoves(const BoardState& s) const {
 		direction = -1;
 	else
 		direction = 1;
-	BoardPosition pos = getPosition();
+	BoardPosition pos = getBoardPosition();
 
 	BoardPosition pos_1(Row(pos.row + direction), pos.column);
 	if(s.hasPieceAt(pos_1) == false) {
