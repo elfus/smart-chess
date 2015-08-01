@@ -66,6 +66,8 @@ enum class PlayerColor {
 	BLACK_PLAYER
 };
 
+std::ostream& operator << (std::ostream& os, PlayerColor c);
+
 struct BoardPosition {
 	Row row;
 	Column column;

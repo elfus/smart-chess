@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
 {
 	try {
 		Glib::RefPtr<Gtk::Application> app =
-				Gtk::Application::create(argc, argv);
+ 				Gtk::Application::create(argc, argv);
 
 		sch::SmartChessWindow main_window;
 

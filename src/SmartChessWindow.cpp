@@ -66,6 +66,9 @@ namespace sch {
         Gtk::Widget* notification_bar = createNotificationBar();
         main_grid->attach(*notification_bar, 0, ROW_COUNT-1, COLUMN_COUNT, 1);
 
+        mBoardController.signalBoardStateUpdated().connect(
+                            sigc::mem_fun(*this, &SmartChessWindow::onBoardStateUpdate));
+
 		show_all_children();
 	}
 
@@ -200,15 +203,15 @@ namespace sch {
         return dynamic_cast<Gtk::MenuBar*>(Gtk::manage(menu_bar));
     }
 
-    Gtk::Widget *SmartChessWindow::createNotificationBar() const {
+    Gtk::Widget *SmartChessWindow::createNotificationBar() {
         Gtk::Box* statusbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
         statusbox->set_vexpand(false);
         statusbox->set_hexpand();
 
-        Gtk::Statusbar* statusbar = Gtk::manage(new Gtk::Statusbar());
-        statusbar->set_vexpand(false);
-        statusbar->set_hexpand();
-        statusbox->add(*statusbar);
+        mStatusBar = Gtk::manage(new Gtk::Statusbar());
+        mStatusBar->set_vexpand(false);
+        mStatusBar->set_hexpand();
+        statusbox->add(*mStatusBar);
 
         Gtk::ProgressBar* progressbar = Gtk::manage(new Gtk::ProgressBar());
         progressbar->set_hexpand(false);
@@ -337,8 +340,6 @@ namespace sch {
         cout << "SmartChessWindow::onStartGame" << endl;
         string err;
         if(validGameOptions(err)) {
-            mBoardController.signalBoardStateUpdated().connect(
-                    sigc::mem_fun(*this, &SmartChessWindow::onBoardStateUpdate));
             mBoardController.startGame(rcg1->getColor(), rcg2->getColor());
         } else {
             Gtk::MessageDialog dialog(err, false, Gtk::MESSAGE_ERROR);
@@ -353,8 +354,8 @@ namespace sch {
 
     void SmartChessWindow::onResetGame() {
         cout << "SmartChessWindow::onResetGame" << endl;
-        onStartGame();
         onEndGame();
+        onStartGame();
     }
 
     bool SmartChessWindow::validGameOptions(std::string &error_msg) {
@@ -375,6 +376,10 @@ namespace sch {
 
     void SmartChessWindow::onBoardStateUpdate(const BoardState& state) {
         cout << "BoardState Updated" << endl;
+        stringstream ss;
+        ss << state.getCurrentPlayer() << "'s turn";
+        mStatusBar->pop();
+        mStatusBar->push(ss.str());
         mView->force_redraw(state);
     }
 } /* namespace sch */

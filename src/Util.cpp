@@ -36,4 +36,12 @@ namespace sch {
     Glib::RefPtr<Gdk::Pixbuf> ImageLoader::getImage(PieceType type) {
         return images[type];
     }
+
+    std::ostream& operator << (std::ostream& os, PlayerColor c) {
+    	switch(c) {
+    	case PlayerColor::WHITE_PLAYER: os << "white player"; break;
+    	case PlayerColor::BLACK_PLAYER: os << "black player"; break;
+    	}
+    	return os;
+    }
 }

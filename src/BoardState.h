@@ -109,6 +109,8 @@ public:
     void setGameInProgress(bool in_progress=true) {mGameInProgress=in_progress;}
     bool isGameInProgress();
 
+
+    PlayerColor getCurrentPlayer() { return mCurrentPlayer; }
 private:
 	/// The active white pieces
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;

@@ -73,6 +73,8 @@ private:
     GRadioColorGroup* rcg1 {nullptr};
     GRadioColorGroup* rcg2 {nullptr};
 
+    Gtk::Statusbar*	  mStatusBar {nullptr};
+
     void onBoardStateUpdate(const BoardState& state);
     void onStartGame();
     void onEndGame();
@@ -91,7 +93,7 @@ private:
      */
     Gtk::Grid *createMainGrid() const;
     Gtk::MenuBar *createMenuBar();
-    Gtk::Widget *createNotificationBar() const;
+    Gtk::Widget *createNotificationBar();
     BoardView *createBoardView() const;
 
     Gtk::Box *createLogArea();

@@ -49,8 +49,7 @@ public:
 
 	void chessBoardClicked(BoardSquare);
 
-	bool gameInProgress() { return mState.operator bool();}
-	std::shared_ptr<BoardState> getState() const {return mState; }
+	bool gameInProgress() { return mState.isGameInProgress();}
 
 	void startGame(PlayerColor player1, PlayerColor player2);
 	void endGame();
@@ -58,7 +57,7 @@ public:
 	bool AlgorithmLogic();
     sigc::signal<void,const BoardState&> signalBoardStateUpdated();
 private:
-	std::shared_ptr<BoardState> mState;
+	BoardState 	mState;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
 	std::vector<std::unique_ptr<ChessPlayer>> mPlayers;
 	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.

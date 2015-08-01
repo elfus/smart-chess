@@ -19,7 +19,7 @@ using namespace std;
 namespace sch {
 
 BoardController::BoardController()
-: mState(nullptr),
+: mState(),
   mSelectedPiece(nullptr),
   mPlayers(),
   mPlayingAgainstHuman(false){
@@ -49,19 +49,19 @@ void BoardController::chessBoardClicked(BoardSquare s)
 			cout << "\tSelected2: " << s.getPiece()->getPieceType() << endl;
 		}
 		// check if the user is capturing a piece
-		auto moves = mSelectedPiece->getPossibleMoves(*mState);
+		auto moves = mSelectedPiece->getPossibleMoves(mState);
 		auto it = find(moves.begin(), moves.end(),
                        s.getPiece()->getBoardPosition());
 		if(it != moves.end()) {
-			*mState = mState->capture(mSelectedPiece, s.getPiece());
+			mState = mState.capture(mSelectedPiece, s.getPiece());
 			mSelectedPiece->setSelected(false);
 			mSelectedPiece = nullptr;
 			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
 			mHumanConnection.disconnect();
 		}
 	} else if(s.hasPiece() && !mSelectedPiece) {
-		if((mState->getCurrentPlayer() == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
-			(mState->getCurrentPlayer() == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
+		if((mState.getCurrentPlayer() == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
+			(mState.getCurrentPlayer() == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
 			mSelectedPiece = s.getPiece();
 			mSelectedPiece->setSelected();
 			cout << "\tSelected1: " << s.getPiece()->getPieceType() << endl;
@@ -69,10 +69,10 @@ void BoardController::chessBoardClicked(BoardSquare s)
 	}
 	else if(!s.hasPiece() && mSelectedPiece){
 		// check if the user just wants to move
-		auto moves = mSelectedPiece->getPossibleMoves(*mState);
+		auto moves = mSelectedPiece->getPossibleMoves(mState);
 		auto it = find(moves.begin(), moves.end(), s.getBoardPosition());
 		if(it != moves.end()) {
-			*mState = mState->move(mSelectedPiece, *it);
+			mState = mState.move(mSelectedPiece, *it);
 			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
 			mHumanConnection.disconnect();
 		} else
@@ -83,9 +83,7 @@ void BoardController::chessBoardClicked(BoardSquare s)
 		cout << "\tEmpty square2" << endl;
 	}
 
-	mState->switchPlayer();
-	Glib::ustring msg((mState->getCurrentPlayer()==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
-	cout.flush();
+	mState.switchPlayer();
 }
 
 /**
@@ -103,29 +101,28 @@ bool BoardController::AlgorithmLogic()
 	// check any game post-conditions, i.e. checkmate
 	ChessPlayer *player {nullptr};
 
-	if(mPlayers[0]->getColor() == mState->getCurrentPlayer())
+	if(mPlayers[0]->getColor() == mState.getCurrentPlayer())
 		player = mPlayers[0].get();
-	else if(mPlayers[1]->getColor() == mState->getCurrentPlayer())
+	else if(mPlayers[1]->getColor() == mState.getCurrentPlayer())
 		player = mPlayers[1].get();
 
 	if(typeid(*player) == typeid(Human)) {
 		cerr << "This method should not be called for a human!" << endl;
 	} else {
-		Move move = player->makeMove(*mState);
-		if(!isValidMove(*mState, move)) {
+		Move move = player->makeMove(mState);
+		if(!isValidMove(mState, move)) {
 			cerr << "Invalid move: " << move << endl;
 			return true;
 		} else {
 			// check if the algorithm is capturing a piece first
-			if(mState->hasPieceAt(move.final_pos))
-				*mState = mState->capture(move.piece, mState->getPieceAt(move.final_pos));
+			if(mState.hasPieceAt(move.final_pos))
+				mState = mState.capture(move.piece, mState.getPieceAt(move.final_pos));
 			else
-				*mState = mState->move(move.piece, move.final_pos);
+				mState = mState.move(move.piece, move.final_pos);
 		}
 	}
 
-	mState->switchPlayer();
-	Glib::ustring msg((mState->getCurrentPlayer()==PlayerColor::WHITE_PLAYER)? "White player's turn." : "Black player's turn.");
+	mState.switchPlayer();
 	cout.flush();
 
 	// Let the human play
@@ -155,24 +152,23 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 void BoardController::startGame(PlayerColor player1, PlayerColor player2) {
 	cout << "BoardController::startGame" << endl;
 
-    mState = make_shared<BoardState>();
-    mState->setCurrentPlayer(player1);
-    mState->setGameInProgress();
+	endGame();
+    mState.setCurrentPlayer(player1);
+    mState.setGameInProgress();
 
-    mBoardStateUpdated(*mState);
+    mBoardStateUpdated(mState);
 }
 
 void BoardController::endGame() {
 	cout << "BoardController::endGame" << endl;
-//	// process current game state, then delete;
-//	mPlayingAgainstHuman = false;
-//	mState.reset();
-//	mOptionsGrid->set_sensitive(true);
-//	mStatus->remove_all_messages();
-//	mHumanConnection.disconnect();
-//	mAlgorithmConnection.disconnect();
-//	mPlayers.clear();
-//	mView->force_redraw();
+	// process current game state, then delete;
+	mPlayingAgainstHuman = false;
+	mState.reset();
+	mHumanConnection.disconnect();
+	mAlgorithmConnection.disconnect();
+	mPlayers.clear();
+
+	mBoardStateUpdated(mState);
 }
 
 void BoardController::resetGame() {

@@ -191,6 +191,7 @@ void BoardState::bindPiecesToSquares()
 }
 
 void BoardState::reset() {
+	mGameInProgress = false;
 	mSquares.clear();
 	initSquares();
 	mWhitePieces.clear();
