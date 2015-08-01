@@ -69,6 +69,8 @@ namespace sch {
         mBoardController.signalBoardStateUpdated().connect(
                             sigc::mem_fun(*this, &SmartChessWindow::onBoardStateUpdate));
 
+        mView->signalClickedReleased().connect(sigc::mem_fun(mBoardController, &BoardController::chessBoardClicked));
+
 		show_all_children();
 	}
 

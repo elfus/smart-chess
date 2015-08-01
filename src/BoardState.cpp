@@ -203,30 +203,43 @@ void BoardState::reset() {
 	assert(!mBlackPieces.empty());
 }
 
-bool BoardState::isValidPosition(BoardPosition pos) const
-{
+bool BoardState::isValidPosition(const BoardSquare& sq) const {
+	sch::BoardPosition board_position = sq.getBoardPosition();
 	for(auto& s : mSquares) {
-		if(s.getBoardPosition() == pos)
+		if (s.getBoardPosition() == board_position)
 			return true;
 	}
 	return false;
 }
 
-shared_ptr<ChessPiece> BoardState::getPieceAt(BoardPosition pos) const
+bool BoardState::selectPieceAt(const BoardSquare& s) {
+	static shared_ptr<ChessPiece> cur_piece {nullptr};
+
+	if(cur_piece) cur_piece->setSelected(false);
+
+	if(hasPieceAt(s)) {
+
+		cur_piece = getPieceAt(s);
+		cur_piece->setSelected();
+		return true;
+	}
+	return false;
+}
+
+shared_ptr<ChessPiece> BoardState::getPieceAt(BoardSquare sq) const
 {
 	shared_ptr<ChessPiece> piece(nullptr);
 	try {
-		piece = getSquareAt(pos).getPiece();
+		piece = getSquareAt(sq.getBoardPosition()).getPiece();
 	} catch (const BoardPositionException& e) {
 		cerr << "WARNING[BoardState::getPieceAt]: " << e.what() << endl;
 	}
 	return piece;
 }
 
-bool BoardState::hasPieceAt(const BoardPosition& pos) const
-{
+bool BoardState::hasPieceAt(const BoardSquare& s) const {
 	try {
-		return getSquareAt(pos).hasPiece();
+		return getSquareAt(s.getBoardPosition()).hasPiece();
 	} catch(const BoardPositionException& e) {
 		cerr << "WARNING: " << e.what() << endl;
 	}

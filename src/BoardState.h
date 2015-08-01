@@ -97,11 +97,18 @@ public:
 	 */
 	BoardState capture(std::shared_ptr<ChessPiece> capturer, std::shared_ptr<ChessPiece> hostage);
 
-	std::shared_ptr<ChessPiece> getPieceAt(BoardPosition pos) const;
+	/**
+	 * Selects the piece at the give BoardSquare.
+	 *
+	 * @return True if a piece was selected, false when there was no piece to select.
+	 */
+	bool selectPieceAt(const BoardSquare& s);
+
+	std::shared_ptr<ChessPiece> getPieceAt(BoardSquare pos) const;
 	const BoardSquare& getSquareAt(BoardPosition pos) const;
 
-	bool hasPieceAt(const BoardPosition& pos) const;
-	bool isValidPosition(BoardPosition pos) const;
+	bool hasPieceAt(const BoardSquare& pos) const;
+	bool isValidPosition(const BoardSquare& pos) const;
 
 	PlayerColor getCurrentPlayer() const { return mCurrentPlayer; }
     void switchPlayer();

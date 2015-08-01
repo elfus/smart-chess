@@ -35,55 +35,22 @@ BoardController::~BoardController() {
  *
  * This method controls the logic of the game.
  *
- * @note Enable this callback when there is a human player.
  */
 void BoardController::chessBoardClicked(BoardSquare s)
 {
 	cout << "POSITION: " << s.getBoardPosition().row << " " << s.getBoardPosition().column << endl;
 
-	if(s.hasPiece() && mSelectedPiece) {
-		if(s.getPiece()->isWhite() == mSelectedPiece->isWhite()) {
-			mSelectedPiece->setSelected(false);
-			mSelectedPiece = s.getPiece();
-			mSelectedPiece->setSelected();
-			cout << "\tSelected2: " << s.getPiece()->getPieceType() << endl;
+	if(mState.isValidPosition(s)) {
+		if(mState.selectPieceAt(s)) {
+			cout << "Piece selected" << endl;
+
+		} else {
+			cout << "Empty square" << endl;
 		}
-		// check if the user is capturing a piece
-		auto moves = mSelectedPiece->getPossibleMoves(mState);
-		auto it = find(moves.begin(), moves.end(),
-                       s.getPiece()->getBoardPosition());
-		if(it != moves.end()) {
-			mState = mState.capture(mSelectedPiece, s.getPiece());
-			mSelectedPiece->setSelected(false);
-			mSelectedPiece = nullptr;
-			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
-			mHumanConnection.disconnect();
-		}
-	} else if(s.hasPiece() && !mSelectedPiece) {
-		if((mState.getCurrentPlayer() == PlayerColor::WHITE_PLAYER && s.getPiece()->isWhite()) ||
-			(mState.getCurrentPlayer() == PlayerColor::BLACK_PLAYER && s.getPiece()->isBlack())) {
-			mSelectedPiece = s.getPiece();
-			mSelectedPiece->setSelected();
-			cout << "\tSelected1: " << s.getPiece()->getPieceType() << endl;
-		}
-	}
-	else if(!s.hasPiece() && mSelectedPiece){
-		// check if the user just wants to move
-		auto moves = mSelectedPiece->getPossibleMoves(mState);
-		auto it = find(moves.begin(), moves.end(), s.getBoardPosition());
-		if(it != moves.end()) {
-			mState = mState.move(mSelectedPiece, *it);
-			mAlgorithmConnection = Glib::signal_idle().connect(sigc::mem_fun(*this, &BoardController::AlgorithmLogic));
-			mHumanConnection.disconnect();
-		} else
-			cout << "\tEmpty square1" << endl;
-		mSelectedPiece->setSelected(false);
-		mSelectedPiece.reset();
-	} else if(!s.hasPiece() && !mSelectedPiece) {
-		cout << "\tEmpty square2" << endl;
 	}
 
 	mState.switchPlayer();
+	mBoardStateUpdated(mState);
 }
 
 /**
@@ -152,7 +119,8 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 void BoardController::startGame(PlayerColor player1, PlayerColor player2) {
 	cout << "BoardController::startGame" << endl;
 
-	endGame();
+	mPlayingAgainstHuman = false;
+	mState.reset();
     mState.setCurrentPlayer(player1);
     mState.setGameInProgress();
 

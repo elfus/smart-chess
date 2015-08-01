@@ -71,6 +71,7 @@ std::ostream& operator << (std::ostream& os, PlayerColor c);
 struct BoardPosition {
 	Row row;
 	Column column;
+	BoardPosition(int r, int c) : row(static_cast<Row>(r)), column(static_cast<Column>(c)) {}
 	BoardPosition(Row r, Column c) : row(r), column(c) {}
 	BoardPosition(const BoardPosition& rhs) : row(rhs.row), column(rhs.column) {}
 	BoardPosition() : row(Row::MAX_ROW), column(Column::MAX_COL) {}

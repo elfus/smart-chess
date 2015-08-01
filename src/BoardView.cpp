@@ -82,7 +82,7 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	}
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
-
+	return BoardSquare(BoardPosition(j, i));
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)
@@ -93,10 +93,11 @@ bool BoardView::clickReleased(GdkEventButton* event)
                  << event->x << ", " << event->y << endl;
             return false;
         }
-//        BoardSquare s = calculateSquare(event->x, event->y);
-//        // notifiy when we have a square with a valid position
-//        if(s.mPosition.isValid())
-//            mSignalClickReleased(s);
+        cout << "Clicked the BoardView" << endl;
+        BoardSquare s = calculateSquare(event->x, event->y);
+        // notifiy when we have a square with a valid position
+        if(s.getBoardPosition().isValid())
+            mSignalClickReleased(s);
     }
 
 	return false;
@@ -235,18 +236,18 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 		ctx->stroke();
 		ctx->restore();
 		// draw the possible squares that this piece can move to
-//		vector<BoardPosition> options = p.getPossibleMoves(*mController->getState());
-//
-//		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
-//		for(BoardPosition p : options) {
-//			ctx->save();
-//			const double x = (BORDER_WIDTH/2) + mSquareWidth*p.column;
-//			const double y = (BORDER_WIDTH/2) + mSquareHeight*p.row;
-//			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
-//			ctx->fill();
-//			ctx->stroke();
-//			ctx->restore();
-//		}
+		vector<BoardPosition> options = p.getPossibleMoves(mCurrentState);
+
+		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
+		for(BoardPosition p : options) {
+			ctx->save();
+			const double x = (BORDER_WIDTH/2) + mSquareWidth*p.column;
+			const double y = (BORDER_WIDTH/2) + mSquareHeight*p.row;
+			ctx->rectangle(x,y, mSquareWidth, mSquareHeight);
+			ctx->fill();
+			ctx->stroke();
+			ctx->restore();
+		}
 	}
 
 	ctx->restore();
@@ -270,7 +271,6 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 	drawBorders(ctx, mBoardWidth, mBoardHeight);
 	drawSquares(ctx, mBoardWidth, mBoardHeight);
 
-	// @todo Remove mState variable from this class
 	if(mCurrentState.isGameInProgress()) {
 		auto black_pieces = mCurrentState.getBlackPieces();
 		assert(black_pieces.size() == 16);
