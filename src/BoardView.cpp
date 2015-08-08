@@ -87,6 +87,9 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 
 bool BoardView::clickReleased(GdkEventButton* event)
 {
+	if(false == mCurrentState.isGameInProgress())
+		return false;
+
     if(event->button == 1)  {// 1 is left mouse
         if(event->x > mBoardWidth || event->y > mBoardHeight) {
             cerr << "Warning: Received click on invalid coordinate:"
