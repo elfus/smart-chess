@@ -54,7 +54,7 @@ public:
 	void startGame(PlayerColor player1, PlayerColor player2);
 	void endGame();
 	void resetGame();
-	bool AlgorithmLogic();
+
     sigc::signal<void,const BoardState&> signalBoardStateUpdated();
 private:
 	BoardState 	mState;

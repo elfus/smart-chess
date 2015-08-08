@@ -313,7 +313,7 @@ std::vector<std::shared_ptr<ChessPiece>> BoardState::getPiecesThatCanBeMoved() c
 	return moves;
 }
 
-BoardState BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<ChessPiece> hostage)
+void BoardState::capture(shared_ptr<ChessPiece>& hostage)
 {
 	if(hostage->isWhite()) {
 		auto it =find_if(mWhitePieces.begin(), mWhitePieces.end(), [&](const shared_ptr<ChessPiece>& p) {
@@ -329,8 +329,6 @@ BoardState BoardState::capture(shared_ptr<ChessPiece> capturer, shared_ptr<Chess
 		mBlackPieces.erase(it);
 		mBlackHostages.push_back(hostage);
 	}
-
-	return std::move(move(capturer, hostage->getBoardPosition()));
 }
 
 BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
@@ -368,6 +366,11 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 			mSelectedPiece->setSelected(false);
 
 			BoardSquare& sq = getSquareAt(pos);
+			// Check if we are capturing an enemy piece
+			if(sq.hasPiece() && sq.getPiece()->getColor() != mSelectedPiece->getColor()) {
+				auto captured_piece = sq.removePiece();
+				capture(captured_piece);
+			}
 			sq.setPiece(mSelectedPiece);
 
 			mSelectedPiece.reset();

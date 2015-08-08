@@ -44,7 +44,6 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 		// 1st check if we clicked on a possible movement
 		if(auto selected_piece = mState.getSelectedPiece()) {
 			auto moves = selected_piece->getPossibleMoves(mState);
-			cout << "A piece is already selected" << endl;
 			for(auto& move : moves) {
 				if(pos == move) {
 					cout << "Clicked on a possible move" << endl;
@@ -74,56 +73,6 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 
 		mBoardStateUpdated(mState);
 	}
-}
-
-/**
- * Callback method which gets called whenever the GUI is idle and calls the
- * AI algorithm and checks the of the current game.
- *
- * @see Programming with gtkmm, section 24 timeout and idle functions
- */
-bool BoardController::AlgorithmLogic()
-{
-	// Check the player's turn
-	// let the current player move
-	// check if the move is valid
-	// 		if move is valid then do the move
-	// check any game post-conditions, i.e. checkmate
-	ChessPlayer *player {nullptr};
-
-	if(mPlayers[0]->getColor() == mState.getCurrentPlayer())
-		player = mPlayers[0].get();
-	else if(mPlayers[1]->getColor() == mState.getCurrentPlayer())
-		player = mPlayers[1].get();
-
-	if(typeid(*player) == typeid(Human)) {
-		cerr << "This method should not be called for a human!" << endl;
-	} else {
-		Move move = player->makeMove(mState);
-		if(!isValidMove(mState, move)) {
-			cerr << "Invalid move: " << move << endl;
-			return true;
-		} else {
-			// check if the algorithm is capturing a piece first
-			if(mState.hasPieceAt(move.final_pos))
-				mState = mState.capture(move.piece, mState.getPieceAt(move.final_pos));
-			else
-				mState = mState.move(move.piece, move.final_pos);
-		}
-	}
-
-	mState.switchPlayer();
-	cout.flush();
-
-	// Let the human play
-	if(mPlayingAgainstHuman) {
-//		mHumanConnection = mView->signalClickedReleased().connect(
-//						sigc::mem_fun(*this,&BoardController::chessBoardClicked));
-		return false;
-	} else {
-		return true;
-	}
-
 }
 
 bool BoardController::isValidMove(const BoardState& s, const Move& m) const

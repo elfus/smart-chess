@@ -97,7 +97,7 @@ public:
 	 * move to done. It assumes the move can be done. The game logic is managed
 	 * by the BoardController class.
 	 */
-	BoardState capture(std::shared_ptr<ChessPiece> capturer, std::shared_ptr<ChessPiece> hostage);
+	void capture(std::shared_ptr<ChessPiece>& hostage);
 
 	/**
 	 * Selects the piece at the give BoardSquare.

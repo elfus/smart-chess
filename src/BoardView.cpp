@@ -279,12 +279,10 @@ bool BoardView::on_draw(const Cairo::RefPtr<Cairo::Context>& ctx) {
 
 	if(mCurrentState.isGameInProgress()) {
 		auto black_pieces = mCurrentState.getBlackPieces();
-		assert(black_pieces.size() == 16);
 		for(auto p : black_pieces)
 			drawPiece(ctx, *p);
 
 		auto white_pieces = mCurrentState.getWhitePieces();
-		assert(white_pieces.size() == 16);
 		for(auto p : white_pieces)
 			drawPiece(ctx, *p);
 	}
