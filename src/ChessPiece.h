@@ -54,6 +54,7 @@ public:
 
 	BoardPosition getBoardPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
+	PlayerColor getColor();
 
 	void setSelected(bool s = true) { mSelected = s;}
 	bool isSelected() const { return mSelected; }

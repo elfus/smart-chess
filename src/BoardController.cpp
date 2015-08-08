@@ -55,13 +55,21 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 					return;
 				}
 			}
+			mState.unselectPiece();
 		}
 
-		if(mState.selectPieceAt(pos)) {
-			cout << "Piece selected" << endl;
-
+		auto selected_square = mState.getSquareAt(pos);
+		if(selected_square.hasPiece() && selected_square.getPiece()->getColor() == mState.getCurrentPlayer()) {
+			cout << "The selected square has a piece at " << endl;
+			if(mState.selectPieceAt(pos)) {
+				cout << "Piece selected" << endl;
+			}
 		} else {
-			cout << "Empty square" << endl;
+			if(selected_square.hasPiece() && selected_square.getPiece()->getColor() != mState.getCurrentPlayer())
+				cout << "The " << mState.getCurrentPlayer() << "player is trying to move a "
+				<< selected_square.getPiece()->getColor() << " piece"<< endl;
+			else
+				cout << "Empty square" << endl;
 		}
 
 		mBoardStateUpdated(mState);

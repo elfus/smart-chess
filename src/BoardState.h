@@ -106,6 +106,8 @@ public:
 	 */
 	bool selectPieceAt(const BoardSquare& s);
 
+	void unselectPiece();
+
 	std::shared_ptr<ChessPiece> getPieceAt(BoardSquare pos) const;
 	const BoardSquare& getSquareAt(BoardPosition pos) const;
 

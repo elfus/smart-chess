@@ -101,6 +101,13 @@ bool ChessPiece::isBlack() const{
 	return !isWhite();
 }
 
+PlayerColor ChessPiece::getColor() {
+	if(isWhite())
+		return PlayerColor::WHITE_PLAYER;
+	else
+		return PlayerColor::BLACK_PLAYER;
+}
+
 std::vector<BoardPosition> ChessPiece::getHorizontalVerticalMoves(const BoardState& s) const {
 	vector<BoardPosition> moves;
 	BoardPosition current = getBoardPosition();

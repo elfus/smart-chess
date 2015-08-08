@@ -236,6 +236,13 @@ bool BoardState::selectPieceAt(const BoardSquare& s) {
 	return false;
 }
 
+void BoardState::unselectPiece() {
+	if(mSelectedPiece) {
+		mSelectedPiece->setSelected(false);
+		mSelectedPiece.reset();
+	}
+}
+
 shared_ptr<ChessPiece> BoardState::getPieceAt(BoardSquare sq) const
 {
 	shared_ptr<ChessPiece> piece(nullptr);
