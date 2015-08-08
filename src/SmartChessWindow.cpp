@@ -69,6 +69,7 @@ namespace sch {
         mBoardController.signalBoardStateUpdated().connect(
                             sigc::mem_fun(*this, &SmartChessWindow::onBoardStateUpdate));
 
+        // When an A.I. clicks on the board, we should connect it to this signal
         mView->signalClickedReleased().connect(sigc::mem_fun(mBoardController, &BoardController::chessBoardClicked));
 
 		show_all_children();

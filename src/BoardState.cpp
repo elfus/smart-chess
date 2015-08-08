@@ -37,7 +37,8 @@ namespace sch {
 
 BoardState::BoardState()
 : mWhitePieces(), mBlackPieces(), mWhiteHostages(), mBlackHostages(),
-  mSquares(), mCurrentPlayer(PlayerColor::WHITE_PLAYER), mGameInProgress(false) {
+  mSquares(), mCurrentPlayer(PlayerColor::WHITE_PLAYER), mGameInProgress(false),
+  mSelectedPiece(nullptr) {
 	reset();
 	cout << "BoardState Constructor" << endl;
 }
@@ -203,6 +204,17 @@ void BoardState::reset() {
 	assert(!mBlackPieces.empty());
 }
 
+/**
+ * Checks whether the BoardSqare @b sq is valid.
+ *
+ * This is done by comparing @b sq with all the BoardSqaures in the current
+ * BoardState.
+ *
+ * @param[in] sq The BoardSquare we want to check.
+ *
+ * @return True when the BoardSquare is valid and inside the valid BoardSquares
+ * in a chess board.
+ */
 bool BoardState::isValidPosition(const BoardSquare& sq) const {
 	sch::BoardPosition board_position = sq.getBoardPosition();
 	for(auto& s : mSquares) {
@@ -213,14 +225,12 @@ bool BoardState::isValidPosition(const BoardSquare& sq) const {
 }
 
 bool BoardState::selectPieceAt(const BoardSquare& s) {
-	static shared_ptr<ChessPiece> cur_piece {nullptr};
-
-	if(cur_piece) cur_piece->setSelected(false);
+	if(mSelectedPiece) mSelectedPiece->setSelected(false);
 
 	if(hasPieceAt(s)) {
 
-		cur_piece = getPieceAt(s);
-		cur_piece->setSelected();
+		mSelectedPiece = getPieceAt(s);
+		mSelectedPiece->setSelected();
 		return true;
 	}
 	return false;
@@ -247,6 +257,16 @@ bool BoardState::hasPieceAt(const BoardSquare& s) const {
 }
 
 const BoardSquare& BoardState::getSquareAt(BoardPosition pos) const
+{
+	for(auto& s : mSquares) {
+		if(s.getBoardPosition() == pos)
+			return s;
+	}
+
+	throw BoardPositionException(pos);
+}
+
+BoardSquare& BoardState::getSquareAt(BoardPosition pos)
 {
 	for(auto& s : mSquares) {
 		if(s.getBoardPosition() == pos)
@@ -327,6 +347,26 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 	return std::move(ns);
 }
 
+	/**
+	 * Moves the current selected piece to the BoardPosition pos.
+	 */
+	void BoardState::moveTo(BoardPosition pos) {
+		if(mSelectedPiece) {
+			BoardSquare& old = getSquareAt(mSelectedPiece->getBoardPosition());
+			auto old_piece = old.removePiece();
+
+			assert(old_piece->getBoardPosition() == mSelectedPiece->getBoardPosition());
+
+			mSelectedPiece->setPosition(pos);
+			mSelectedPiece->setSelected(false);
+
+			BoardSquare& sq = getSquareAt(pos);
+			sq.setPiece(mSelectedPiece);
+
+			mSelectedPiece.reset();
+		}
+	}
+
     void BoardState::switchPlayer() {
         if(mCurrentPlayer == PlayerColor::WHITE_PLAYER)
             mCurrentPlayer = PlayerColor::BLACK_PLAYER;
@@ -337,5 +377,9 @@ BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
 
     bool BoardState::isGameInProgress() {
         return mGameInProgress;
+    }
+
+    std::shared_ptr<ChessPiece> BoardState::getSelectedPiece() {
+    	return mSelectedPiece;
     }
 } /* namespace sch */

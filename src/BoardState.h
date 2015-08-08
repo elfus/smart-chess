@@ -84,6 +84,8 @@ public:
 	 */
 	BoardState move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
 
+	void moveTo(BoardPosition pos);
+
 	/**
 	 * The ChessPiece pointed to by capturer captures the ChessPiece pointed
 	 * to by hostage.
@@ -116,6 +118,7 @@ public:
     void setGameInProgress(bool in_progress=true) {mGameInProgress=in_progress;}
     bool isGameInProgress();
 
+    std::shared_ptr<ChessPiece> getSelectedPiece();
 
     PlayerColor getCurrentPlayer() { return mCurrentPlayer; }
 private:
@@ -130,6 +133,9 @@ private:
 
 	/// Black pieces captured by white player
 	std::vector<std::shared_ptr<ChessPiece>> mBlackHostages;
+
+	/// The current selected ChessPiece
+	std::shared_ptr<ChessPiece> mSelectedPiece;
 
 	/// The 64 squares in a board plus one extra square used to mark the end of it.
 	std::vector<BoardSquare> mSquares;
@@ -149,6 +155,8 @@ private:
 
 	void copy(const BoardState& rhs);
 	std::shared_ptr<ChessPiece>  copyPiece(std::shared_ptr<ChessPiece> piece);
+
+	BoardSquare& getSquareAt(BoardPosition pos);
 };
 
 } /* namespace sch */
