@@ -243,6 +243,9 @@ void BoardView::drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessP
 
 		ctx->set_source_rgba(0, 0.0, 0.9, 0.75);
 		for(BoardPosition p : options) {
+			if(false == p.isValid())
+				continue;
+
 			ctx->save();
 			const double x = (BORDER_WIDTH/2) + mSquareWidth*p.column;
 			const double y = (BORDER_WIDTH/2) + mSquareHeight*p.row;
