@@ -36,19 +36,19 @@ BoardController::~BoardController() {
  * This method controls the logic of the game.
  *
  */
-void BoardController::chessBoardClicked(BoardSquare s)
+void BoardController::chessBoardClicked(BoardPosition pos)
 {
-	cout << "POSITION: " << s.getBoardPosition().row << " " << s.getBoardPosition().column << endl;
+	cout << "POSITION: " << pos.row << " " << pos.column << endl;
 
-	if(mState.isValidPosition(s)) {
+	if(mState.isValidPosition(pos)) {
 		// 1st check if we clicked on a possible movement
 		if(auto selected_piece = mState.getSelectedPiece()) {
 			auto moves = selected_piece->getPossibleMoves(mState);
 			cout << "A piece is already selected" << endl;
 			for(auto& move : moves) {
-				if(s.getBoardPosition() == move) {
+				if(pos == move) {
 					cout << "Clicked on a possible move" << endl;
-					mState.moveTo(s.getBoardPosition());
+					mState.moveTo(pos);
 
 					mState.switchPlayer();
 					mBoardStateUpdated(mState);
@@ -57,14 +57,13 @@ void BoardController::chessBoardClicked(BoardSquare s)
 			}
 		}
 
-		if(mState.selectPieceAt(s)) {
+		if(mState.selectPieceAt(pos)) {
 			cout << "Piece selected" << endl;
 
 		} else {
 			cout << "Empty square" << endl;
 		}
 
-		mState.switchPlayer();
 		mBoardStateUpdated(mState);
 	}
 }

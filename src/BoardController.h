@@ -47,7 +47,7 @@ public:
 	BoardController();
 	virtual ~BoardController();
 
-	void chessBoardClicked(BoardSquare);
+	void chessBoardClicked(BoardPosition);
 
 	bool gameInProgress() { return mState.isGameInProgress();}
 

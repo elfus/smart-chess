@@ -48,14 +48,14 @@ BoardView::~BoardView() {
 	cerr << "ChessBoard Destructor" << endl;
 }
 
-sigc::signal<void, BoardSquare>
+sigc::signal<void, BoardPosition>
 BoardView::signalClickedReleased()
 {
 	return mSignalClickReleased;
 }
 
 
-BoardSquare BoardView::calculateSquare(double x, double y)
+BoardPosition BoardView::calculateBoardPosition(double x, double y)
 {
 	int  i = 0, j = 0;
 	bool found = false;
@@ -64,7 +64,7 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	if(x < BORDER || y < BORDER || x > (SQUARE_NUM*mSquareWidth) + BORDER
 		|| y > (SQUARE_NUM*mSquareHeight) + BORDER) {
 		clog << "Invalid square clicked" << endl;
-		return BoardSquare(BoardPosition());
+		return BoardPosition();
 	}
 
 	for(i=0; i < SQUARE_NUM; ++i) {
@@ -82,7 +82,7 @@ BoardSquare BoardView::calculateSquare(double x, double y)
 	}
 	assert( i < SQUARE_NUM );
 	assert( j < SQUARE_NUM);
-	return BoardSquare(BoardPosition(j, i));
+	return BoardPosition(j, i);
 }
 
 bool BoardView::clickReleased(GdkEventButton* event)
@@ -97,9 +97,9 @@ bool BoardView::clickReleased(GdkEventButton* event)
             return false;
         }
         cout << "Clicked the BoardView" << endl;
-        BoardSquare s = calculateSquare(event->x, event->y);
+        BoardPosition s = calculateBoardPosition(event->x, event->y);
         // notifiy when we have a square with a valid position
-        if(s.getBoardPosition().isValid())
+        if(s.isValid())
             mSignalClickReleased(s);
     }
 

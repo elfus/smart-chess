@@ -48,7 +48,7 @@ public:
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& ctx);
 
-	sigc::signal<void, BoardSquare> signalClickedReleased();
+	sigc::signal<void, BoardPosition> signalClickedReleased();
 
 	void force_redraw(const BoardState &ptr);
 private:
@@ -63,7 +63,7 @@ private:
 	int mSquareHeight;
     BoardState mCurrentState;
 
-    sigc::signal<void, BoardSquare> mSignalClickReleased;
+    sigc::signal<void, BoardPosition> mSignalClickReleased;
 
 	void drawBorders(const Cairo::RefPtr<Cairo::Context>& ctx,
 				int board_width, int board_height);
@@ -75,7 +75,7 @@ private:
 	void drawPiece(const Cairo::RefPtr<Cairo::Context>& ctx, const ChessPiece& p);
 
 
-	BoardSquare calculateSquare(double x, double y);
+	BoardPosition calculateBoardPosition(double x, double y);
 };
 
 
