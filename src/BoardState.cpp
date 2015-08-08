@@ -313,48 +313,24 @@ std::vector<std::shared_ptr<ChessPiece>> BoardState::getPiecesThatCanBeMoved() c
 	return moves;
 }
 
-void BoardState::capture(shared_ptr<ChessPiece>& hostage)
-{
-	if(hostage->isWhite()) {
-		auto it =find_if(mWhitePieces.begin(), mWhitePieces.end(), [&](const shared_ptr<ChessPiece>& p) {
-				return p->getBoardPosition() == hostage->getBoardPosition();
-				});
-		mWhitePieces.erase(it);
-		mWhiteHostages.push_back(hostage);
+	void BoardState::capture(shared_ptr<ChessPiece>& hostage)
+	{
+		if(hostage->isWhite()) {
+			auto it =find_if(mWhitePieces.begin(), mWhitePieces.end(), [&](const shared_ptr<ChessPiece>& p) {
+					return p->getBoardPosition() == hostage->getBoardPosition();
+					});
+			mWhitePieces.erase(it);
+			mWhiteHostages.push_back(hostage);
+		}
+		else {
+			auto it = find_if(mBlackPieces.begin(), mBlackPieces.end(), [&](const shared_ptr<ChessPiece>& p) {
+							return p->getBoardPosition() == hostage->getBoardPosition();
+							});
+			mBlackPieces.erase(it);
+			mBlackHostages.push_back(hostage);
+		}
 	}
-	else {
-		auto it = find_if(mBlackPieces.begin(), mBlackPieces.end(), [&](const shared_ptr<ChessPiece>& p) {
-						return p->getBoardPosition() == hostage->getBoardPosition();
-						});
-		mBlackPieces.erase(it);
-		mBlackHostages.push_back(hostage);
-	}
-}
 
-BoardState BoardState::move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos)
-{
-	BoardState ns(*this); // new state
-
-	auto olds = find_if(ns.mSquares.begin(), ns.mSquares.end(), [&](BoardSquare& s) {
-		return s.getBoardPosition() == ptr->getBoardPosition();
-	});
-
-	auto news = find_if(ns.mSquares.begin(), ns.mSquares.end(), [&](BoardSquare& s) {
-			return s.getBoardPosition() == pos;
-		});
-
-	if(olds != ns.mSquares.end() && news != ns.mSquares.end()) {
-		std::shared_ptr<ChessPiece> p = (*olds).removePiece();
-		(*news).setPiece(p);
-		if(p)p->setPosition(pos);
-	} else
-		cerr << "Failed to move piece " << ptr->getPieceType() << endl;
-	return std::move(ns);
-}
-
-	/**
-	 * Moves the current selected piece to the BoardPosition pos.
-	 */
 	void BoardState::moveTo(BoardPosition pos) {
 		if(mSelectedPiece) {
 			BoardSquare& old = getSquareAt(mSelectedPiece->getBoardPosition());

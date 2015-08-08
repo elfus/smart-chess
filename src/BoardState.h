@@ -72,25 +72,16 @@ public:
 	std::vector<std::shared_ptr<ChessPiece>> getPiecesThatCanBeMoved() const;
 
 	/**
-	 * Moves the ChessPiece pointed to by ptr to the given BoardPosition pointed
-	 * to by pos.
+	 * Moves the current selected piece to the BoardPosition pos.
 	 *
-	 * @param[in] ptr The ChessPiece to move.
-	 * @param[in] pos The BoardPosition where we are moving the piece.
-	 *
-	 * @note This method does not check any chess rule or pre-condition for the
-	 * move to done. It assumes the move can be done. The game logic is managed
-	 * by the BoardController class.
+	 * If there is an opponent's piece it will be captured.
 	 */
-	BoardState move(std::shared_ptr<ChessPiece> ptr, BoardPosition pos);
-
 	void moveTo(BoardPosition pos);
 
 	/**
-	 * The ChessPiece pointed to by capturer captures the ChessPiece pointed
-	 * to by hostage.
+	 * The ChessPiece pointed to by hostage is removed from the vector of
+	 * currently active pieces and added to the captured vector
 	 *
-	 * @param[in] capturer The ChessPiece that is capturing.
 	 * @param[in] hostage The ChessPiece that is being captured.
 	 *
 	 * @note This method does not check any chess rule or pre-condition for the
