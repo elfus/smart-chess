@@ -46,6 +46,7 @@ public:
 	ChessPlayer(Color color);
 	virtual ~ChessPlayer();
 
+	virtual bool isHuman() { return false; }
 	Color getColor() const { return mColor; }
 
 	virtual Move makeMove(const BoardState& state) = 0;
@@ -58,6 +59,7 @@ public:
 	Human(Color color);
 	virtual ~Human();
 
+	bool isHuman() { return true; }
 	Move makeMove(const BoardState& state);
 };
 

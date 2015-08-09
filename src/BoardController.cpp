@@ -50,6 +50,10 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 
 					mState.switchPlayer();
 					mBoardStateUpdated(mState);
+
+					if(!mPlayer1->isHuman() || !mPlayer2->isHuman()) {
+						Glib::signal_idle().connect(sigc::mem_fun(this, &BoardController::mainGameLogic));
+					}
 					return;
 				}
 			}
@@ -87,11 +91,14 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 	return valid;
 }
 
-void BoardController::startGame(ChessPlayer::Color player1, ChessPlayer::Color player2) {
+void BoardController::startGame(ChessPlayer* player1, ChessPlayer* player2) {
 	cout << "BoardController::startGame" << endl;
 
+	mPlayer1 = unique_ptr<ChessPlayer>(player1);
+	mPlayer2 = unique_ptr<ChessPlayer>(player2);
+
 	mState.reset();
-    mState.setCurrentPlayer(player1);
+    mState.setCurrentPlayer(mPlayer1->getColor());
     mState.setGameInProgress();
 
     mBoardStateUpdated(mState);
@@ -112,8 +119,40 @@ void BoardController::resetGame() {
 	cout << "BoardController::resetGame" << endl;
 	endGame();
     /// @todo Save the initial player colors and also if they are human or not
-    startGame(ChessPlayer::Color::WHITE, ChessPlayer::Color::BLACK);
+    startGame(mPlayer1.get(), mPlayer2.get());
 }
+
+	bool BoardController::mainGameLogic() {
+		Move move;
+
+		if(mPlayer1 && mPlayer1->getColor() == mState.getCurrentPlayer())
+			move = mPlayer1->makeMove(mState);
+
+		if(mPlayer2  && mPlayer2->getColor() == mState.getCurrentPlayer())
+			move = mPlayer2->makeMove(mState);
+
+		if(isValidMove(mState, move)) {
+			auto target_square = mState.getSquareAt(move.piece->getBoardPosition());
+			if(mState.selectPieceAt(target_square)) {
+				auto moves = mState.getSelectedPiece()->getPossibleMoves(mState);
+				for(auto& possible_pos : moves) {
+					if(move.final_pos == possible_pos) {
+						cout << "Clicked on a possible move" << endl;
+						mState.moveTo(move.final_pos);
+
+						mState.switchPlayer();
+						mBoardStateUpdated(mState);
+						break;
+					}
+				}
+				mState.unselectPiece();
+			}
+		}
+
+		mBoardStateUpdated(mState);
+
+		return false;
+	}
 
 
     sigc::signal<void, const BoardState&> BoardController::signalBoardStateUpdated() {

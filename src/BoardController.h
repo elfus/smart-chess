@@ -31,6 +31,7 @@
 #ifndef BOARDCONTROLLER_H_
 #define BOARDCONTROLLER_H_
 
+#include "ChessPlayer.h"
 #include "BoardState.h"
 
 namespace Gtk {
@@ -51,13 +52,17 @@ public:
 
 	bool gameInProgress() { return mState.isGameInProgress();}
 
-	void startGame(ChessPlayer::Color player1, ChessPlayer::Color player2);
+	void startGame(ChessPlayer* player1, ChessPlayer* player2);
 	void endGame();
 	void resetGame();
+
+	bool mainGameLogic();
 
     sigc::signal<void,const BoardState&> signalBoardStateUpdated();
 private:
 	BoardState 	mState;
+	std::unique_ptr<ChessPlayer>	mPlayer1;
+	std::unique_ptr<ChessPlayer>	mPlayer2;
 	std::shared_ptr<ChessPiece> mSelectedPiece;
 	std::vector<std::unique_ptr<ChessPlayer>> mPlayers;
 	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.

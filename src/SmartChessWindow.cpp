@@ -343,7 +343,7 @@ namespace sch {
         cout << "SmartChessWindow::onStartGame" << endl;
         string err;
         if(validGameOptions(err)) {
-            mBoardController.startGame(rcg1->getColor(), rcg2->getColor());
+            mBoardController.startGame(new Human(rcg1->getColor()), new Algorithm(rcg2->getColor()));
         } else {
             Gtk::MessageDialog dialog(err, false, Gtk::MESSAGE_ERROR);
             dialog.run();
