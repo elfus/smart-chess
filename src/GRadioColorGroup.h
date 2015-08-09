@@ -7,6 +7,7 @@
 
 #include <gtkmm/grid.h>
 #include "Util.h"
+#include "ChessPlayer.h"
 
 namespace Gtk {
     class RadioButton;
@@ -21,7 +22,7 @@ namespace sch {
         sigc::signal<void> signalClickedWhite();
         sigc::signal<void> signalClickedBlack();
 
-        PlayerColor getColor() const;
+        ChessPlayer::Color getColor() const;
         void setWhite();
         void setBlack();
     private:

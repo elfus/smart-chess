@@ -33,59 +33,63 @@
 
 namespace sch {
 
-ChessPlayer::ChessPlayer() {
-	// TODO Auto-generated constructor stub
-
-}
-
-ChessPlayer::~ChessPlayer() {
-	// TODO Auto-generated destructor stub
-}
-
-Human::Human() {
-
-}
-
-Human::~Human() {
-
-}
-
-Move Human::makeMove(const BoardState& state) {
-
-}
-
-Algorithm::Algorithm() {
-
-}
-
-Algorithm::~Algorithm() {
-
-}
-
-Move Algorithm::makeMove(const BoardState& state) {
-	assert(state.getCurrentPlayer() == getColor());
-
-	std::vector<std::shared_ptr<ChessPiece>> pieces;
-
-	if(getColor() == PlayerColor::WHITE_PLAYER) {
-		pieces = state.getWhitePieces();
-	} else {
-		pieces = state.getBlackPieces();
+	ChessPlayer::ChessPlayer(Color color) : mColor(color) {
 	}
 
-	std::vector<BoardPosition> moves;
-	std::shared_ptr<ChessPiece> the_piece {nullptr};
+	ChessPlayer::~ChessPlayer() {
+	}
 
-	for(auto piece : pieces) {
-		moves = piece->getPossibleMoves(state);
-		if(!moves.empty()) {
-			the_piece = piece;
-			break;
+	Human::Human(Color color) : ChessPlayer(color) {
+
+	}
+
+	Human::~Human() {
+
+	}
+
+	Move Human::makeMove(const BoardState& state) {
+
+	}
+
+	Algorithm::Algorithm(Color color) : ChessPlayer(color) {
+
+	}
+
+	Algorithm::~Algorithm() {
+
+	}
+
+	Move Algorithm::makeMove(const BoardState& state) {
+		assert(state.getCurrentPlayer() == getColor());
+
+		std::vector<std::shared_ptr<ChessPiece>> pieces;
+
+		if(getColor() == ChessPlayer::Color::WHITE) {
+			pieces = state.getWhitePieces();
+		} else {
+			pieces = state.getBlackPieces();
 		}
+
+		std::vector<BoardPosition> moves;
+		std::shared_ptr<ChessPiece> the_piece {nullptr};
+
+		for(auto piece : pieces) {
+			moves = piece->getPossibleMoves(state);
+			if(!moves.empty()) {
+				the_piece = piece;
+				break;
+			}
+		}
+
+		return Move(the_piece, moves[0]);
 	}
 
-	return Move(the_piece, moves[0]);
-}
-
+	std::ostream& operator << (std::ostream& os, ChessPlayer::Color c) {
+		switch(c) {
+		case ChessPlayer::Color::WHITE: os << "white player"; break;
+		case ChessPlayer::Color::BLACK: os << "black player"; break;
+		}
+		return os;
+	}
 
 } /* namespace sch */

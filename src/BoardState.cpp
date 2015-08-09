@@ -37,7 +37,7 @@ namespace sch {
 
 BoardState::BoardState()
 : mWhitePieces(), mBlackPieces(), mWhiteHostages(), mBlackHostages(),
-  mSquares(), mCurrentPlayer(PlayerColor::WHITE_PLAYER), mGameInProgress(false),
+  mSquares(), mCurrentPlayer(ChessPlayer::Color::WHITE), mGameInProgress(false),
   mSelectedPiece(nullptr) {
 	reset();
 	cout << "BoardState Constructor" << endl;
@@ -300,7 +300,7 @@ std::vector<std::shared_ptr<ChessPiece>> BoardState::getPiecesThatCanBeMoved() c
 {
 	std::vector<std::shared_ptr<ChessPiece>> moves;
 
-	if(getCurrentPlayer() == PlayerColor::WHITE_PLAYER) {
+	if(getCurrentPlayer() == ChessPlayer::Color::WHITE) {
 		for(auto p : mWhitePieces)
 			if(p->canMove(*this))
 				moves.push_back(p);
@@ -354,10 +354,10 @@ std::vector<std::shared_ptr<ChessPiece>> BoardState::getPiecesThatCanBeMoved() c
 	}
 
     void BoardState::switchPlayer() {
-        if(mCurrentPlayer == PlayerColor::WHITE_PLAYER)
-            mCurrentPlayer = PlayerColor::BLACK_PLAYER;
-        else if(mCurrentPlayer == PlayerColor::BLACK_PLAYER)
-            mCurrentPlayer = PlayerColor::WHITE_PLAYER;
+        if(mCurrentPlayer == ChessPlayer::Color::WHITE)
+            mCurrentPlayer = ChessPlayer::Color::BLACK;
+        else if(mCurrentPlayer == ChessPlayer::Color::BLACK)
+            mCurrentPlayer = ChessPlayer::Color::WHITE;
 
     }
 

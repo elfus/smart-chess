@@ -88,7 +88,7 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 	return valid;
 }
 
-void BoardController::startGame(PlayerColor player1, PlayerColor player2) {
+void BoardController::startGame(ChessPlayer::Color player1, ChessPlayer::Color player2) {
 	cout << "BoardController::startGame" << endl;
 
 	mPlayingAgainstHuman = false;
@@ -115,7 +115,7 @@ void BoardController::resetGame() {
 	cout << "BoardController::resetGame" << endl;
 	endGame();
     /// @todo Save the initial player colors and also if they are human or not
-    startGame(PlayerColor::WHITE_PLAYER, PlayerColor::BLACK_PLAYER);
+    startGame(ChessPlayer::Color::WHITE, ChessPlayer::Color::BLACK);
 }
 
 

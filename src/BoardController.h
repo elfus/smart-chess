@@ -51,7 +51,7 @@ public:
 
 	bool gameInProgress() { return mState.isGameInProgress();}
 
-	void startGame(PlayerColor player1, PlayerColor player2);
+	void startGame(ChessPlayer::Color player1, ChessPlayer::Color player2);
 	void endGame();
 	void resetGame();
 

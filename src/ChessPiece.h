@@ -32,6 +32,7 @@
 #define CHESSPIECE_H_
 
 #include "Util.h"
+#include "ChessPlayer.h"
 #include <gdkmm.h>
 #include <map>
 
@@ -54,7 +55,7 @@ public:
 
 	BoardPosition getBoardPosition() const { return mPosition; }
 	PieceType getPieceType() const { return mPieceType; }
-	PlayerColor getColor();
+	ChessPlayer::Color getColor();
 
 	void setSelected(bool s = true) { mSelected = s;}
 	bool isSelected() const { return mSelected; }

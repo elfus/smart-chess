@@ -39,20 +39,23 @@ class BoardState;
 
 class ChessPlayer {
 public:
-	ChessPlayer();
+	enum class Color {
+		WHITE,
+		BLACK
+	};
+	ChessPlayer(Color color);
 	virtual ~ChessPlayer();
 
-	PlayerColor getColor() const { return mColor; }
-	void setColor(PlayerColor c) { mColor = c; }
+	Color getColor() const { return mColor; }
 
 	virtual Move makeMove(const BoardState& state) = 0;
 private:
-	PlayerColor mColor;
+	Color mColor;
 };
 
 class Human : public ChessPlayer {
 public:
-	Human();
+	Human(Color color);
 	virtual ~Human();
 
 	Move makeMove(const BoardState& state);
@@ -60,11 +63,13 @@ public:
 
 class Algorithm : public ChessPlayer {
 public:
-	Algorithm();
+	Algorithm(Color color);
 	virtual ~Algorithm();
 
 	Move makeMove(const BoardState& state);
 };
+
+std::ostream& operator << (std::ostream& os, ChessPlayer::Color c);
 
 } /* namespace sch */
 

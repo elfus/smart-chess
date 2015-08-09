@@ -35,6 +35,7 @@
 #include <memory>
 #include <assert.h>
 #include "ChessPiece.h"
+#include "ChessPlayer.h"
 
 namespace sch {
 
@@ -105,7 +106,7 @@ public:
 	bool hasPieceAt(const BoardSquare& pos) const;
 	bool isValidPosition(const BoardSquare& pos) const;
 
-	PlayerColor getCurrentPlayer() const { return mCurrentPlayer; }
+	ChessPlayer::Color getCurrentPlayer() const { return mCurrentPlayer; }
     void switchPlayer();
 
     void setGameInProgress(bool in_progress=true) {mGameInProgress=in_progress;}
@@ -113,7 +114,7 @@ public:
 
     std::shared_ptr<ChessPiece> getSelectedPiece();
 
-    PlayerColor getCurrentPlayer() { return mCurrentPlayer; }
+    ChessPlayer::Color getCurrentPlayer() { return mCurrentPlayer; }
 private:
 	/// The active white pieces
 	std::vector<std::shared_ptr<ChessPiece>> mWhitePieces;
@@ -133,7 +134,7 @@ private:
 	/// The 64 squares in a board plus one extra square used to mark the end of it.
 	std::vector<BoardSquare> mSquares;
 
-	PlayerColor mCurrentPlayer;
+	ChessPlayer::Color mCurrentPlayer;
     bool mGameInProgress;
 
 	void initWhitePieces();
@@ -144,7 +145,7 @@ private:
 	void bindPiecesToSquares();
 	void reset();
 
-	void setCurrentPlayer(PlayerColor c) { mCurrentPlayer = c; }
+	void setCurrentPlayer(ChessPlayer::Color c) { mCurrentPlayer = c; }
 
 	void copy(const BoardState& rhs);
 	std::shared_ptr<ChessPiece>  copyPiece(std::shared_ptr<ChessPiece> piece);
