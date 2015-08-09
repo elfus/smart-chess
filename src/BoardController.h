@@ -62,7 +62,6 @@ private:
 	std::vector<std::unique_ptr<ChessPlayer>> mPlayers;
 	sigc::connection mAlgorithmConnection; // Connection to the algorithm logic.
 	sigc::connection mHumanConnection; // Connection to the game logic.
-	bool mPlayingAgainstHuman;
     sigc::signal<void, const BoardState&> mBoardStateUpdated;
 
 	bool isValidMove(const BoardState& s, const Move& m) const;

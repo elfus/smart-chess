@@ -21,8 +21,7 @@ namespace sch {
 BoardController::BoardController()
 : mState(),
   mSelectedPiece(nullptr),
-  mPlayers(),
-  mPlayingAgainstHuman(false){
+  mPlayers(){
 
 }
 
@@ -91,7 +90,6 @@ bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 void BoardController::startGame(ChessPlayer::Color player1, ChessPlayer::Color player2) {
 	cout << "BoardController::startGame" << endl;
 
-	mPlayingAgainstHuman = false;
 	mState.reset();
     mState.setCurrentPlayer(player1);
     mState.setGameInProgress();
@@ -101,8 +99,7 @@ void BoardController::startGame(ChessPlayer::Color player1, ChessPlayer::Color p
 
 void BoardController::endGame() {
 	cout << "BoardController::endGame" << endl;
-	// process current game state, then delete;
-	mPlayingAgainstHuman = false;
+
 	mState.reset();
 	mHumanConnection.disconnect();
 	mAlgorithmConnection.disconnect();
