@@ -81,11 +81,13 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 {
 	bool valid = false;
-	auto moves = m.piece->getPossibleMoves(s);
-	for(auto& pos : moves) {
-		if(pos == m.final_pos) {
-			valid = true;
-			break;
+	if(m.piece) {
+		auto moves = m.piece->getPossibleMoves(s);
+		for(auto& pos : moves) {
+			if(pos == m.final_pos) {
+				valid = true;
+				break;
+			}
 		}
 	}
 	return valid;

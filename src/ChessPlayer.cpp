@@ -48,7 +48,7 @@ namespace sch {
 	}
 
 	Move Human::makeMove(const BoardState& state) {
-
+		return Move();
 	}
 
 	Algorithm::Algorithm(Color color) : ChessPlayer(color) {

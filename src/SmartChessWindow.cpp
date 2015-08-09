@@ -42,6 +42,7 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
+#include <glibmm.h>
 
 using namespace std;
 
@@ -343,7 +344,14 @@ namespace sch {
         cout << "SmartChessWindow::onStartGame" << endl;
         string err;
         if(validGameOptions(err)) {
-            mBoardController.startGame(new Human(rcg1->getColor()), new Algorithm(rcg2->getColor()));
+        	ChessPlayer* player1 = (mCbt1->get_active_text() == "Human") ? static_cast<ChessPlayer*>(new Human(rcg1->getColor())) : new Algorithm(rcg1->getColor());
+        	ChessPlayer* player2 = (mCbt2->get_active_text() == "Human") ? static_cast<ChessPlayer*>(new Human(rcg2->getColor())) : new Algorithm(rcg2->getColor());
+
+        	if(typeid(*player1) != typeid(Human)) {
+        		Glib::signal_idle().connect(sigc::mem_fun(mBoardController, &BoardController::mainGameLogic));
+        	}
+
+            mBoardController.startGame(player1, player2);
         } else {
             Gtk::MessageDialog dialog(err, false, Gtk::MESSAGE_ERROR);
             dialog.run();
