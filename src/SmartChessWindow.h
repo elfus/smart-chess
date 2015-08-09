@@ -74,6 +74,8 @@ private:
     GRadioColorGroup* rcg2 {nullptr};
 
     Gtk::Statusbar*	  mStatusBar {nullptr};
+    sigc::connection	mAIPlayerConnection;
+    sigc::connection	mBoardViewConnection;
 
     void onBoardStateUpdate(const BoardState& state);
     void onStartGame();

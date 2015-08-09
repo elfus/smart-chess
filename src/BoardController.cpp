@@ -26,7 +26,7 @@ BoardController::BoardController()
 }
 
 BoardController::~BoardController() {
-	// TODO Auto-generated destructor stub
+
 }
 
 /**
@@ -37,8 +37,6 @@ BoardController::~BoardController() {
  */
 void BoardController::chessBoardClicked(BoardPosition pos)
 {
-	cout << "POSITION: " << pos.row << " " << pos.column << endl;
-
 	if(mState.isValidPosition(pos)) {
 		// 1st check if we clicked on a possible movement
 		if(auto selected_piece = mState.getSelectedPiece()) {
@@ -68,7 +66,7 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 			}
 		} else {
 			if(selected_square.hasPiece() && selected_square.getPiece()->getColor() != mState.getCurrentPlayer())
-				cout << "The " << mState.getCurrentPlayer() << "player is trying to move a "
+				cout << "The " << mState.getCurrentPlayer() << " is trying to move a "
 				<< selected_square.getPiece()->getColor() << " piece"<< endl;
 			else
 				cout << "Empty square" << endl;
@@ -81,7 +79,7 @@ void BoardController::chessBoardClicked(BoardPosition pos)
 bool BoardController::isValidMove(const BoardState& s, const Move& m) const
 {
 	bool valid = false;
-	if(m.piece) {
+	if(m.piece.get() != nullptr) {
 		auto moves = m.piece->getPossibleMoves(s);
 		for(auto& pos : moves) {
 			if(pos == m.final_pos) {
@@ -153,7 +151,9 @@ void BoardController::resetGame() {
 
 		mBoardStateUpdated(mState);
 
-		return false;
+		// when playing only A.I. we should not disconnect this method
+		bool both_ai = (typeid(*mPlayer1.get()) != typeid(Human)) && (typeid(*mPlayer2.get()) != typeid(Human));
+		return both_ai;// when returning false means this method will be disconnected from the glib idle functions
 	}
 
 

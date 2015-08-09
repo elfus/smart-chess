@@ -70,9 +70,6 @@ namespace sch {
         mBoardController.signalBoardStateUpdated().connect(
                             sigc::mem_fun(*this, &SmartChessWindow::onBoardStateUpdate));
 
-        // When an A.I. clicks on the board, we should connect it to this signal
-        mView->signalClickedReleased().connect(sigc::mem_fun(mBoardController, &BoardController::chessBoardClicked));
-
 		show_all_children();
 	}
 
@@ -344,11 +341,17 @@ namespace sch {
         cout << "SmartChessWindow::onStartGame" << endl;
         string err;
         if(validGameOptions(err)) {
+        	/// @todo when we have more algorithms we will have to create a factory method
         	ChessPlayer* player1 = (mCbt1->get_active_text() == "Human") ? static_cast<ChessPlayer*>(new Human(rcg1->getColor())) : new Algorithm(rcg1->getColor());
         	ChessPlayer* player2 = (mCbt2->get_active_text() == "Human") ? static_cast<ChessPlayer*>(new Human(rcg2->getColor())) : new Algorithm(rcg2->getColor());
 
         	if(typeid(*player1) != typeid(Human)) {
-        		Glib::signal_idle().connect(sigc::mem_fun(mBoardController, &BoardController::mainGameLogic));
+        		mAIPlayerConnection = Glib::signal_idle().connect(sigc::mem_fun(mBoardController, &BoardController::mainGameLogic));
+        	}
+
+        	// When an A.I. clicks on the board, we should connect it to this signal
+        	if(typeid(*player1) == typeid(Human) ||  typeid(*player2) == typeid(Human)) {
+        		mBoardViewConnection = mView->signalClickedReleased().connect(sigc::mem_fun(mBoardController, &BoardController::chessBoardClicked));
         	}
 
             mBoardController.startGame(player1, player2);
@@ -360,6 +363,8 @@ namespace sch {
 
     void SmartChessWindow::onEndGame() {
         cout << "SmartChessWindow::onEndGame" << endl;
+        if(mAIPlayerConnection) mAIPlayerConnection.disconnect();
+        if(mBoardViewConnection) mBoardViewConnection.disconnect();
         mBoardController.endGame();
     }
 

@@ -112,7 +112,7 @@ private:
 struct Move {
 	std::shared_ptr<ChessPiece> piece; // The piece we want to move
 	BoardPosition final_pos; // The final position where the piece will be moved
-	Move() : piece(), final_pos() {}
+	Move() : piece(nullptr), final_pos() {}
 	Move(std::shared_ptr<ChessPiece> p, BoardPosition pos) : piece(p), final_pos(pos) {}
 };
 
