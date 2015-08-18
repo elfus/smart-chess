@@ -79,17 +79,6 @@ public:
 	 */
 	void moveTo(BoardPosition pos);
 
-	/**
-	 * The ChessPiece pointed to by hostage is removed from the vector of
-	 * currently active pieces and added to the captured vector
-	 *
-	 * @param[in] hostage The ChessPiece that is being captured.
-	 *
-	 * @note This method does not check any chess rule or pre-condition for the
-	 * move to done. It assumes the move can be done. The game logic is managed
-	 * by the BoardController class.
-	 */
-	void capture(std::shared_ptr<ChessPiece>& hostage);
 
 	/**
 	 * Selects the piece at the give BoardSquare.
@@ -107,9 +96,7 @@ public:
 	bool isValidPosition(const BoardSquare& pos) const;
 
 	ChessPlayer::Color getCurrentPlayer() const { return mCurrentPlayer; }
-    void switchPlayer();
 
-    void setGameInProgress(bool in_progress=true) {mGameInProgress=in_progress;}
     bool isGameInProgress();
 
     std::shared_ptr<ChessPiece> getSelectedPiece();
@@ -136,6 +123,22 @@ private:
 
 	ChessPlayer::Color mCurrentPlayer;
     bool mGameInProgress;
+
+    /**
+	 * The ChessPiece pointed to by hostage is removed from the vector of
+	 * currently active pieces and added to the captured vector
+	 *
+	 * @param[in] hostage The ChessPiece that is being captured.
+	 *
+	 * @note This method does not check any chess rule or pre-condition for the
+	 * move to done. It assumes the move can be done. The game logic is managed
+	 * by the BoardController class.
+	 */
+	void capture(std::shared_ptr<ChessPiece>& hostage); // method accessed by BoardController because it's a friend
+
+	void switchPlayer(); // method accessed by BoardController because it's a friend
+
+	void setGameInProgress(bool in_progress=true) {mGameInProgress=in_progress;} // method accessed by BoardController because it's a friend
 
 	void initWhitePieces();
 	void initBlackPieces();
