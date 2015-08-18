@@ -64,6 +64,7 @@ private:
     Glib::RefPtr<Gtk::UIManager> mUIManager;
     Gtk::Widget *mLogArea;
     Gtk::Widget *mOptionsGrid;
+    Gtk::Grid	*mSubOptionsGrid;
     BoardView   *mView;
 
 

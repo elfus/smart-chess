@@ -48,7 +48,8 @@ using namespace std;
 
 namespace sch {
 
-	SmartChessWindow::SmartChessWindow() : mLogArea(nullptr), mOptionsGrid(nullptr) {
+	SmartChessWindow::SmartChessWindow()
+	: mLogArea(nullptr), mOptionsGrid(nullptr), mSubOptionsGrid(nullptr) {
 		Gtk::Grid* main_grid = createMainGrid();
 		add(*main_grid);
 
@@ -130,50 +131,51 @@ namespace sch {
         const int SUBOPTIONS_ROWS = 3;
         const int SUBOPTIONS_COLS = 3;
         const int MARGIN = 1;
-        Gtk::Grid* suboptions = Gtk::manage(new Gtk::Grid());
-        suboptions->set_vexpand();
-        suboptions->set_hexpand(false);
-        suboptions->set_column_homogeneous(true);
-        suboptions->insert_column(0);
+
+        mSubOptionsGrid = Gtk::manage(new Gtk::Grid());
+        mSubOptionsGrid->set_vexpand();
+        mSubOptionsGrid->set_hexpand(false);
+        mSubOptionsGrid->set_column_homogeneous(true);
+        mSubOptionsGrid->insert_column(0);
 
         for(auto i : IntRange(SUBOPTIONS_COLS))
-            suboptions->insert_column(i);
+            mSubOptionsGrid->insert_column(i);
 
         for(auto i : IntRange(SUBOPTIONS_ROWS))
-            suboptions->insert_row(i);
+            mSubOptionsGrid->insert_row(i);
 
         Gtk::Label* p1 = Gtk::manage(new Gtk::Label("Player 1"));
         p1->set_margin_left(MARGIN);
         p1->set_margin_right(MARGIN);
-        suboptions->attach(*p1, 0, 0, 1, 1);
+        mSubOptionsGrid->attach(*p1, 0, 0, 1, 1);
 
         Gtk::Label* vs = Gtk::manage(new Gtk::Label("V.S."));
         vs->set_margin_left(MARGIN);
         vs->set_margin_right(MARGIN);
-        suboptions->attach(*vs, 1, 0, 1, 1);
+        mSubOptionsGrid->attach(*vs, 1, 0, 1, 1);
 
         Gtk::Label* p2 = Gtk::manage(new Gtk::Label("Player 2"));
         p2->set_margin_left(MARGIN);
         p2->set_margin_right(MARGIN);
-        suboptions->attach(*p2, 2, 0, 1, 1);
+        mSubOptionsGrid->attach(*p2, 2, 0, 1, 1);
 
         mCbt1 = Gtk::manage(new Gtk::ComboBoxText());
         mCbt1->append("Human");
         mCbt1->append("A.I.");
         mCbt1->set_active(0);
-        suboptions->attach(*mCbt1, 0, 1, 1, 1);
+        mSubOptionsGrid->attach(*mCbt1, 0, 1, 1, 1);
 
         mCbt2 = Gtk::manage(new Gtk::ComboBoxText());
         mCbt2->append("Human");
         mCbt2->append("A.I.");
         mCbt2->set_active(1);
-        suboptions->attach(*mCbt2, 2, 1, 1, 1);
+        mSubOptionsGrid->attach(*mCbt2, 2, 1, 1, 1);
 
         rcg1 = Gtk::manage(new GRadioColorGroup());
-        suboptions->attach(*rcg1, 0, 2, 1, 1);
+        mSubOptionsGrid->attach(*rcg1, 0, 2, 1, 1);
 
         rcg2 = Gtk::manage(new GRadioColorGroup());
-        suboptions->attach(*rcg2, 2, 2, 1, 1);
+        mSubOptionsGrid->attach(*rcg2, 2, 2, 1, 1);
 
         rcg1->signalClickedWhite().connect(sigc::mem_fun(rcg2, &GRadioColorGroup::setBlack));
         rcg1->signalClickedBlack().connect(sigc::mem_fun(rcg2, &GRadioColorGroup::setWhite));
@@ -181,7 +183,7 @@ namespace sch {
         rcg2->signalClickedBlack().connect(sigc::mem_fun(rcg1, &GRadioColorGroup::setWhite));
         rcg1->setWhite();
         rcg2->setBlack();
-        return suboptions;
+        return mSubOptionsGrid;
     }
 
     SmartChessWindow::~SmartChessWindow() {
@@ -355,6 +357,8 @@ namespace sch {
         	}
 
             mBoardController.startGame(player1, player2);
+
+            mSubOptionsGrid->set_sensitive(false);
         } else {
             Gtk::MessageDialog dialog(err, false, Gtk::MESSAGE_ERROR);
             dialog.run();
@@ -366,6 +370,7 @@ namespace sch {
         if(mAIPlayerConnection) mAIPlayerConnection.disconnect();
         if(mBoardViewConnection) mBoardViewConnection.disconnect();
         mBoardController.endGame();
+        mSubOptionsGrid->set_sensitive();
     }
 
     void SmartChessWindow::onResetGame() {
